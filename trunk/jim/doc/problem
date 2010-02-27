@@ -1,0 +1,92 @@
+miniSQL
+Time Limit: 1000MS  Memory Limit: 65536K 
+Total Submissions: 1510  Accepted: 463 
+
+Description
+
+Joan is taking an internship at a company these days. Every day she is assigned tons of dull statistical jobs such as counting how many products made by the company values more than $100. In order to have more time to chat with the handsome intern nearby, she asks you to program a clever software that helps her get released from the onerous work.
+
+The software should take as input a table of records together with several queries and for each query output all the records respectively.
+
+Input
+
+The first part of the input is a single line consisting of three integers, m(1 ¡Ü m ¡Ü 10), n(1 ¡Ü n ¡Ü 10000), k(1 ¡Ü k ¡Ü 100) indicating the number of columns in the table, the number of records and the number of queries.
+
+The second part of the input is the description of the table, which consists of m lines. The i-th line of this part consists two strings in the format Column_Name Type which describes the i-th column of the table.
+
+Column_Name contains only letters(a-zA-Z), digits(0-9) and underline(_).
+Type is either "STR" or "INT" indicating the type of this column.
+The third part of the input shows the content of the table which contains n lines. The i-th line of this part shows the i-th record in the table which consists of m items.
+
+if the type of the i-th column is "INT", the i-th item will be a 32-bit integer.
+if the type of the i-th column is "STR" , the i-th item will be a string containing only letters(a-zA-Z), digits(0-9) and underline(_).
+The last part of the input gives the k queries which are similar to SQL select statements. The query is in the format select Column_List where Condition
+
+Column_List contains a list of column names which are separated by a single comma. All the names occured in the description of the table.
+Condition is in the format Column_Name Op Value 
+Column_Name is one of the column name in the description of the table.
+if the column's type is "STR", Op is "=". Otherwise it may be "=", "<" or ">". 
+if the column's type is "STR", Value will be a quoted string containing only letters(a-zA-Z), digits(0-9) and underline(_). Otherwise it will be a 32-bit integer. 
+The size of the input will not exceed 1M bytes.
+
+Output
+
+For each query output a table and a blank line as Sample Output shows.
+
+Sample Input
+
+3 10 4
+SID INT
+NAME STR
+PRIZE INT
+1000 Potion 50
+1001 Phoenix_Down 150
+1002 Remedy 300
+1003 Dagger 320
+1004 Rod 260
+1005 Flame_Staff 1100
+1006 Broad_Sword 330
+1007 Fork 1100
+1008 Javelin 880
+1009 Cats_Claws 4000
+select SID,NAME,PRIZE where PRIZE>100
+select SID,SID where NAME="Dagger"
+select PRIZE where NAME="Rod"
+select SID,NAME,PRIZE where NAME="Excalibur"
+Sample Output
+
+
++-----------------------------+
+| SID  |     NAME     | PRIZE |
+|------|--------------|-------|
+| 1001 | Phoenix_Down |  150  |
+| 1002 |    Remedy    |  300  |
+| 1003 |    Dagger    |  320  |
+| 1004 |     Rod      |  260  |
+| 1005 | Flame_Staff  | 1100  |
+| 1006 | Broad_Sword  |  330  |
+| 1007 |     Fork     | 1100  |
+| 1008 |   Javelin    |  880  |
+| 1009 |  Cats_Claws  | 4000  |
++-----------------------------+
+
++-------------+
+| SID  | SID  |
+|------|------|
+| 1003 | 1003 |
++-------------+
+
++-------+
+| PRIZE |
+|-------|
+|  260  |
++-------+
+
++--------------------+
+| SID | NAME | PRIZE |
+|-----|------|-------|
++--------------------+
+
+Source
+
+POJ Founder Monthly Contest ¨C 2008.10.05, Dagger

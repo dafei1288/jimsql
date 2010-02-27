@@ -1,0 +1,5 @@
+3
+sid int 8 
+name STR 20 
+pwd str 20
+1000 chris 12aabb
