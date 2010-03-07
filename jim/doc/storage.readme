@@ -10,8 +10,8 @@ storage
   |    +--table2
   |
   +---db2
-  |		|
-  |		|
-  |		+table3 
+  |	|
+  |	|
+  |	+table3 
   |
   +---db3
