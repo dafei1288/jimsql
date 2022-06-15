@@ -1,5 +1,9 @@
 package com.dafei1288.jimsql.jdbc;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.CallableStatement;
@@ -21,14 +25,28 @@ import java.util.concurrent.Executor;
 
 public class JqConnection implements Connection {
 
-  private String datapath;
-  JqConnection(String datapath){
-    this.datapath = datapath;
+//  private String datapath;
+//  JqConnection(String datapath){
+//    this.datapath = datapath;
+//  }
+
+  private Socket clientSocket;
+
+
+  private Properties info;
+
+  public JqConnection(Properties info) throws IOException {
+    this.info = info;
+    clientSocket = new Socket(info.getProperty("host"),(Integer)info.get("port"));
+  }
+
+  public Socket getClientSocket(){
+    return this.clientSocket;
   }
 
   @Override
   public Statement createStatement() throws SQLException {
-    return new JqStatement(datapath);
+    return new JqStatement(this);
   }
 
   @Override
@@ -68,6 +86,13 @@ public class JqConnection implements Connection {
 
   @Override
   public void close() throws SQLException {
+    try {
+//      this.in.close();
+//      this.out.close();
+      this.clientSocket.close();
+    } catch (IOException e) {
+      throw new SQLException(e);
+    }
 
   }
 

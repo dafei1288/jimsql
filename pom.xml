@@ -11,6 +11,7 @@
   <modules>
     <module>jdbc</module>
     <module>server</module>
+    <module>common</module>
   </modules>
 
   <properties>
@@ -25,10 +26,17 @@
     <antlr.version>4.9.3</antlr.version>
     <inmemantlr.version>1.9.2</inmemantlr.version>
     <netty.version>4.1.77.Final</netty.version>
+    <jimsql.version>1.0-SNAPSHOT</jimsql.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>com.dafei1288.jimsql</groupId>
+        <artifactId>common</artifactId>
+        <version>${jimsql.version}</version>
+      </dependency>
+
       <dependency>
         <groupId>org.apache.calcite</groupId>
         <artifactId>calcite-core</artifactId>

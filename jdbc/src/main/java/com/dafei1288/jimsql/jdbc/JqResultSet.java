@@ -1,6 +1,9 @@
 package com.dafei1288.jimsql.jdbc;
 
+import com.dafei1288.jimsql.common.JimSessionStatus;
+import com.dafei1288.jimsql.common.RowData;
 import com.google.common.io.Files;
+import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,33 +48,95 @@ public class JqResultSet implements ResultSet {
   private String[] currentArray;
   private Map<String,Integer> colIndexMap = new HashMap<>();
 
-  public JqResultSet(String filepath,List<String> cols, String tableName) {
-    this.filepath = filepath;
-    this.cols = cols;
-    this.tableName = tableName;
-    try {
-      lines = Files.readLines(Path.of(URI.create(this.filepath+this.tableName+".csv")).toFile(), Charset.defaultCharset());
-      String headerLine = lines.get(0);
-      String[] headers = headerLine.split(",");
-      for(int i = 0; i < headers.length; i++){
-        String header = headers[i];
-        colIndexMap.put(header,i);
+  private int currentIndex = -1;
+  private volatile List<RowData> rowDataList;
+  private volatile boolean readData ;
+  private volatile boolean needHold;
+
+  private ObjectDecoderInputStream decoderInputStream;
+
+  public JqResultSet(){
+
+  }
+
+  public JqResultSet(ObjectDecoderInputStream decoderInputStream){
+    this.decoderInputStream = decoderInputStream;
+    this.rowDataList = new ArrayList<>();
+    this.readData = true;
+    new Thread(()->{
+      while (readData){
+        try{
+          Object obj = decoderInputStream.readObject();
+
+          if(obj instanceof RowData){
+//            System.out.println("adding data "+obj);
+            needHold = false;
+            rowDataList.add((RowData) obj);
+          }
+          if(obj instanceof JimSessionStatus && JimSessionStatus.FINISH.equals((JimSessionStatus)obj)){
+//            System.out.println("finish add data ");
+            needHold = false;
+            readData = false;
+          }
+        }catch (Exception e){
+          e.printStackTrace();
+        }
       }
-      datas = lines.subList(1,lines.size()).iterator();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    }).start();
+
   }
 
   @Override
   public boolean next() throws SQLException {
-    boolean hasNext = datas.hasNext();
-    if(hasNext == true) {
-      currentData = datas.next();
-      currentArray = currentData.split(",");
+    boolean tag = false;
+    ++this.currentIndex;
+
+    System.out.println("this.rowDataList.size() ==> "+this.rowDataList.size());
+    System.out.println("this.currentIndex ==> "+this.currentIndex);
+    System.out.println("this.readData ==> "+this.readData);
+
+    while(needHold == true){
+      try {
+        Thread.sleep(10);
+      } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      }
     }
-    return hasNext;
+    if(this.readData==true || (this.readData==false && this.rowDataList.size()>this.currentIndex)){
+      tag = true;
+    }
+
+    //tag = this.rowDataList.size() > this.currentIndex++ || this.readData;
+    return tag;
   }
+
+  //  public JqResultSet(String filepath,List<String> cols, String tableName) {
+//    this.filepath = filepath;
+//    this.cols = cols;
+//    this.tableName = tableName;
+//    try {
+//      lines = Files.readLines(Path.of(URI.create(this.filepath+this.tableName+".csv")).toFile(), Charset.defaultCharset());
+//      String headerLine = lines.get(0);
+//      String[] headers = headerLine.split(",");
+//      for(int i = 0; i < headers.length; i++){
+//        String header = headers[i];
+//        colIndexMap.put(header,i);
+//      }
+//      datas = lines.subList(1,lines.size()).iterator();
+//    } catch (IOException e) {
+//      throw new RuntimeException(e);
+//    }
+//  }
+//
+//  @Override
+//  public boolean next() throws SQLException {
+//    boolean hasNext = datas.hasNext();
+//    if(hasNext == true) {
+//      currentData = datas.next();
+//      currentArray = currentData.split(",");
+//    }
+//    return hasNext;
+//  }
 
   @Override
   public void close() throws SQLException {
@@ -83,7 +148,12 @@ public class JqResultSet implements ResultSet {
     return false;
   }
 
-  @Override
+//  @Override
+//  public String getString(int columnIndex) throws SQLException {
+//
+//  }
+
+    @Override
   public String getString(int columnIndex) throws SQLException {
     return currentArray[columnIndex];
   }
@@ -163,9 +233,22 @@ public class JqResultSet implements ResultSet {
     return null;
   }
 
+//  @Override
+//  public String getString(String columnLabel) throws SQLException {
+//    return currentArray[this.colIndexMap.get(columnLabel)];
+//  }
+
+
   @Override
   public String getString(String columnLabel) throws SQLException {
-    return currentArray[this.colIndexMap.get(columnLabel)];
+    while(this.readData == true && this.rowDataList.size()<=this.currentIndex){
+      try {
+        Thread.sleep(10);
+      } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    return this.rowDataList.get(this.currentIndex).getDatas().get(columnLabel).toString();
   }
 
   @Override

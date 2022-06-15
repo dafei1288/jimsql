@@ -1,5 +1,10 @@
 package com.dafei1288.jimsql.jdbc;
 
+import com.dafei1288.jimsql.common.JimSessionStatus;
+import com.dafei1288.jimsql.common.RowData;
+import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,31 +21,62 @@ import java.util.regex.Pattern;
 
 public class JqStatement implements Statement {
 
-  private String datapath;
-  JqStatement(String datapath){
-    this.datapath = datapath;
+//  private String datapath;
+//  JqStatement(String datapath){
+//    this.datapath = datapath;
+//  }
+
+  private JqConnection jqConnection;
+  private PrintWriter out;
+  private InputStream in;
+
+  public JqStatement(JqConnection jqConnection) throws SQLException{
+    this.jqConnection = jqConnection;
+    try {
+      out = new PrintWriter(jqConnection.getClientSocket().getOutputStream(), true);
+      in = jqConnection.getClientSocket().getInputStream();
+    }catch (Exception e){
+      throw new SQLException();
+    }
   }
 
   @Override
   public ResultSet executeQuery(String sql) throws SQLException {
+    out.println(sql);
+    ObjectDecoderInputStream decoderInputStream = new ObjectDecoderInputStream(in);
+    JqResultSet jqResultSet = null;
 
-    Pattern pattern = Pattern.compile("^select (\\*|[a-z0-9,]*) from ([a-z]+)");
-    Matcher matcher = pattern.matcher(sql);
-    String tableName = "";
-    List<String> cols = null;
-    if(matcher.find()){
-      String cs = matcher.group(1);
-      if(cs.equals("*")){
-      }else{
-        String[] cns =cs.split(",");
-        cols = Arrays.stream(cns).toList();
+    try {
+      Object obj = decoderInputStream.readObject();
+      if(obj instanceof JimSessionStatus && JimSessionStatus.BEGIN.equals((JimSessionStatus) obj)){
+        jqResultSet = new JqResultSet(decoderInputStream);
       }
-      tableName = matcher.group(2);
+    }catch (Exception e){
+      throw new SQLException("can‘t start query ");
     }
-    JqResultSet jqResultSet = new JqResultSet(datapath,cols,tableName);
-
     return jqResultSet;
   }
+
+  //  @Override
+//  public ResultSet executeQuery(String sql) throws SQLException {
+//
+//    Pattern pattern = Pattern.compile("^select (\\*|[a-z0-9,]*) from ([a-z]+)");
+//    Matcher matcher = pattern.matcher(sql);
+//    String tableName = "";
+//    List<String> cols = null;
+//    if(matcher.find()){
+//      String cs = matcher.group(1);
+//      if(cs.equals("*")){
+//      }else{
+//        String[] cns =cs.split(",");
+//        cols = Arrays.stream(cns).toList();
+//      }
+//      tableName = matcher.group(2);
+//    }
+//    JqResultSet jqResultSet = null;//new JqResultSet(datapath,cols,tableName);
+//
+//    return jqResultSet;
+//  }
 
   @Override
   public int executeUpdate(String sql) throws SQLException {
@@ -49,7 +85,7 @@ public class JqStatement implements Statement {
 
   @Override
   public void close() throws SQLException {
-
+    this.jqConnection = null;
   }
 
   @Override
