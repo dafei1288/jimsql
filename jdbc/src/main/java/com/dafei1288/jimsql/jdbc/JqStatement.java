@@ -1,7 +1,7 @@
 package com.dafei1288.jimsql.jdbc;
 
-import com.dafei1288.jimsql.common.JimSessionStatus;
-import com.dafei1288.jimsql.common.RowData;
+import com.dafei1288.jimsql.common.JimSQueryStatus;
+import com.dafei1288.jimsql.common.JqResultSetMetaData;
 import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -10,14 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class JqStatement implements Statement {
 
@@ -48,9 +40,17 @@ public class JqStatement implements Statement {
 
     try {
       Object obj = decoderInputStream.readObject();
-      if(obj instanceof JimSessionStatus && JimSessionStatus.BEGIN.equals((JimSessionStatus) obj)){
+      if(obj instanceof JimSQueryStatus && JimSQueryStatus.BEGIN.equals((JimSQueryStatus) obj)){
+        //读取metadata
+        obj =  decoderInputStream.readObject();
+
         jqResultSet = new JqResultSet(decoderInputStream);
+
+        if(obj instanceof JqResultSetMetaData){
+          jqResultSet.setJqResultSetMetaData((JqResultSetMetaData) obj);
+        }
       }
+
     }catch (Exception e){
       throw new SQLException("can‘t start query ");
     }

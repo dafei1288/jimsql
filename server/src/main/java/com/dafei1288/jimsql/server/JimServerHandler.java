@@ -1,40 +1,77 @@
 package com.dafei1288.jimsql.server;
 
-import com.dafei1288.jimsql.common.JimSessionStatus;
+import com.dafei1288.jimsql.common.JimSQueryStatus;
+import com.dafei1288.jimsql.common.JqColumnMetadata;
+import com.dafei1288.jimsql.common.JqResultSetMetaData;
 import com.dafei1288.jimsql.common.RowData;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class JimServerHandler extends ChannelInboundHandlerAdapter {
 
   @Override
   public void channelActive(ChannelHandlerContext ctx) throws Exception {
-
-    System.out.println(ctx.name());
-    ctx.writeAndFlush(JimSessionStatus.BEGIN);
+    ctx.writeAndFlush(JimSQueryStatus.BEGIN);
     ctx.flush();
   }
 
   @Override
   public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-    super.channelRead(ctx,msg);
+    //super.channelRead(ctx,msg);
 
     String sql = msg.toString();
-    System.out.println(" sql will run : " + sql);
+    System.out.println("sql will run : " + sql +" , on "+ctx.hashCode());
     if(sql.contains("select")){
-      List<RowData> datas = new ArrayList<>();
+
+
+
+      LinkedHashMap<String,JqColumnMetadata> jqColumnMetadataList = new LinkedHashMap<>();
+
+      JqColumnMetadata jqColumnMetadata = new JqColumnMetadata();
+      jqColumnMetadata.setIndex(1);
+      jqColumnMetadata.setLabelName("id");
+      jqColumnMetadata.setClazz(String.class);
+      jqColumnMetadata.setClazzStr("String");
+      jqColumnMetadata.setTableName("user");
+      jqColumnMetadata.setColumnType(1);
+      jqColumnMetadataList.put(jqColumnMetadata.getLabelName(),jqColumnMetadata);
+
+
+      jqColumnMetadata = new JqColumnMetadata();
+      jqColumnMetadata.setIndex(2);
+      jqColumnMetadata.setLabelName("name");
+      jqColumnMetadata.setClazz(String.class);
+      jqColumnMetadata.setClazzStr("String");
+      jqColumnMetadata.setTableName("user");
+      jqColumnMetadata.setColumnType(2);
+      jqColumnMetadataList.put(jqColumnMetadata.getLabelName(),jqColumnMetadata);
+
+      jqColumnMetadata = new JqColumnMetadata();
+      jqColumnMetadata.setIndex(3);
+      jqColumnMetadata.setLabelName("age");
+      jqColumnMetadata.setClazz(Integer.class);
+      jqColumnMetadata.setClazzStr("Integer");
+      jqColumnMetadata.setTableName("user");
+      jqColumnMetadata.setColumnType(1);
+      jqColumnMetadataList.put(jqColumnMetadata.getLabelName(),jqColumnMetadata);
+
+      JqResultSetMetaData jqResultSetMetaData = new JqResultSetMetaData(jqColumnMetadataList);
+      jqResultSetMetaData.setColumnMeta(jqColumnMetadataList);
+
+      ctx.writeAndFlush(jqResultSetMetaData);
+
+//      List<RowData> datas = new ArrayList<>();
       for(int i = 0;i<10;i++){
         RowData rowData = new RowData();
         rowData.setNext(true);
-        if(i==99){
+        if(i==9){
           rowData.setNext(false);
         }
-        Map<String,Object> map = new HashMap<>();
+        LinkedHashMap<String,Object> map = new LinkedHashMap<>();
         map.put("id","id"+i);
         map.put("name","name"+i);
         map.put("age",i);
@@ -45,15 +82,14 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
 
 
     }else{
-      ctx.writeAndFlush(JimSessionStatus.OK);
+      ctx.writeAndFlush(JimSQueryStatus.OK);
     }
     ctx.flush();
   }
 
   @Override
   public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-//    super.channelReadComplete(ctx);
-    ctx.writeAndFlush(JimSessionStatus.FINISH);
+    ctx.writeAndFlush(JimSQueryStatus.FINISH);
     ctx.flush();
   }
 

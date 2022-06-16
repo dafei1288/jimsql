@@ -1,19 +1,13 @@
 package com.dafei1288.jimsql.jdbc;
 
-import com.dafei1288.jimsql.common.JimSessionStatus;
+import com.dafei1288.jimsql.common.JimSQueryStatus;
+import com.dafei1288.jimsql.common.JqResultSetMetaData;
 import com.dafei1288.jimsql.common.RowData;
-import com.google.common.io.Files;
 import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
-import java.net.URI;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.Clob;
@@ -53,7 +47,16 @@ public class JqResultSet implements ResultSet {
   private volatile boolean readData ;
   private volatile boolean needHold;
 
+  private JqResultSetMetaData jqResultSetMetaData;
   private ObjectDecoderInputStream decoderInputStream;
+
+  public JqResultSetMetaData getJqResultSetMetaData() {
+    return jqResultSetMetaData;
+  }
+
+  public void setJqResultSetMetaData(JqResultSetMetaData jqResultSetMetaData) {
+    this.jqResultSetMetaData = jqResultSetMetaData;
+  }
 
   public JqResultSet(){
 
@@ -67,13 +70,17 @@ public class JqResultSet implements ResultSet {
       while (readData){
         try{
           Object obj = decoderInputStream.readObject();
+          if(obj==null){
+
+          }
 
           if(obj instanceof RowData){
 //            System.out.println("adding data "+obj);
             needHold = false;
             rowDataList.add((RowData) obj);
           }
-          if(obj instanceof JimSessionStatus && JimSessionStatus.FINISH.equals((JimSessionStatus)obj)){
+
+          if(obj instanceof JimSQueryStatus && JimSQueryStatus.FINISH.equals((JimSQueryStatus)obj)){
 //            System.out.println("finish add data ");
             needHold = false;
             readData = false;
@@ -91,9 +98,9 @@ public class JqResultSet implements ResultSet {
     boolean tag = false;
     ++this.currentIndex;
 
-    System.out.println("this.rowDataList.size() ==> "+this.rowDataList.size());
-    System.out.println("this.currentIndex ==> "+this.currentIndex);
-    System.out.println("this.readData ==> "+this.readData);
+//    System.out.println("this.rowDataList.size() ==> "+this.rowDataList.size());
+//    System.out.println("this.currentIndex ==> "+this.currentIndex);
+//    System.out.println("this.readData ==> "+this.readData);
 
     while(needHold == true){
       try {
@@ -343,7 +350,7 @@ public class JqResultSet implements ResultSet {
 
   @Override
   public ResultSetMetaData getMetaData() throws SQLException {
-    return null;
+    return this.jqResultSetMetaData;
   }
 
   @Override
