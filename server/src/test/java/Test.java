@@ -29,12 +29,13 @@ public class Test {
       compile = false;
     }
 
-    String sql = "create database aaaa";
+    String sql = "select id,name,age from t1";
+    sql = "show table descript t1";
     ParseTree pt;
     gp.parse(sql);
     pt = t.getParseTree();
 
-    ParseTreeProcessor<String, String> processor = new ParseTreeProcessor<String, String>(pt) {
+    ParseTreeProcessor<String, Object> processor = new ParseTreeProcessor<String, Object>(pt) {
 
 
 
@@ -53,6 +54,14 @@ public class Test {
       @Override
       protected void initialize() {
         for (ParseTreeNode n : this.parseTree.getNodes()) {
+
+          if(n.getRule().equals("columnName")){
+            System.out.println("==>"+n.getLabel());
+          }
+          if(n.getRule().equals("tableName")){
+            System.out.println("==>"+n.getLabel());
+          }
+
           smap.put(n,n.getLabel());
         }
       }

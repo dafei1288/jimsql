@@ -5,7 +5,7 @@
   <parent>
     <artifactId>jimsql-parent</artifactId>
     <groupId>com.dafei1288.jimsql</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -39,4 +39,59 @@
       <version>2.0.12.Final</version>
     </dependency>
   </dependencies>
+  <build>
+    <plugins>
+
+      <!-- 使用maven-assembly-plugin插件打包 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.2.0</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>com.dafei1288.jimsql.server.Jimserver</mainClass>
+            </manifest>
+          </archive>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+
+      <plugin>
+        <groupId>com.spotify</groupId>
+        <artifactId>dockerfile-maven-plugin</artifactId>
+        <version>1.4.13</version>
+        <executions>
+          <execution>
+            <id>default</id>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <repository>dafei1288/jimsql_server</repository>
+          <tag>${project.version}</tag>
+<!--          <buildArgs>-->
+<!--            <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>-->
+<!--          </buildArgs>-->
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+
+
 </project>

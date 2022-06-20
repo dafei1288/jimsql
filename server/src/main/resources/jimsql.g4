@@ -51,9 +51,14 @@ identifier:
 ;
 
 number:
-  DIGIT
-  | DIGITS
+   DIGIT
+  | floatNumber
 ;
+
+floatNumber:
+  DIGIT (DOT_SYMBOL? DIGIT)
+;
+
 
 dropDatabase:
   DROP_SYMBOL DATABASE_SYMBOL schemaName
@@ -215,9 +220,9 @@ fragment X: [xX];
 fragment Y: [yY];
 fragment Z: [zZ];
 
-fragment DIGIT:    [0-9];
-fragment DIGITS:   DIGIT+;
-fragment HEXDIGIT: [0-9a-fA-F];
+fragment DIGIT:    [0-9]+;
+//fragment DIGITS:   DIGIT+;
+//fragment HEXDIGIT: [0-9a-fA-F];
 
 
 
