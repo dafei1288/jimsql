@@ -1,0 +1,11 @@
+version: '3'
+services:
+  jimsql:
+    privileged: true
+    volumes:
+      - "data:/jimsql/data"
+    image: dafei1288/jimsql_server:1.0.0
+    ports:
+      - "8821:8821"
+    environment:
+      JAVA_ARGS: 8821 0.0.0.0 /jimsql/data
