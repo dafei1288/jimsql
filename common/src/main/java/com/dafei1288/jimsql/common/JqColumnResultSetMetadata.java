@@ -2,7 +2,7 @@ package com.dafei1288.jimsql.common;
 
 import java.io.Serializable;
 
-public class JqColumnMetadata implements Serializable {
+public class JqColumnResultSetMetadata implements Serializable {
   private String labelName;
   private Integer index;
 

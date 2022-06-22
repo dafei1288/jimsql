@@ -7,14 +7,35 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 public class Jimserver {
 
-  public static String HOST = "0.0.0.0";
-  public static int PORT = 8821;
+  private static String HOST = "0.0.0.0";
+  private static int PORT = 8821;
+  private static String DATA_DIR = "./data" ;
 
-  public static void createServer(String host,int port){
+
+  public static String getDataDir(){
+    return DATA_DIR;
+  }
+  public static int getPort(){
+    return PORT;
+  }
+  public static String getHost(){
+    return HOST;
+  }
+
+  private static EventLoopGroup bossGroup;
+  private static EventLoopGroup workerGroup;
+
+  private static ChannelFuture channelFuture;
+
+  public static void createServer(String host,int port,String datadir){
+    DATA_DIR = datadir;
+    PORT = port;
+    HOST = host;
+
     //循环组接收连接，不进行处理,转交给下面的线程组
-    EventLoopGroup bossGroup = new NioEventLoopGroup();
+    bossGroup = new NioEventLoopGroup();
     //循环组处理连接，获取参数，进行工作处理
-    EventLoopGroup workerGroup = new NioEventLoopGroup();
+    workerGroup = new NioEventLoopGroup();
     try {
       //服务端进行启动类
       ServerBootstrap serverBootstrap = new ServerBootstrap();
@@ -22,10 +43,10 @@ public class Jimserver {
       serverBootstrap.group(bossGroup, workerGroup)
           .channel(NioServerSocketChannel.class)
           .childHandler(new JimServerInitializer());
-
       //绑定端口
-      ChannelFuture channelFuture = serverBootstrap.bind(host,port).sync();
-      System.out.println(String.format("jimsql server is running on %s:%s",host,port));
+      channelFuture = serverBootstrap.bind(host,port).sync();
+          //serverBootstrap.bind(host,port).sync();
+      System.out.println(String.format("jimsql server is running on %s:%s , with data dir : %s ",host,port,datadir));
       channelFuture.channel().closeFuture().sync();
     } catch (InterruptedException e) {
       e.printStackTrace();
@@ -35,15 +56,32 @@ public class Jimserver {
     }
   }
 
-  public static void createServer(int port){
-    createServer(HOST,port);
+  void shutdown(){
+    System.out.println("Stopping server");
+    try{
+      bossGroup.shutdownGracefully().sync();
+      workerGroup.shutdownGracefully().sync();
+      channelFuture.channel().close();
+      System.out.println("Server stopped");
+    }catch (InterruptedException e){
+      e.printStackTrace();
+    }
   }
-  public static void createServer(){
-    createServer(HOST,PORT);
-  }
-
 
   public static void main(String[] args) {
-    createServer();
+    Integer port = 8821;
+    String host = "0.0.0.0";
+    String datadir = "data";
+    if(args.length == 1){
+      port = Integer.parseInt(args[0]);
+    }else if(args.length == 2){
+      port = Integer.parseInt(args[0]);
+      host = args[1];
+    }else if(args.length ==3){
+      port = Integer.parseInt(args[0]);
+      host = args[1];
+      datadir = args[2];
+    }
+    createServer(host,port,datadir);
   }
 }

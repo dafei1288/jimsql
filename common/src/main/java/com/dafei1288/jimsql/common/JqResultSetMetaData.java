@@ -1,6 +1,5 @@
 package com.dafei1288.jimsql.common;
 
-import com.dafei1288.jimsql.common.JqColumnMetadata;
 import java.io.Serializable;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -11,18 +10,18 @@ public class JqResultSetMetaData implements ResultSetMetaData, Serializable {
 //
 //  }
 
-  public JqResultSetMetaData(LinkedHashMap<String, JqColumnMetadata> columnMeta) {
+  public JqResultSetMetaData(LinkedHashMap<String, JqColumnResultSetMetadata> columnMeta) {
     this._columnMeta = columnMeta;
   }
 
-  private LinkedHashMap<String, JqColumnMetadata> _columnMeta;
+  private LinkedHashMap<String, JqColumnResultSetMetadata> _columnMeta;
 
-  public LinkedHashMap<String, JqColumnMetadata> getColumnMeta() {
+  public LinkedHashMap<String, JqColumnResultSetMetadata> getColumnMeta() {
     return _columnMeta;
   }
 
   public void setColumnMeta(
-      LinkedHashMap<String, JqColumnMetadata> columnMeta) {
+      LinkedHashMap<String, JqColumnResultSetMetadata> columnMeta) {
     this._columnMeta = columnMeta;
   }
 

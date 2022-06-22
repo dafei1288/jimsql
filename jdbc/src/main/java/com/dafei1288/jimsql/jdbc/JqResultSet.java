@@ -7,6 +7,7 @@ import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
+import java.net.SocketException;
 import java.net.URL;
 import java.sql.Array;
 import java.sql.Blob;
@@ -66,7 +67,9 @@ public class JqResultSet implements ResultSet {
     this.decoderInputStream = decoderInputStream;
     this.rowDataList = new ArrayList<>();
     this.readData = true;
+
     new Thread(()->{
+      int i = 0;
       while (readData){
         try{
           Object obj = decoderInputStream.readObject();
@@ -84,6 +87,18 @@ public class JqResultSet implements ResultSet {
 //            System.out.println("finish add data ");
             needHold = false;
             readData = false;
+          }
+        }catch (SocketException e){
+          e.printStackTrace();
+          i++;
+          try {
+            Thread.sleep(10l);
+          } catch (InterruptedException ex) {
+            throw new RuntimeException(ex);
+          }
+          if(i>10){
+              this.readData = false;
+              throw new RuntimeException("connect loss .");
           }
         }catch (Exception e){
           e.printStackTrace();

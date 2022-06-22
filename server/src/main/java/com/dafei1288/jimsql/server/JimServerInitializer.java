@@ -6,6 +6,8 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.codec.serialization.ClassResolver;
+import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
 import io.netty.handler.codec.serialization.ObjectEncoder;
@@ -24,8 +26,9 @@ public class JimServerInitializer  extends ChannelInitializer<SocketChannel> {
 //    pipeline.addLast(new LengthFieldPrepender(4));
 //    pipeline.addLast(new StringEncoder(CharsetUtil.UTF_8));
     pipeline.addLast(new ObjectEncoder());
-//    pipeline.addLast(new ObjectDecoder());
-    pipeline.addLast(new StringDecoder(CharsetUtil.UTF_8));
+    ClassResolver cr = ClassResolvers.weakCachingConcurrentResolver(this.getClass().getClassLoader());
+    pipeline.addLast(new ObjectDecoder(cr));
+//    pipeline.addLast(new StringDecoder(CharsetUtil.UTF_8));
     pipeline.addLast(new JimServerHandler());
   }
 }

@@ -35,6 +35,12 @@ public class JqConnection implements Connection {
 
   private Properties info;
 
+  public Properties getInfo(){
+    return this.info;
+  }
+
+
+
   public JqConnection(Properties info) throws IOException {
     this.info = info;
     clientSocket = new Socket(info.getProperty("host"),(Integer)info.get("port"));

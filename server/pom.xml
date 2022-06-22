@@ -56,6 +56,9 @@
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
+<!--          <descriptors>-->
+<!--            <descriptor>src/main/assembly/assembly.xml</descriptor>-->
+<!--          </descriptors>-->
         </configuration>
         <executions>
           <execution>
@@ -87,6 +90,7 @@
 <!--          <buildArgs>-->
 <!--            <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>-->
 <!--          </buildArgs>-->
+
         </configuration>
       </plugin>
     </plugins>

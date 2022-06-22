@@ -19,8 +19,9 @@ public class TestServer {
 
     Statement statement = conn.createStatement();
     System.out.println(statement);
-
-    ResultSet resultSet = statement.executeQuery("select * from user");
+    String sql = "select id,name from user";
+    ResultSet resultSet = statement.executeQuery(sql);
+    System.out.println(sql);
     System.out.println(resultSet);
     while(resultSet.next()){
 //      id,name,age

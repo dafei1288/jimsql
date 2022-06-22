@@ -1,8 +1,11 @@
 package com.dafei1288.jimsql.jdbc;
 
 import com.dafei1288.jimsql.common.JimSQueryStatus;
+import com.dafei1288.jimsql.common.JqQueryReq;
 import com.dafei1288.jimsql.common.JqResultSetMetaData;
 import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
+import io.netty.handler.codec.serialization.ObjectEncoderOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -19,13 +22,15 @@ public class JqStatement implements Statement {
 //  }
 
   private JqConnection jqConnection;
-  private PrintWriter out;
+//  private PrintWriter out;
+  private ObjectEncoderOutputStream out;
   private InputStream in;
 
   public JqStatement(JqConnection jqConnection) throws SQLException{
     this.jqConnection = jqConnection;
     try {
-      out = new PrintWriter(jqConnection.getClientSocket().getOutputStream(), true);
+      //out = new PrintWriter(jqConnection.getClientSocket().getOutputStream(), true);
+      out = new ObjectEncoderOutputStream(jqConnection.getClientSocket().getOutputStream());
       in = jqConnection.getClientSocket().getInputStream();
     }catch (Exception e){
       throw new SQLException();
@@ -34,7 +39,15 @@ public class JqStatement implements Statement {
 
   @Override
   public ResultSet executeQuery(String sql) throws SQLException {
-    out.println(sql);
+    JqQueryReq jqQueryReq = new JqQueryReq();
+    jqQueryReq.setSql(sql);
+    jqQueryReq.setDb(this.jqConnection.getInfo().getProperty("db"));
+//    out.println(jqQueryReq);
+    try {
+      out.writeObject(jqQueryReq);
+    } catch (IOException e) {
+      throw new SQLWarning(e);
+    }
     ObjectDecoderInputStream decoderInputStream = new ObjectDecoderInputStream(in);
     JqResultSet jqResultSet = null;
 
@@ -52,6 +65,7 @@ public class JqStatement implements Statement {
       }
 
     }catch (Exception e){
+      e.printStackTrace();
       throw new SQLException("can‘t start query ");
     }
     return jqResultSet;

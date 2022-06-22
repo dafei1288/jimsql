@@ -28,6 +28,7 @@ dml:
 
 dql:
   selectTable
+  | explainSelectTable
 ;
 
 dcl:
@@ -156,6 +157,10 @@ expression:
 ;
 
 
+explainSelectTable:
+  EXPLAIN_SYMBOL selectTable
+;
+
 showProcesslist:
   SHOW_SYMBOL PROCESSLIST_SYMBOL
 ;
@@ -251,6 +256,9 @@ AND_SYMBOL:                      A N D;
 SHOW_SYMBOL:                     S H O W;
 PROCESSLIST_SYMBOL:              P R O C E S S L I S T;
 DESCRIPT_SYMBOL:                 D E S C R I P T;
+EXPLAIN_SYMBOL:                  E X P L A I N;
+
+
 
 LETTER: [a-zA-Z0-9_$\u0080-\uffff];
 LETTERS: LETTER+;
