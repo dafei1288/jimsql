@@ -2,10 +2,17 @@ version: '3'
 services:
   jimsql:
     privileged: true
-    volumes:
-      - "data:/jimsql/data"
     image: dafei1288/jimsql_server:1.0.0
     ports:
       - "8821:8821"
+      - "8825:8825"
+#     volumes:
+#       - "./data:/jimsql/data"
     environment:
+#      JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,address=*:8825,server=y,suspend=n
       JAVA_ARGS: 8821 0.0.0.0 /jimsql/data
+#    extra_hosts:
+#      - "host.docker.internal:host-gateway"
+#networks:
+#  default:
+#    driver: host
