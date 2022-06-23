@@ -8,6 +8,25 @@
   <artifactId>jimsql-parent</artifactId>
   <packaging>pom</packaging>
   <version>1.0.0</version>
+  <url>https://github.com/dafei1288/jimsql</url>
+
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>dafei1288</name>
+      <email>dafei1288@sina.com</email>
+      <organization>dafei1288.com</organization>
+    </developer>
+  </developers>
+
   <modules>
     <module>jdbc</module>
     <module>server</module>
