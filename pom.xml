@@ -198,6 +198,7 @@
 
     <build>
       <plugins>
+
         <!-- Nexus Staging Plugin -->
         <plugin>
           <groupId>org.sonatype.plugins</groupId>
