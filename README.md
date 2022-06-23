@@ -21,13 +21,24 @@ services:
       JAVA_ARGS: 8821 0.0.0.0 /jimsql/data
 ```
 
+Use snapshot  repository
+
+```xml
+  <repositories>
+  <repository>
+    <id>jim</id>
+    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+  </repository>
+</repositories>
+```
+
 Then use jdbc to connect
 
 ```xml
 <dependency>
-  <groupId>com.dafei1288.jimsql</groupId>
+  <groupId>com.dafei1288</groupId>
   <artifactId>jdbc</artifactId>
-  <version>${jimsql.version}</version>
+  <version>1.0.0-SNAPSHOT</version>
 </dependency>
 ```
 

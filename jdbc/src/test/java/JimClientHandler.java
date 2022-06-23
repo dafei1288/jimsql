@@ -4,7 +4,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.concurrent.EventExecutorGroup;
 import java.time.LocalDateTime;
 
-public class JimClientHandler extends SimpleChannelInboundHandler<String> {
+public class JimClientHandler extends SimpleChannelInboundHandler<Object> {
 
   private ChannelHandlerContext channelHandlerContext;
 
@@ -13,9 +13,17 @@ public class JimClientHandler extends SimpleChannelInboundHandler<String> {
   }
 
   @Override
-  protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
-    System.out.println("got from server ==>"+msg);
+  protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
 
+    System.out.println("got from server ==>"+msg+" =>"+this.hashCode());
+    ctx.writeAndFlush("next");
+
+  }
+
+  @Override
+  public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+    super.channelReadComplete(ctx);
+    System.out.println("完成。。。");
   }
 
   @Override
