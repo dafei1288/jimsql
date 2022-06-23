@@ -22,16 +22,26 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+        server-id: ossrh
+        server-username: ${{ secrets.MAVEN_USERNAME }}
+        server-password: ${{ secrets.MAVEN_PASSWORD }}
+
     - name: Build with Maven
       run: mvn -B package -DskipTests=true  --file pom.xml
 
-    - name: Release Maven package
-      uses: samuelmeuli/action-maven-publish@v1
-      with:
-        gpg_private_key: ${{ secrets.GPG_SECRET }}
-        gpg_passphrase: ${{ secrets.GPG_PASSWORD  }}
-        nexus_username: ${{ secrets.NEXUS_USERNAME }}
-        nexus_password: ${{ secrets.NEXUS_USERNAME }}
+
+    - name: Publish package
+      run: mvn --batch-mode deploy
+      env:
+        MAVEN_USERNAME: ${{ secrets.NEXUS_USERNAME }}
+        MAVEN_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+#    - name: Release Maven package
+#      uses: samuelmeuli/action-maven-publish@v1
+#      with:
+#        gpg_private_key: ${{ secrets.GPG_SECRET }}
+#        gpg_passphrase: ${{ secrets.GPG_PASSWORD  }}
+#        nexus_username: ${{ secrets.NEXUS_USERNAME }}
+#        nexus_password: ${{ secrets.NEXUS_USERNAME }}
 
 #    - name: Checkout code
 #      uses: actions/checkout@v2
