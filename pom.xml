@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.dafei1288.jimsql</groupId>
+  <groupId>com.dafei1288</groupId>
   <artifactId>jimsql-parent</artifactId>
   <packaging>pom</packaging>
   <version>1.0.0</version>
@@ -51,19 +51,19 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.dafei1288.jimsql</groupId>
+        <groupId>com.dafei1288</groupId>
         <artifactId>common</artifactId>
         <version>${jimsql.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>com.dafei1288.jimsql</groupId>
+        <groupId>com.dafei1288</groupId>
         <artifactId>server</artifactId>
         <version>${jimsql.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>com.dafei1288.jimsql</groupId>
+        <groupId>com.dafei1288</groupId>
         <artifactId>jdbc</artifactId>
         <version>${jimsql.version}</version>
       </dependency>
