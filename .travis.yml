@@ -1,4 +1,0 @@
-language: java
-jdk: openjdk17
-install: true
-script: mvn -DskipTests=true clean package
