@@ -53,7 +53,7 @@ jobs:
         context: server
           # Note: tags has to be all lower-case
         tags: |
-            dafei1288:
+          dafei1288/jimsql_server:latest 
           # build on feature branches, push only on main branch
         push: true
 
