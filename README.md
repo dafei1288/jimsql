@@ -23,6 +23,15 @@ services:
 
 Then use jdbc to connect
 
+```xml
+<dependency>
+  <groupId>com.dafei1288.jimsql</groupId>
+  <artifactId>jdbc</artifactId>
+  <version>${jimsql.version}</version>
+</dependency>
+```
+
+
 ```java
 import java.sql.Connection;
 import java.sql.DriverManager;
