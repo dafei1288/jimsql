@@ -31,6 +31,7 @@
     <module>jdbc</module>
     <module>server</module>
     <module>common</module>
+    <module>storage/bitcask</module>
   </modules>
 
   <properties>
@@ -40,12 +41,14 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 
-    <calcite.version>1.30.0</calcite.version>
+    <calcite.version>1.33.0</calcite.version>
     <guava.version>31.1-jre</guava.version>
     <antlr.version>4.9.3</antlr.version>
     <inmemantlr.version>1.9.2</inmemantlr.version>
     <netty.version>4.1.77.Final</netty.version>
     <jimsql.version>1.0.0-SNAPSHOT</jimsql.version>
+    <parquet.version>1.12.3</parquet.version>
+    <arrow.version>1.12.3</arrow.version>
   </properties>
 
   <dependencyManagement>
@@ -106,6 +109,25 @@
       </dependency>
 
 
+      <dependency>
+        <groupId>org.apache.arrow</groupId>
+        <artifactId>arrow-memory</artifactId>
+        <version>${arrow.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.parquet</groupId>
+        <artifactId>parquet-common</artifactId>
+        <version>${parquet.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.parquet</groupId>
+        <artifactId>parquet-arrow</artifactId>
+        <version>${parquet.version}</version>
+      </dependency>
+
+
     </dependencies>
   </dependencyManagement>
 
@@ -130,6 +152,8 @@
       <groupId>com.github.julianthome</groupId>
       <artifactId>inmemantlr-api</artifactId>
     </dependency>
+
+
 
 
   </dependencies>
