@@ -1,10 +1,10 @@
-# What is JimSQL
+# JimSQL是什么
 
-JimSql = Jim Isn't MySQL. Jim is a database system implemention use Java.
+JimSql = Jim Isn't MySQL. JimSQL是纯 java 编写的数据库系统.
 
-# Useage
+# 如何使用JimSQL
 
-use `docker-compose` to start a server
+使用 `docker-compose` 尝试，配置文件如下
 ```yaml
 version: '3'
 services:
@@ -21,8 +21,8 @@ services:
       JAVA_ARGS: 8821 0.0.0.0 /jimsql/data
 ```
 
-Use snapshot  repository
 
+添加snapshots仓库
 ```xml
   <repositories>
   <repository>
@@ -32,8 +32,7 @@ Use snapshot  repository
 </repositories>
 ```
 
-Then use jdbc to connect
-
+引入jdbc依赖
 ```xml
 <dependency>
   <groupId>com.dafei1288</groupId>
@@ -41,8 +40,7 @@ Then use jdbc to connect
   <version>1.0.0-SNAPSHOT</version>
 </dependency>
 ```
-
-示例代码
+示例代码：
 
 ```java
 import java.sql.Connection;
@@ -82,12 +80,11 @@ public class TestServer {
 }
 ```
 
-# Devlpment
+# 如何开发
 
-## Prerequisites
-1. Java >= 17 
-2. Maven >= 3.8 (If you want to compile and install IoTDB from source code).
+## 环境要求
+1. Java >= 17
+2. Maven >= 3.8 
 
-## Build from source
-
+## 如何从代码编译
 `mvn clean package -Ddockerfile.skip -DskipTest=true`
