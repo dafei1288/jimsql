@@ -195,8 +195,7 @@ updateItem:
 // ---------------------------
 // DQL
 // ---------------------------
-selectTable:
-  SELECT_SYMBOL (DISTINCT_SYMBOL)? columnList FROM_SYMBOL tableName
+selectTable:`r`n  SELECT_SYMBOL (DISTINCT_SYMBOL)? columnList FROM_SYMBOL (tableName | tableSource)
   (WHERE_SYMBOL expression)?
   (ORDER_SYMBOL BY_SYMBOL orderItem (COMMA_SYMBOL orderItem)*)?
   (LIMIT_SYMBOL INT_LITERAL (OFFSET_SYMBOL INT_LITERAL)?)?
@@ -213,6 +212,25 @@ columnList:
 columnName:
   identifier
 ;
+
+tableSource:
+  tablePrimary (tableJoin)*
+;
+
+tablePrimary:
+  tableName (AS_SYMBOL? alias)?
+;
+
+alias:
+  identifier
+;
+
+tableJoin:
+  ( (INNER_SYMBOL)? JOIN_SYMBOL tablePrimary ON_SYMBOL expression )
+| ( (LEFT_SYMBOL | RIGHT_SYMBOL | FULL_SYMBOL) (OUTER_SYMBOL)? JOIN_SYMBOL tablePrimary ON_SYMBOL expression )
+| ( CROSS_SYMBOL JOIN_SYMBOL tablePrimary )
+;
+
 
 explainSelectTable:
   EXPLAIN_SYMBOL selectTable
@@ -330,7 +348,7 @@ AND_SYMBOL:                      A N D;
 SHOW_SYMBOL:                     S H O W;
 PROCESSLIST_SYMBOL:              P R O C E S S L I S T;
 DESCRIPT_SYMBOL:                 D E S C R I P T;
-EXPLAIN_SYMBOL:                  E X P L A I N;
+EXPLAIN_SYMBOL:                  E X P L A I N;`r`nJOIN_SYMBOL:                     J O I N;`r`nINNER_SYMBOL:                    I N N E R;`r`nLEFT_SYMBOL:                     L E F T;`r`nRIGHT_SYMBOL:                    R I G H T;`r`nFULL_SYMBOL:                     F U L L;`r`nOUTER_SYMBOL:                    O U T E R;`r`nCROSS_SYMBOL:                    C R O S S;`r`nON_SYMBOL:                       O N;`r`nAS_SYMBOL:                       A S;
 
 // Identifiers (keep legacy behavior)
 LETTER: [a-zA-Z0-9_$\u0080-\uffff];
@@ -339,4 +357,5 @@ LETTERS: LETTER+;
 // Quoted identifiers
 BACKTICK_QUOTED_ID: '`' ( '``' | ~'`' )* '`';
 DOUBLE_QUOTED_ID: '"' ( '""' | ~('"'|'\r'|'\n') )* '"';
+
 

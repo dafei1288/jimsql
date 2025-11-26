@@ -46,12 +46,15 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
       }
     }
     if(parseTreeNode.getRule().equals("tableName")){
-      JqTable jqTable = new JqTable();
-      jqTable.setTableName(stripQuotes(parseTreeNode.getLabel()));
-      queryLogicalPlan.setFromTable(jqTable);
+      if (queryLogicalPlan.getFromTable() == null) {
+        JqTable jqTable = new JqTable();
+        jqTable.setTableName(stripQuotes(parseTreeNode.getLabel()));
+        queryLogicalPlan.setFromTable(jqTable);
+      }
     }
 
   }
 }
+
 
 
