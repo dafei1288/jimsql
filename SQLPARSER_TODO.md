@@ -137,3 +137,13 @@ SELECT id, name FROM b;
 
 Next Steps (planned)\n- INSERT ... SELECT / INSERT ... SET grammar (no execution changes)\n- DDL strict CREATE TABLE and ALTER TABLE family\n- SHOW CREATE TABLE / DESCRIBE variants\n- Tests under server/src/test/java for new syntax (no runtime changes)\n
 
+
+Execution Plan (Minimal)
+- [x] 1) ORDER BY, LIMIT/OFFSET: implemented in QueryPhysicalPlan; applies when all ORDER BY columns exist in current table; stable for single-table queries.
+- [x] 2) WHERE (simple AND of column comparisons): implemented in QueryPhysicalPlan; supports =, !=, >, >=, <, <= with numeric/string literals; applies only when all referenced columns exist in current table; no OR/parentheses/functions yet.
+- [ ] 3) GROUP BY/HAVING (basic aggregates): planned; COUNT/SUM/AVG only.
+- [ ] 4) JOIN (INNER, eq-join): planned; nested loop on single ON equality.
+
+Notes
+- Sorting and filtering operate on CSV-backed table rows; types derived from ServerMetadata (header + sample row).
+- For JOIN queries, execution still uses single-table path; filters requiring other tables are skipped to avoid false negatives.
