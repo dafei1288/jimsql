@@ -5,9 +5,12 @@ import com.dafei1288.jimsql.common.meta.JqDatabase;
 import com.dafei1288.jimsql.common.meta.JqTable;
 import com.dafei1288.jimsql.server.plan.physical.PhysicalPlan;
 import com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan;
+import java.util.List;
 import java.util.ArrayList;
 import com.dafei1288.jimsql.server.plan.logical.OrderItem;
-import com.dafei1288.jimsql.server.plan.logical.JoinSpec;public class QueryLogicalPlan implements LogicalPlan{
+import com.dafei1288.jimsql.server.plan.logical.JoinSpec;
+
+public class QueryLogicalPlan implements LogicalPlan{
   private boolean star;
   private List<JqColumn> jqColumnList;
   private JqTable fromTable;
@@ -96,3 +99,4 @@ import com.dafei1288.jimsql.server.plan.logical.JoinSpec;public class QueryLogic
   public java.util.List<JoinSpec> getJoins() { return joins; }
   public void setJoins(java.util.List<JoinSpec> joins) { this.joins = joins; }
 }
+
