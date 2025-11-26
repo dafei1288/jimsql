@@ -51,8 +51,11 @@ schemaName:
   identifier
 ;
 
+// identifier supports bare, backtick-quoted, and double-quoted names
 identifier:
-  LETTERS
+    LETTERS
+  | BACKTICK_QUOTED_ID
+  | DOUBLE_QUOTED_ID
 ;
 
 dropDatabase:
@@ -111,6 +114,8 @@ values:
 expr:
     numberLiteral
   | stringLiteral
+  | booleanLiteral
+  | nullLiteral
   | identifier
 ;
 
@@ -152,6 +157,15 @@ numberLiteral:
 
 stringLiteral:
     STRING_LITERAL
+;
+
+booleanLiteral:
+    TRUE_SYMBOL
+  | FALSE_SYMBOL
+;
+
+nullLiteral:
+    NULL_SYMBOL
 ;
 
 // ---------------------------
@@ -248,7 +262,7 @@ BLOCK_COMMENT: '/*' .*? '*/' -> channel(HIDDEN);
 // Literals
 INT_LITERAL: [0-9]+;
 DECIMAL_LITERAL: [0-9]+ '.' [0-9]* | '.' [0-9]+;
-STRING_LITERAL: '\'' (\\' | \\\\ . | ~[''\r\n])* '\'';
+STRING_LITERAL: '\'' ( '\\' . | ~('\\'|'\''|'\r'|'\n') )* '\'';
 
 // Keyword fragments (A..Z)
 fragment A: [aA];
@@ -277,10 +291,6 @@ fragment W: [wW];
 fragment X: [xX];
 fragment Y: [yY];
 fragment Z: [zZ];
-
-// Identifiers (keep legacy behavior)
-LETTER: [a-zA-Z0-9_$\u0080-\uffff];
-LETTERS: LETTER+;
 
 // Keywords (must appear before LETTER/LETTERS)
 CREATE_SYMBOL:                   C R E A T E;
@@ -321,3 +331,12 @@ SHOW_SYMBOL:                     S H O W;
 PROCESSLIST_SYMBOL:              P R O C E S S L I S T;
 DESCRIPT_SYMBOL:                 D E S C R I P T;
 EXPLAIN_SYMBOL:                  E X P L A I N;
+
+// Identifiers (keep legacy behavior)
+LETTER: [a-zA-Z0-9_$\u0080-\uffff];
+LETTERS: LETTER+;
+
+// Quoted identifiers
+BACKTICK_QUOTED_ID: '`' ( '``' | ~'`' )* '`';
+DOUBLE_QUOTED_ID: '"' ( '""' | ~('"'|'\r'|'\n') )* '"';
+
