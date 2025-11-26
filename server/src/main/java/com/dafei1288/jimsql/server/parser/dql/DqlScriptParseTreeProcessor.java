@@ -26,7 +26,7 @@ public class DqlScriptParseTreeProcessor extends ScriptParseTreeProcessor {
   protected void process(ParseTreeNode parseTreeNode) throws ParseTreeProcessorException {
     if("selectTable".equals(parseTreeNode.getRule())){
 //      System.out.println("this is DqlScriptParseTreeProcessor");
-      SelectTableParseTreeProcessor processor = new SelectTableParseTreeProcessor(parseTree);
+      SelectTableParseTreeProcessor processor = new SelectTableParseTreeProcessor((ParseTree) smap.get(parseTreeNode));
       this.setCurrentParseTreeProcessor(processor);
       this.setSqlStatementEnum(SqlStatementEnum.SELECT_TABLE);
       this.getCurrentParseTreeProcessor().process();
@@ -34,3 +34,4 @@ public class DqlScriptParseTreeProcessor extends ScriptParseTreeProcessor {
     }
   }
 }
+

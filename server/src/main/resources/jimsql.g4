@@ -390,7 +390,7 @@ groupByList:
 
 columnList:
     STAR_SYMBOL
-  | selectItems
+  | valueExpr (AS_SYMBOL? alias)? (COMMA_SYMBOL valueExpr (AS_SYMBOL? alias)?)*
 ;
 
 selectItems:
@@ -631,7 +631,7 @@ DESCRIBE_SYMBOL:                 D E S C R I B E;
 COLUMNS_SYMBOL:                  C O L U M N S;
 
 // Identifiers (keep legacy behavior)
-LETTER: [a-zA-Z0-9_$\u0080-\uffff];
+fragment LETTER: [a-zA-Z0-9_$\u0080-\uffff];
 LETTERS: LETTER+;
 
 // Quoted identifiers
@@ -648,4 +648,7 @@ qualifiedName:
 functionCall:
   identifier START_PAR_SYMBOL (expression (COMMA_SYMBOL expression)*)? CLOSE_PAR_SYMBOL
 ;
+
+
+
 

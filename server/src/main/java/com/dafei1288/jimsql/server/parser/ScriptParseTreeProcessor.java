@@ -13,9 +13,15 @@ public class ScriptParseTreeProcessor extends ParseTreeProcessor {
   private SqlStatementEnum sqlStatementEnum = null;
 
   public SqlStatementEnum getSqlStatementEnum() {
-    if(sqlStatementEnum != null){
+    if (sqlStatementEnum != null) {
       return sqlStatementEnum;
     }
+    ParseTreeProcessor child = this.getCurrentParseTreeProcessor();
+    if (child instanceof ScriptParseTreeProcessor) {
+      return ((ScriptParseTreeProcessor) child).getSqlStatementEnum();
+    }
+    return null;
+  }
     return ((ScriptParseTreeProcessor)this.getCurrentParseTreeProcessor()).getSqlStatementEnum();
   }
 
@@ -79,3 +85,4 @@ public class ScriptParseTreeProcessor extends ParseTreeProcessor {
 
   }
 }
+
