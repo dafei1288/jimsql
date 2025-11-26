@@ -30,9 +30,9 @@ Milestones & Tasks
 - [x] UNION / UNION ALL (basic chaining)
 
 3) DML Complete
-- [ ] INSERT INTO t (cols)? VALUES rowValues (',' rowValues)*
-- [ ] INSERT ... SELECT (parse support)
-- [ ] INSERT ... SET col=expr (',' ...)*
+- [x] INSERT INTO t (cols)? VALUES rowValues (',' rowValues)*
+- [x] INSERT ... SELECT (parse support)
+- [x] INSERT ... SET col=expr (',' ...)*
 - [ ] UPDATE t SET col=expr (',' ...)* WHERE ...
 - [ ] DELETE FROM t WHERE ...
 
@@ -136,3 +136,4 @@ SELECT id, name FROM b;
 ```
 
 Next Steps (planned)\n- INSERT ... SELECT / INSERT ... SET grammar (no execution changes)\n- DDL strict CREATE TABLE and ALTER TABLE family\n- SHOW CREATE TABLE / DESCRIBE variants\n- Tests under server/src/test/java for new syntax (no runtime changes)\n
+
