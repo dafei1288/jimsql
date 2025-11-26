@@ -28,9 +28,9 @@
   </developers>
 
   <modules>
-    <module>jdbc</module>
-    <module>server</module>
     <module>common</module>
+    <module>server</module>
+    <module>jdbc</module>
     <module>jimsql_mcp_server</module>
   </modules>
 
