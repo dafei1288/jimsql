@@ -15,12 +15,12 @@ import org.snt.inmemantlr.tree.ParseTreeProcessor;
 public class SqlParserSmokeTest {
   public static void main(String[] args) throws Exception {
     String[] sqls = new String[] {
-//      "SELECT DISTINCT u.id, u.name, SUM(o.amount) AS total FROM `user` u LEFT JOIN `order` o ON o.user_id = u.id WHERE u.status = 'A' AND o.created_at >= '2024-01-01' GROUP BY u.id, u.name HAVING SUM(o.amount) > 100 ORDER BY total DESC, u.id ASC LIMIT 10 OFFSET 20",
-//      "SELECT id, name FROM a UNION ALL SELECT id, name FROM b",
-//      "INSERT INTO user(id, name) VALUES (1,'x'),(2,'y')",
-//      "INSERT INTO user SET id=3, name='z'",
-//      "SHOW CREATE TABLE `user`",
-//      "DESCRIBE `user`"
+      "SELECT DISTINCT u.id, u.name, SUM(o.amount) AS total FROM `user` u LEFT JOIN `order` o ON o.user_id = u.id WHERE u.status = 'A' AND o.created_at >= '2024-01-01' GROUP BY u.id, u.name HAVING SUM(o.amount) > 100 ORDER BY total DESC, u.id ASC LIMIT 10 OFFSET 20",
+      "SELECT id, name FROM a UNION ALL SELECT id, name FROM b",
+      "INSERT INTO user(id, name) VALUES (1,'x'),(2,'y')",
+      "INSERT INTO user SET id=3, name='z'",
+      "SHOW CREATE TABLE `user`",
+      "DESCRIBE `user`",
             "SELECT u.id, u.name FROM user u",
             "SELECT SUM(o.amount) AS total FROM `order` o",
             "SELECT u.id, SUM(o.amount) AS total FROM user u JOIN `order` o ON o.user_id=u.id"
@@ -35,8 +35,8 @@ public class SqlParserSmokeTest {
         ok++;
 
         if (s.getSqlStatementEnum() != null && s.getSqlStatementEnum().name().equals("SELECT_TABLE")) {
-          SelectTableParseTreeProcessor stpp = (SelectTableParseTreeProcessor) s.getCurrentParseTreeProcessor();
-          QueryLogicalPlan plan = stpp.getResult();
+          org.snt.inmemantlr.tree.ParseTreeProcessor cur = s.getCurrentParseTreeProcessor();
+          QueryLogicalPlan plan = null;\r\n          if (cur instanceof com.dafei1288.jimsql.server.parser.dql.DqlScriptParseTreeProcessor) {\r\n            Object r = ((com.dafei1288.jimsql.server.parser.dql.DqlScriptParseTreeProcessor) cur).getResult();\r\n            if (r instanceof QueryLogicalPlan) plan = (QueryLogicalPlan) r;\r\n          } else if (cur instanceof SelectTableParseTreeProcessor) {\r\n            plan = ((SelectTableParseTreeProcessor) cur).getResult();\r\n          }
           dumpPlan(plan);
         }
       } catch (Throwable e) {
@@ -57,6 +57,7 @@ public class SqlParserSmokeTest {
     System.out.println("  joins=" + p.getJoins().stream().map(j-> j.getType()+" "+(j.getRightTable()==null?null:j.getRightTable().getTableName())+" ON "+j.getOnExpression()).toList());
   }
 }
+
 
 
 
