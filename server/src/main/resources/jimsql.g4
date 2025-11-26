@@ -38,6 +38,8 @@ dcl:
   | showDatabases
   | showTables
   | showTableDesc
+  | showCreateTable
+  | describeTable
 ;
 
 // ---------------------------
@@ -301,6 +303,16 @@ showTableDesc:
   | DESCRIPT_SYMBOL TABLE_SYMBOL tableName
 ;
 
+
+showCreateTable:
+  SHOW_SYMBOL CREATE_SYMBOL TABLE_SYMBOL tableName
+;
+
+describeTable:
+  DESCRIBE_SYMBOL tableName
+  | DESC_SYMBOL TABLE_SYMBOL? tableName
+  | SHOW_SYMBOL COLUMNS_SYMBOL FROM_SYMBOL tableName
+;
 // ---------------------------
 // Lexer Tokens
 // ---------------------------
@@ -403,6 +415,8 @@ SHOW_SYMBOL:                     S H O W;
 PROCESSLIST_SYMBOL:              P R O C E S S L I S T;
 DESCRIPT_SYMBOL:                 D E S C R I P T;
 EXPLAIN_SYMBOL:                  E X P L A I N;
+DESCRIBE_SYMBOL:                 D E S C R I B E;
+COLUMNS_SYMBOL:                  C O L U M N S;
 UNION_SYMBOL:                    U N I O N;
 ALL_SYMBOL:                      A L L;
 JOIN_SYMBOL:                     J O I N;
@@ -422,4 +436,5 @@ LETTERS: LETTER+;
 // Quoted identifiers
 BACKTICK_QUOTED_ID: '`' ( '``' | ~'`' )* '`';
 DOUBLE_QUOTED_ID: '"' ( '""' | ~('"'|'\r'|'\n') )* '"';
+
 
