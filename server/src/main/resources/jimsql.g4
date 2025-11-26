@@ -1,19 +1,21 @@
 grammar jimsql;
 
+// ---------------------------
+// Entry Points
+// ---------------------------
 sqlscript:
     EOF
-    | (simpleStatement) (SEMICOLON_SYMBOL EOF? | EOF)
-    | (simpleStatement SEMICOLON_SYMBOL)+
+  | (simpleStatement) (SEMICOLON_SYMBOL EOF? | EOF)
+  | (simpleStatement SEMICOLON_SYMBOL)+
 ;
 
-simpleStatement: ddl
-  | dml
-  | dql
-  | dcl
-;
+simpleStatement: ddl | dml | dql | dcl;
 
+// ---------------------------
+// Statement Groups
+// ---------------------------
 ddl:
-  createDatabase
+    createDatabase
   | dropDatabase
   | useDatabase
   | createTable
@@ -21,13 +23,13 @@ ddl:
 ;
 
 dml:
-  insertTable
+    insertTable
   | deleteTable
   | updateTable
 ;
 
 dql:
-  selectTable
+    selectTable
   | explainSelectTable
 ;
 
@@ -38,7 +40,9 @@ dcl:
   | showTableDesc
 ;
 
-
+// ---------------------------
+// DDL
+// ---------------------------
 createDatabase:
   CREATE_SYMBOL DATABASE_SYMBOL  schemaName
 ;
@@ -50,16 +54,6 @@ schemaName:
 identifier:
   LETTERS
 ;
-
-number:
-   DIGIT
-  | floatNumber
-;
-
-floatNumber:
-  DIGIT (DOT_SYMBOL? DIGIT)
-;
-
 
 dropDatabase:
   DROP_SYMBOL DATABASE_SYMBOL schemaName
@@ -81,12 +75,13 @@ tableName:
   identifier
 ;
 
-
+// ---------------------------
+// DML
+// ---------------------------
 insertTable:
-//insert into  user_info (user_account,user_name,user_age,user_class) values ('00001', '张三 ','20','计算机系'),
+  // insert into user_info (a,b) values ('00001','20'),('00002','30')
   INSERT_SYMBOL INTO_SYMBOL tableName ( START_PAR_SYMBOL fields CLOSE_PAR_SYMBOL )?  insertValues
 ;
-
 
 fields:
     insertIdentifier (COMMA_SYMBOL insertIdentifier)*
@@ -107,23 +102,68 @@ valueList:
 ;
 
 values:
-    (expr) (COMMA_SYMBOL (expr))*
+    expr (COMMA_SYMBOL expr)*
 ;
 
+// ---------------------------
+// Expressions (with precedence)
+// ---------------------------
 expr:
-  number
+    numberLiteral
+  | stringLiteral
   | identifier
-
 ;
 
+expression:
+    orExpr
+;
 
+orExpr:
+    andExpr (OR_SYMBOL andExpr)*
+;
 
+andExpr:
+    notExpr (AND_SYMBOL notExpr)*
+;
+
+notExpr:
+    (NOT_SYMBOL)? predicate
+;
+
+predicate:
+    primary (
+        (EQ_SYMBOL | GT_SYMBOL | LT_SYMBOL | GTE_SYMBOL | LTE_SYMBOL | NE_SYMBOL) primary
+      | IS_SYMBOL (NOT_SYMBOL)? NULL_SYMBOL
+      | LIKE_SYMBOL primary
+      | BETWEEN_SYMBOL primary AND_SYMBOL primary
+      | IN_SYMBOL START_PAR_SYMBOL (expr (COMMA_SYMBOL expr)*)? CLOSE_PAR_SYMBOL
+    )?
+;
+
+primary:
+    START_PAR_SYMBOL expression CLOSE_PAR_SYMBOL
+  | expr
+;
+
+numberLiteral:
+    INT_LITERAL
+  | DECIMAL_LITERAL
+;
+
+stringLiteral:
+    STRING_LITERAL
+;
+
+// ---------------------------
+// DML (delete/update)
+// ---------------------------
 deleteTable:
-  DELETE_SYMBOL FROM_SYMBOL tableName (WHERE_SYMBOL expressions)?
+  DELETE_SYMBOL FROM_SYMBOL tableName (WHERE_SYMBOL expression)?
 ;
 
+// Keep rule name for compatibility; route to single expression now
 expressions:
-  expression ( (OR_SYMBOL | AND_SYMBOL ) expression )*
+  expression
 ;
 
 updateTable:
@@ -138,10 +178,18 @@ updateItem:
   columnName EQ_SYMBOL expr
 ;
 
-//Address = 'Zhongshan 23', City = 'Nanjing'
-
+// ---------------------------
+// DQL
+// ---------------------------
 selectTable:
-  SELECT_SYMBOL columnList FROM_SYMBOL tableName (WHERE_SYMBOL expression)?
+  SELECT_SYMBOL (DISTINCT_SYMBOL)? columnList FROM_SYMBOL tableName
+  (WHERE_SYMBOL expression)?
+  (ORDER_SYMBOL BY_SYMBOL orderItem (COMMA_SYMBOL orderItem)*)?
+  (LIMIT_SYMBOL INT_LITERAL (OFFSET_SYMBOL INT_LITERAL)?)?
+;
+
+orderItem:
+  columnName (ASC_SYMBOL | DESC_SYMBOL)?
 ;
 
 columnList:
@@ -152,15 +200,13 @@ columnName:
   identifier
 ;
 
-expression:
-  expr (EQ_SYMBOL | GT_SYMBOL | LT_SYMBOL | GTE_SYMBOL | LTE_SYMBOL | NE_SYMBOL ) expr
-;
-
-
 explainSelectTable:
   EXPLAIN_SYMBOL selectTable
 ;
 
+// ---------------------------
+// DCL
+// ---------------------------
 showProcesslist:
   SHOW_SYMBOL PROCESSLIST_SYMBOL
 ;
@@ -175,9 +221,9 @@ showTableDesc:
   | DESCRIPT_SYMBOL TABLE_SYMBOL tableName
 ;
 
-
-
-
+// ---------------------------
+// Lexer Tokens
+// ---------------------------
 DOT_SYMBOL:         '.';
 SEMICOLON_SYMBOL:   ';';
 STAR_SYMBOL:        '*';
@@ -190,14 +236,21 @@ GTE_SYMBOL:         '>=';
 LTE_SYMBOL:         '<=';
 NE_SYMBOL:          '!=';
 
-
 START_PAR_SYMBOL:   '(';
 CLOSE_PAR_SYMBOL:   ')';
-// White space handling
-WHITESPACE: [ \t\f\r\n] -> channel(HIDDEN); // Ignore whitespaces.
 
+// Whitespace & Comments
+WHITESPACE: [ \t\f\r\n] -> channel(HIDDEN);
+LINE_COMMENT: '--' ~[\r\n]* -> channel(HIDDEN);
+HASH_COMMENT: '#' ~[\r\n]* -> channel(HIDDEN);
+BLOCK_COMMENT: '/*' .*? '*/' -> channel(HIDDEN);
 
+// Literals
+INT_LITERAL: [0-9]+;
+DECIMAL_LITERAL: [0-9]+ '.' [0-9]* | '.' [0-9]+;
+STRING_LITERAL: '\'' (\\' | \\\\ . | ~[''\r\n])* '\'';
 
+// Keyword fragments (A..Z)
 fragment A: [aA];
 fragment B: [bB];
 fragment C: [cC];
@@ -225,14 +278,11 @@ fragment X: [xX];
 fragment Y: [yY];
 fragment Z: [zZ];
 
-fragment DIGIT:    [0-9]+;
-//fragment DIGITS:   DIGIT+;
-//fragment HEXDIGIT: [0-9a-fA-F];
+// Identifiers (keep legacy behavior)
+LETTER: [a-zA-Z0-9_$\u0080-\uffff];
+LETTERS: LETTER+;
 
-
-
-
-
+// Keywords (must appear before LETTER/LETTERS)
 CREATE_SYMBOL:                   C R E A T E;
 DROP_SYMBOL:                     D R O P;
 DATABASE_SYMBOL:                 D A T A B A S E;
@@ -241,9 +291,23 @@ USE_SYMBOL:                      U S E;
 TABLES_SYMBOL:                   T A B L E S;
 TABLE_SYMBOL:                    T A B L E;
 SELECT_SYMBOL:                   S E L E C T;
+DISTINCT_SYMBOL:                 D I S T I N C T;
 FROM_SYMBOL:                     F R O M;
 WHERE_SYMBOL:                    W H E R E;
-INNER_SYMBOL:                    I N N E R ;
+ORDER_SYMBOL:                    O R D E R;
+BY_SYMBOL:                       B Y;
+ASC_SYMBOL:                      A S C;
+DESC_SYMBOL:                     D E S C;
+LIMIT_SYMBOL:                    L I M I T;
+OFFSET_SYMBOL:                   O F F S E T;
+NOT_SYMBOL:                      N O T;
+IS_SYMBOL:                       I S;
+LIKE_SYMBOL:                     L I K E;
+IN_SYMBOL:                       I N;
+BETWEEN_SYMBOL:                  B E T W E E N;
+TRUE_SYMBOL:                     T R U E;
+FALSE_SYMBOL:                    F A L S E;
+NULL_SYMBOL:                     N U L L;
 INSERT_SYMBOL:                   I N S E R T;
 INTO_SYMBOL:                     I N T O;
 VALUE_SYMBOL:                    V A L U E;
@@ -257,9 +321,3 @@ SHOW_SYMBOL:                     S H O W;
 PROCESSLIST_SYMBOL:              P R O C E S S L I S T;
 DESCRIPT_SYMBOL:                 D E S C R I P T;
 EXPLAIN_SYMBOL:                  E X P L A I N;
-
-
-
-LETTER: [a-zA-Z0-9_$\u0080-\uffff];
-LETTERS: LETTER+;
-

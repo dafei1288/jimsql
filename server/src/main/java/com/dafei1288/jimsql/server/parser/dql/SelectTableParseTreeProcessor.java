@@ -36,9 +36,9 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
         queryLogicalPlan.setStar(true);
       }else {
         queryLogicalPlan.setStar(false);
-        List<JqColumn> jqColumnList = parseTreeNode.getChildren().stream().map(it -> {
+        List<JqColumn> jqColumnList = parseTreeNode.getChildren().stream().filter(it -> "columnName".equals(it.getRule())).map(it -> {
                                                     JqColumn jqColumn = new JqColumn();
-                                                    jqColumn.setColumnName(it.getLabel());
+                                                    jqColumn.setColumnName(stripQuotes(it.getLabel()));
                                                     return jqColumn;
         }).collect(Collectors.toList());
         queryLogicalPlan.setJqColumnList(jqColumnList);
@@ -47,9 +47,11 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
     }
     if(parseTreeNode.getRule().equals("tableName")){
       JqTable jqTable = new JqTable();
-      jqTable.setTableName(parseTreeNode.getLabel());
+      jqTable.setTableName(stripQuotes(parseTreeNode.getLabel()));
       queryLogicalPlan.setFromTable(jqTable);
     }
 
   }
 }
+
+
