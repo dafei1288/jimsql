@@ -34,8 +34,10 @@ dropDatabase:
   DROP_SYMBOL DATABASE_SYMBOL (IF_SYMBOL EXISTS_SYMBOL)? schemaName
 ;
 
-useDatabase:
-  USE_SYMBOL schemaName
+
+
+dropTable:
+  DROP_SYMBOL TABLE_SYMBOL tableName
 ;
 
 createTable:
@@ -139,6 +141,12 @@ columnName:
 // ---------------------------
 // DML
 // ---------------------------
+
+dml:
+  insertTable
+  | deleteTable
+  | updateTable
+;
 insertTable:
   INSERT_SYMBOL INTO_SYMBOL tableName
     (
@@ -347,6 +355,11 @@ updateItem:
 // ---------------------------
 // DQL (SELECT/UNION)
 // ---------------------------
+
+dql:
+  selectTable
+  | explainSelectTable
+;
 selectTable:
   selectBody (UNION_SYMBOL (ALL_SYMBOL)? selectBody)*
 ;
@@ -399,6 +412,15 @@ explainSelectTable:
 // ---------------------------
 // DCL
 // ---------------------------
+
+dcl:
+  showProcesslist
+  | showDatabases
+  | showTables
+  | showTableDesc
+  | showCreateTable
+  | describeTable
+;
 showProcesslist:
   SHOW_SYMBOL PROCESSLIST_SYMBOL
 ;
@@ -592,4 +614,5 @@ LETTERS: LETTER+;
 // Quoted identifiers
 BACKTICK_QUOTED_ID: '`' ( '``' | ~'`' )* '`';
 DOUBLE_QUOTED_ID: '"' ( '""' | ~('"'|'\r'|'\n') )* '"';
+
 
