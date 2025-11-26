@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -64,15 +65,23 @@ public class ServerMetadata {
                                 jqTable.setJqDatabase(jqDatabase);
 
                               try {
-                                String firtLine = Files.newBufferedReader(csvFile.toPath()).readLine();
+                                java.io.BufferedReader br = Files.newBufferedReader(csvFile.toPath());
+                                String firtLine = br.readLine();
                                 String[] columns = firtLine.split(Utils.COLUMN_SPILTOR);
+                                String secondLine = br.readLine();
+                                if (secondLine == null) secondLine = "";
+                                String[] sample = secondLine.split(Utils.COLUMN_SPILTOR, -1);
                                 LinkedHashMap<String,JqColumn> jqColumnList = Arrays.stream(columns).map(column->{
                                     JqColumn jqColumn = new JqColumn();
                                     jqColumn.setColumnName(column);
                                     jqColumn.setTable(jqTable);
-                                    jqColumn.setColumnType(1);
-                                    jqColumn.setColumnClazzType(String.class);
-                                    jqColumn.setColumnType(1);
+                                    int idx = Arrays.asList(columns).indexOf(column);
+                                    String val = (idx >=0 && idx < sample.length) ? sample[idx] : null;
+                                    if (val != null && val.matches("-?\\d+")) {
+                                      try { long l = Long.parseLong(val); if (l>=Integer.MIN_VALUE && l<=Integer.MAX_VALUE) { jqColumn.setColumnType(Types.INTEGER); jqColumn.setColumnClazzType(Integer.class);} else { jqColumn.setColumnType(Types.BIGINT); jqColumn.setColumnClazzType(Long.class);} }
+                                      catch (Exception e){ jqColumn.setColumnType(Types.INTEGER); jqColumn.setColumnClazzType(Integer.class);} }
+                                    else if (val != null && val.matches("-?((\\d+\\.\\d+)|(\\d+))")) { jqColumn.setColumnType(Types.DOUBLE); jqColumn.setColumnClazzType(Double.class); }
+                                    else { jqColumn.setColumnType(Types.VARCHAR); jqColumn.setColumnClazzType(String.class); }
                                     jqColumn.setSize(50);
                                     return jqColumn;
                                 }).collect(Collectors.toMap(JqColumn::getColumnName, Function.identity(), (oldValue, newValue) -> oldValue, LinkedHashMap::new));

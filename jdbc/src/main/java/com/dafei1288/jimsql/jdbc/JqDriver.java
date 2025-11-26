@@ -16,7 +16,7 @@ public class JqDriver implements Driver {
 
   private static final JqDriver INSTANCE = new JqDriver();
   private static final String DEFAULT_URL = "jdbc:jimsql:";
-  private static final String PATTERN  = "^jdbc:jimsql://([a-zA-Z0-9_\\.]+):([0-9]+)/([a-zA-Z0-9_\\.]+)$";
+  private static final String PATTERN  = "^jdbc:jimsql://([a-zA-Z0-9_\\.]+):([0-9]+)/([a-zA-Z0-9_\\.]+)(\\?([^#]+))?$";
   private static String DATADIR = "/tmp";
   private static final ThreadLocal<Connection> DEFAULT_CONNECTION =
       new ThreadLocal<>();
@@ -46,16 +46,37 @@ public class JqDriver implements Driver {
     String host = "";
     int port = 0;
     String db = "";
+    String query = null;
 
     if(m.find()){
       host = m.group(1);
       port = Integer.parseInt(m.group(2));
       db = m.group(3);
+      query = m.groupCount() >= 5 ? m.group(5) : null;
 
       info.put("host",host);
       info.put("port",port);
       info.put("db",db);
       info.put("url",url);
+      String proto = System.getProperty("jimsql.protocol");
+      if (proto != null) {
+        info.put("protocol", proto);
+      }
+      if (query != null && !query.isEmpty()) {
+        java.util.Map<String,String> q = parseQuery(query);
+        for (java.util.Map.Entry<String,String> e : q.entrySet()) {
+          info.put(e.getKey(), e.getValue());
+        }
+        proto = q.get("protocol");
+        if (proto == null) proto = q.get("jimsql.protocol");
+        if (proto != null) info.put("protocol", proto);
+        if (q.get("user") != null) info.put("user", q.get("user"));
+        if (q.get("password") != null) info.put("password", q.get("password"));
+      }
+      String protoSys = System.getProperty("jimsql.protocol");
+      if (protoSys != null && !protoSys.isEmpty()) {
+        info.put("protocol", protoSys);
+      }
     }else{
       throw new SQLException("url error please makesure the url is useable ");
     }
@@ -68,6 +89,26 @@ public class JqDriver implements Driver {
     }
 
     return jq;
+  }
+
+  private static java.util.Map<String,String> parseQuery(String q) {
+    java.util.Map<String,String> m = new java.util.HashMap<>();
+    String[] parts = q.split("&");
+    for (String p : parts) {
+      if (p.isEmpty()) continue;
+      int idx = p.indexOf('=');
+      String k; String v;
+      if (idx > 0) {
+        k = p.substring(0, idx);
+        v = p.substring(idx+1);
+      } else { k = p; v = ""; }
+      try {
+        k = java.net.URLDecoder.decode(k, java.nio.charset.StandardCharsets.UTF_8);
+        v = java.net.URLDecoder.decode(v, java.nio.charset.StandardCharsets.UTF_8);
+      } catch (Exception ignored) {}
+      m.put(k, v);
+    }
+    return m;
   }
 
   @Override

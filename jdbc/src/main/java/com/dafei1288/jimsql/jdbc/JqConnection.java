@@ -52,6 +52,10 @@ public class JqConnection implements Connection {
 
   @Override
   public Statement createStatement() throws SQLException {
+    String proto = info.getProperty("protocol", System.getProperty("jimsql.protocol","legacy"));
+    if ("jspv1".equalsIgnoreCase(proto)) {
+      return new com.dafei1288.jimsql.jdbc.protocol.JspV1Statement(this);
+    }
     return new JqStatement(this);
   }
 

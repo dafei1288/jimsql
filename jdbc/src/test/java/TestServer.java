@@ -14,7 +14,7 @@ public class TestServer {
 
 
     Class.forName("com.dafei1288.jimsql.jdbc.JqDriver");
-    Connection conn = DriverManager.getConnection("jdbc:jimsql://localhost:8821/test");
+    Connection conn = DriverManager.getConnection("jdbc:jimsql://localhost:8821/test?protocol=jspv1&&wirelog=json");
     System.out.println(conn);
 
     Statement statement = conn.createStatement();
@@ -27,10 +27,10 @@ public class TestServer {
 //      id,name,age
       ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
       List<String> colNames = new ArrayList<>();
-      for(int i=0;i<resultSetMetaData.getColumnCount();i++){
-//        colNames.add(resultSetMetaData.getColumnName(i));
+      int count = resultSetMetaData.getColumnCount();
+      for (int i = 1; i <= count; i++) { // JDBC column index is 1-based
         String colName = resultSetMetaData.getColumnLabel(i);
-        System.out.println(colName+" => "+resultSet.getString(colName));
+        System.out.println(colName + " => " + resultSet.getString(colName));
       }
       System.out.println();
 //      String id = resultSet.getString("id");
