@@ -20,33 +20,101 @@ ddl:
   | useDatabase
   | createTable
   | dropTable
-;
-
-dml:
-    insertTable
-  | deleteTable
-  | updateTable
-;
-
-dql:
-    selectTable
-  | explainSelectTable
-;
-
-dcl:
-    showProcesslist
-  | showDatabases
-  | showTables
-  | showTableDesc
-  | showCreateTable
-  | describeTable
+  | alterTable
 ;
 
 // ---------------------------
 // DDL
 // ---------------------------
 createDatabase:
-  CREATE_SYMBOL DATABASE_SYMBOL  schemaName
+  CREATE_SYMBOL DATABASE_SYMBOL (IF_SYMBOL NOT_SYMBOL EXISTS_SYMBOL)? schemaName
+;
+
+dropDatabase:
+  DROP_SYMBOL DATABASE_SYMBOL (IF_SYMBOL EXISTS_SYMBOL)? schemaName
+;
+
+useDatabase:
+  USE_SYMBOL schemaName
+;
+
+createTable:
+  CREATE_SYMBOL TABLE_SYMBOL (IF_SYMBOL NOT_SYMBOL EXISTS_SYMBOL)? tableName
+  START_PAR_SYMBOL tableElementList CLOSE_PAR_SYMBOL
+;
+
+tableElementList:
+  tableElement (COMMA_SYMBOL tableElement)*
+;
+
+tableElement:
+  columnDef
+  | tableConstraint
+;
+
+columnDef:
+  columnName dataType columnDefOption*
+;
+
+columnDefOption:
+    NULL_SYMBOL
+  | NOT_SYMBOL NULL_SYMBOL
+  | DEFAULT_SYMBOL defaultValue
+  | AUTO_INCREMENT_SYMBOL
+  | PRIMARY_SYMBOL KEY_SYMBOL
+  | UNIQUE_SYMBOL
+  | COMMENT_SYMBOL stringLiteral
+;
+
+defaultValue:
+    stringLiteral
+  | numberLiteral
+  | NULL_SYMBOL
+  | TRUE_SYMBOL
+  | FALSE_SYMBOL
+;
+
+numberLiteral:
+    INT_LITERAL
+  | DECIMAL_LITERAL
+;
+
+stringLiteral:
+    STRING_LITERAL
+;
+
+tableConstraint:
+    PRIMARY_SYMBOL KEY_SYMBOL START_PAR_SYMBOL colList CLOSE_PAR_SYMBOL
+  | UNIQUE_SYMBOL START_PAR_SYMBOL colList CLOSE_PAR_SYMBOL
+  | (CONSTRAINT_SYMBOL identifier)? FOREIGN_SYMBOL KEY_SYMBOL START_PAR_SYMBOL colList CLOSE_PAR_SYMBOL
+      REFERENCES_SYMBOL tableName START_PAR_SYMBOL colList CLOSE_PAR_SYMBOL
+;
+
+colList:
+  columnName (COMMA_SYMBOL columnName)*
+;
+
+alterTable:
+  ALTER_SYMBOL TABLE_SYMBOL tableName alterSpecification
+;
+
+alterSpecification:
+    ADD_SYMBOL (COLUMN_SYMBOL)? columnDef positionClause?
+  | DROP_SYMBOL (COLUMN_SYMBOL)? columnName
+  | MODIFY_SYMBOL (COLUMN_SYMBOL)? columnDef
+  | CHANGE_SYMBOL (COLUMN_SYMBOL)? identifier identifier columnDef
+  | RENAME_SYMBOL (TO_SYMBOL)? tableName
+  | ADD_SYMBOL (UNIQUE_SYMBOL)? (INDEX_SYMBOL | KEY_SYMBOL) identifier START_PAR_SYMBOL colList CLOSE_PAR_SYMBOL
+  | DROP_SYMBOL (INDEX_SYMBOL | KEY_SYMBOL) identifier
+  | ADD_SYMBOL (CONSTRAINT_SYMBOL identifier)? FOREIGN_SYMBOL KEY_SYMBOL START_PAR_SYMBOL colList CLOSE_PAR_SYMBOL REFERENCES_SYMBOL tableName START_PAR_SYMBOL colList CLOSE_PAR_SYMBOL
+  | DROP_SYMBOL FOREIGN_SYMBOL KEY_SYMBOL identifier
+  | ADD_SYMBOL PRIMARY_SYMBOL KEY_SYMBOL START_PAR_SYMBOL colList CLOSE_PAR_SYMBOL
+  | DROP_SYMBOL PRIMARY_SYMBOL KEY_SYMBOL
+;
+
+positionClause:
+    FIRST_SYMBOL
+  | AFTER_SYMBOL identifier
 ;
 
 schemaName:
@@ -60,23 +128,11 @@ identifier:
   | DOUBLE_QUOTED_ID
 ;
 
-dropDatabase:
-  DROP_SYMBOL DATABASE_SYMBOL schemaName
-;
-
-useDatabase:
-  USE_SYMBOL schemaName
-;
-
-createTable:
-  CREATE_SYMBOL TABLE_SYMBOL  tableName
-;
-
-dropTable:
-  DROP_SYMBOL TABLE_SYMBOL tableName
-;
-
 tableName:
+  identifier
+;
+
+columnName:
   identifier
 ;
 
@@ -188,15 +244,6 @@ primary:
   | expr
 ;
 
-numberLiteral:
-    INT_LITERAL
-  | DECIMAL_LITERAL
-;
-
-stringLiteral:
-    STRING_LITERAL
-;
-
 booleanLiteral:
     TRUE_SYMBOL
   | FALSE_SYMBOL
@@ -207,8 +254,75 @@ nullLiteral:
 ;
 
 // ---------------------------
+// Data Types
+// ---------------------------
+
+dataType:
+    integerType
+  | floatDoubleType
+  | decimalType
+  | charVarType
+  | binaryVarType
+  | textBlobType
+  | dateTimeType
+  | jsonType
+  | boolType
+  | enumType
+  | setType
+;
+
+integerType:
+  (TINYINT_SYMBOL | SMALLINT_SYMBOL | MEDIUMINT_SYMBOL | INT_SYMBOL | BIGINT_SYMBOL) (UNSIGNED_SYMBOL)?
+;
+
+floatDoubleType:
+  FLOAT_SYMBOL | DOUBLE_SYMBOL
+;
+
+decimalType:
+  DECIMAL_T_SYMBOL START_PAR_SYMBOL INT_LITERAL (COMMA_SYMBOL INT_LITERAL)? CLOSE_PAR_SYMBOL
+;
+
+charVarType:
+  (CHAR_SYMBOL | VARCHAR_SYMBOL) START_PAR_SYMBOL INT_LITERAL CLOSE_PAR_SYMBOL
+;
+
+binaryVarType:
+  (BINARY_SYMBOL | VARBINARY_SYMBOL) START_PAR_SYMBOL INT_LITERAL CLOSE_PAR_SYMBOL
+;
+
+textBlobType:
+  TINYTEXT_SYMBOL | TEXT_SYMBOL | MEDIUMTEXT_SYMBOL | LONGTEXT_SYMBOL | TINYBLOB_SYMBOL | BLOB_SYMBOL | MEDIUMBLOB_SYMBOL | LONGBLOB_SYMBOL
+;
+
+dateTimeType:
+  DATE_SYMBOL | TIME_SYMBOL | DATETIME_SYMBOL | TIMESTAMP_SYMBOL | YEAR_SYMBOL
+;
+
+jsonType:
+  JSON_SYMBOL
+;
+
+boolType:
+  BOOL_SYMBOL | BOOLEAN_SYMBOL
+;
+
+enumType:
+  ENUM_SYMBOL START_PAR_SYMBOL stringList CLOSE_PAR_SYMBOL
+;
+
+setType:
+  SET_SYMBOL START_PAR_SYMBOL stringList CLOSE_PAR_SYMBOL
+;
+
+stringList:
+  STRING_LITERAL (COMMA_SYMBOL STRING_LITERAL)*
+;
+
+// ---------------------------
 // DML (delete/update)
 // ---------------------------
+
 deleteTable:
   DELETE_SYMBOL FROM_SYMBOL tableName (WHERE_SYMBOL expression)?
 ;
@@ -258,10 +372,6 @@ columnList:
     STAR_SYMBOL? (columnName (COMMA_SYMBOL columnName)* )?
 ;
 
-columnName:
-  identifier
-;
-
 // FROM sources and JOINs
 
 tableSource:
@@ -303,7 +413,6 @@ showTableDesc:
   | DESCRIPT_SYMBOL TABLE_SYMBOL tableName
 ;
 
-
 showCreateTable:
   SHOW_SYMBOL CREATE_SYMBOL TABLE_SYMBOL tableName
 ;
@@ -313,6 +422,7 @@ describeTable:
   | DESC_SYMBOL TABLE_SYMBOL? tableName
   | SHOW_SYMBOL COLUMNS_SYMBOL FROM_SYMBOL tableName
 ;
+
 // ---------------------------
 // Lexer Tokens
 // ---------------------------
@@ -377,11 +487,57 @@ fragment Z: [zZ];
 // Keywords (must appear before LETTER/LETTERS)
 CREATE_SYMBOL:                   C R E A T E;
 DROP_SYMBOL:                     D R O P;
+ALTER_SYMBOL:                    A L T E R;
+ADD_SYMBOL:                      A D D;
+MODIFY_SYMBOL:                   M O D I F Y;
+CHANGE_SYMBOL:                   C H A N G E;
+RENAME_SYMBOL:                   R E N A M E;
+TO_SYMBOL:                       T O;
+IF_SYMBOL:                       I F;
+EXISTS_SYMBOL:                   E X I S T S;
 DATABASE_SYMBOL:                 D A T A B A S E;
 DATABASES_SYMBOL:                D A T A B A S E S;
 USE_SYMBOL:                      U S E;
 TABLES_SYMBOL:                   T A B L E S;
 TABLE_SYMBOL:                    T A B L E;
+COLUMN_SYMBOL:                   C O L U M N;
+FIRST_SYMBOL:                    F I R S T;
+AFTER_SYMBOL:                    A F T E R;
+INDEX_SYMBOL:                    I N D E X;
+KEY_SYMBOL:                      K E Y;
+PRIMARY_SYMBOL:                  P R I M A R Y;
+UNIQUE_SYMBOL:                   U N I Q U E;
+FOREIGN_SYMBOL:                  F O R E I G N;
+REFERENCES_SYMBOL:               R E F E R E N C E S;
+CONSTRAINT_SYMBOL:               C O N S T R A I N T;
+AUTO_INCREMENT_SYMBOL:           A U T O '_' I N C R E M E N T;
+DEFAULT_SYMBOL:                  D E F A U L T;
+COMMENT_SYMBOL:                  C O M M E N T;
+UNSIGNED_SYMBOL:                 U N S I G N E D;
+CHAR_SYMBOL:                     C H A R;
+VARCHAR_SYMBOL:                  V A R C H A R;
+BINARY_SYMBOL:                   B I N A R Y;
+VARBINARY_SYMBOL:                V A R B I N A R Y;
+TINYTEXT_SYMBOL:                 T I N Y T E X T;
+TEXT_SYMBOL:                     T E X T;
+MEDIUMTEXT_SYMBOL:               M E D I U M T E X T;
+LONGTEXT_SYMBOL:                 L O N G T E X T;
+TINYBLOB_SYMBOL:                 T I N Y B L O B;
+BLOB_SYMBOL:                     B L O B;
+MEDIUMBLOB_SYMBOL:               M E D I U M B L O B;
+LONGBLOB_SYMBOL:                 L O N G B L O B;
+DATE_SYMBOL:                     D A T E;
+TIME_SYMBOL:                     T I M E;
+DATETIME_SYMBOL:                 D A T E T I M E;
+TIMESTAMP_SYMBOL:                T I M E S T A M P;
+YEAR_SYMBOL:                     Y E A R;
+JSON_SYMBOL:                     J S O N;
+BOOL_SYMBOL:                     B O O L;
+BOOLEAN_SYMBOL:                  B O O L E A N;
+ENUM_SYMBOL:                     E N U M;
+FLOAT_SYMBOL:                    F L O A T;
+DOUBLE_SYMBOL:                   D O U B L E;
+DECIMAL_T_SYMBOL:                D E C I M A L;
 SELECT_SYMBOL:                   S E L E C T;
 DISTINCT_SYMBOL:                 D I S T I N C T;
 FROM_SYMBOL:                     F R O M;
@@ -415,8 +571,6 @@ SHOW_SYMBOL:                     S H O W;
 PROCESSLIST_SYMBOL:              P R O C E S S L I S T;
 DESCRIPT_SYMBOL:                 D E S C R I P T;
 EXPLAIN_SYMBOL:                  E X P L A I N;
-DESCRIBE_SYMBOL:                 D E S C R I B E;
-COLUMNS_SYMBOL:                  C O L U M N S;
 UNION_SYMBOL:                    U N I O N;
 ALL_SYMBOL:                      A L L;
 JOIN_SYMBOL:                     J O I N;
@@ -428,6 +582,8 @@ OUTER_SYMBOL:                    O U T E R;
 CROSS_SYMBOL:                    C R O S S;
 ON_SYMBOL:                       O N;
 AS_SYMBOL:                       A S;
+DESCRIBE_SYMBOL:                 D E S C R I B E;
+COLUMNS_SYMBOL:                  C O L U M N S;
 
 // Identifiers (keep legacy behavior)
 LETTER: [a-zA-Z0-9_$\u0080-\uffff];
@@ -436,5 +592,4 @@ LETTERS: LETTER+;
 // Quoted identifiers
 BACKTICK_QUOTED_ID: '`' ( '``' | ~'`' )* '`';
 DOUBLE_QUOTED_ID: '"' ( '""' | ~('"'|'\r'|'\n') )* '"';
-
 
