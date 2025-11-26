@@ -4,6 +4,7 @@ import com.dafei1288.jimsql.common.JqQueryReq;
 import java.io.IOException;
 import java.io.InputStream;
 import org.snt.inmemantlr.GenericParser;
+import org.snt.inmemantlr.comp.DefaultCompilerOptionsProvider;
 import org.snt.inmemantlr.exceptions.CompilationException;
 import org.snt.inmemantlr.exceptions.IllegalWorkflowException;
 import org.snt.inmemantlr.exceptions.ParseTreeProcessorException;
@@ -35,6 +36,13 @@ public class SqlParser {
     try (InputStream sgrammar = SqlParser.class.getResourceAsStream("/jimsql.g4")) {
       sgrammarcontent = FileUtils.getStringFromStream(sgrammar);
       gp = new GenericParser(sgrammarcontent);
+      DefaultCompilerOptionsProvider cop = new DefaultCompilerOptionsProvider();
+      cop.getOptions().clear();
+      cop.getOptions().add("-source");
+      cop.getOptions().add("8");
+      cop.getOptions().add("-target");
+      cop.getOptions().add("8");
+      gp.setCompilerOptionsProvider(cop);
       defaultTreeListener = new DefaultTreeListener();
 
       gp.setListener(defaultTreeListener);
@@ -55,3 +63,4 @@ public class SqlParser {
     return scriptParseTreeProcessor;
   }
 }
+
