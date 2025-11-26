@@ -17,7 +17,9 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
 
   private final QueryLogicalPlan queryLogicalPlan = new QueryLogicalPlan();
   private boolean limitNext = false;
-  private boolean offsetNext = false;
+  private boolean offsetNext = false;\n  private boolean whereNext = false;\n  private boolean havingNext = false;
+  private boolean whereNext = false;
+  private boolean havingNext = false;
 
   public SelectTableParseTreeProcessor(ParseTree parseTree) {
     super(parseTree);
@@ -70,9 +72,7 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
         }
       }
       queryLogicalPlan.getOrderBy().add(new OrderItem(col, asc));
-    }
-
-    // LIMIT / OFFSET
+    }\n\n    // GROUP BY\n    if ("groupByList".equals(parseTreeNode.getRule())) {\n      java.util.List<JqColumn> gcols = new java.util.ArrayList<>();\n      for (org.snt.inmemantlr.tree.ParseTreeNode ch : parseTreeNode.getChildren()) {\n        if ("columnName".equals(ch.getRule())) {\n          JqColumn c = new JqColumn();\n          c.setColumnName(stripQuotes(ch.getLabel()));\n          gcols.add(c);\n        }\n      }\n      if (!gcols.isEmpty()) {\n        java.util.List<JqColumn> all = queryLogicalPlan.getGroupByColumns();\n        all.addAll(gcols);\n        queryLogicalPlan.setGroupByColumns(all);\n      }\n    }\n\n    // LIMIT / OFFSET
     if ("LIMIT_SYMBOL".equals(parseTreeNode.getRule())) {
       limitNext = true; offsetNext = false; return;
     }
@@ -85,9 +85,7 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
         if (limitNext && queryLogicalPlan.getLimit() == null) { queryLogicalPlan.setLimit(v); limitNext = false; }
         else if (offsetNext && queryLogicalPlan.getOffset() == null) { queryLogicalPlan.setOffset(v); offsetNext = false; }
       } catch (Exception ignore) {}
-    }
-
-    // JOINs
+    }\n\n    // WHERE / HAVING markers\n    if ("WHERE_SYMBOL".equals(parseTreeNode.getRule())) { whereNext = true; havingNext = false; return; }\n    if ("HAVING_SYMBOL".equals(parseTreeNode.getRule())) { havingNext = true; whereNext = false; return; }\n\n    // Capture expression for WHERE/HAVING (raw text)\n    if ("expression".equals(parseTreeNode.getRule())) {\n      if (whereNext && queryLogicalPlan.getWhereExpression() == null) {\n        queryLogicalPlan.setWhereExpression(extractText(parseTreeNode));\n        whereNext = false;\n      } else if (havingNext && queryLogicalPlan.getHavingExpression() == null) {\n        queryLogicalPlan.setHavingExpression(extractText(parseTreeNode));\n        havingNext = false;\n      }\n    }\n\n    // JOINs
     if ("tableJoin".equals(parseTreeNode.getRule())) {
       JoinSpec js = new JoinSpec();
       js.setType(JoinType.INNER);
@@ -146,3 +144,5 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
     for (ParseTreeNode c : n.getChildren()) dfs(c, sb);
   }
 }
+
+
