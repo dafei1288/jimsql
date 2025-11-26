@@ -34,6 +34,10 @@ dropDatabase:
   DROP_SYMBOL DATABASE_SYMBOL (IF_SYMBOL EXISTS_SYMBOL)? schemaName
 ;
 
+useDatabase:
+  USE_SYMBOL schemaName
+;
+
 
 
 dropTable:
@@ -614,5 +618,6 @@ LETTERS: LETTER+;
 // Quoted identifiers
 BACKTICK_QUOTED_ID: '`' ( '``' | ~'`' )* '`';
 DOUBLE_QUOTED_ID: '"' ( '""' | ~('"'|'\r'|'\n') )* '"';
+
 
 
