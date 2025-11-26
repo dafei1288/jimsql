@@ -136,13 +136,31 @@ notExpr:
 ;
 
 predicate:
-    primary (
-        (EQ_SYMBOL | GT_SYMBOL | LT_SYMBOL | GTE_SYMBOL | LTE_SYMBOL | NE_SYMBOL) primary
+    valueExpr (
+        (EQ_SYMBOL | GT_SYMBOL | LT_SYMBOL | GTE_SYMBOL | LTE_SYMBOL | NE_SYMBOL) valueExpr
       | IS_SYMBOL (NOT_SYMBOL)? NULL_SYMBOL
-      | LIKE_SYMBOL primary
-      | BETWEEN_SYMBOL primary AND_SYMBOL primary
+      | LIKE_SYMBOL valueExpr
+      | BETWEEN_SYMBOL valueExpr AND_SYMBOL valueExpr
       | IN_SYMBOL START_PAR_SYMBOL (expr (COMMA_SYMBOL expr)*)? CLOSE_PAR_SYMBOL
     )?
+;
+
+// Arithmetic expression precedence
+valueExpr:
+  addExpr
+;
+
+addExpr:
+  mulExpr ((PLUS_SYMBOL | MINUS_SYMBOL) mulExpr)*
+;
+
+mulExpr:
+  unaryExpr ((STAR_SYMBOL | DIV_SYMBOL | MOD_SYMBOL) unaryExpr)*
+;
+
+unaryExpr:
+  (PLUS_SYMBOL | MINUS_SYMBOL) unaryExpr
+  | primary
 ;
 
 primary:
@@ -193,16 +211,27 @@ updateItem:
 ;
 
 // ---------------------------
-// DQL
+// DQL (SELECT/UNION)
 // ---------------------------
-selectTable:`r`n  SELECT_SYMBOL (DISTINCT_SYMBOL)? columnList FROM_SYMBOL (tableName | tableSource)
+selectTable:
+  selectBody (UNION_SYMBOL (ALL_SYMBOL)? selectBody)*
+;
+
+selectBody:
+  SELECT_SYMBOL (DISTINCT_SYMBOL)? columnList FROM_SYMBOL (tableName | tableSource)
   (WHERE_SYMBOL expression)?
+  (GROUP_SYMBOL BY_SYMBOL groupByList)?
+  (HAVING_SYMBOL expression)?
   (ORDER_SYMBOL BY_SYMBOL orderItem (COMMA_SYMBOL orderItem)*)?
   (LIMIT_SYMBOL INT_LITERAL (OFFSET_SYMBOL INT_LITERAL)?)?
 ;
 
 orderItem:
   columnName (ASC_SYMBOL | DESC_SYMBOL)?
+;
+
+groupByList:
+  columnName (COMMA_SYMBOL columnName)*
 ;
 
 columnList:
@@ -212,6 +241,8 @@ columnList:
 columnName:
   identifier
 ;
+
+// FROM sources and JOINs
 
 tableSource:
   tablePrimary (tableJoin)*
@@ -230,7 +261,6 @@ tableJoin:
 | ( (LEFT_SYMBOL | RIGHT_SYMBOL | FULL_SYMBOL) (OUTER_SYMBOL)? JOIN_SYMBOL tablePrimary ON_SYMBOL expression )
 | ( CROSS_SYMBOL JOIN_SYMBOL tablePrimary )
 ;
-
 
 explainSelectTable:
   EXPLAIN_SYMBOL selectTable
@@ -260,6 +290,10 @@ DOT_SYMBOL:         '.';
 SEMICOLON_SYMBOL:   ';';
 STAR_SYMBOL:        '*';
 COMMA_SYMBOL:       ',';
+PLUS_SYMBOL:        '+';
+MINUS_SYMBOL:       '-';
+DIV_SYMBOL:         '/';
+MOD_SYMBOL:         '%';
 
 EQ_SYMBOL:          '=';
 GT_SYMBOL:          '>';
@@ -322,6 +356,8 @@ SELECT_SYMBOL:                   S E L E C T;
 DISTINCT_SYMBOL:                 D I S T I N C T;
 FROM_SYMBOL:                     F R O M;
 WHERE_SYMBOL:                    W H E R E;
+GROUP_SYMBOL:                    G R O U P;
+HAVING_SYMBOL:                   H A V I N G;
 ORDER_SYMBOL:                    O R D E R;
 BY_SYMBOL:                       B Y;
 ASC_SYMBOL:                      A S C;
@@ -348,7 +384,18 @@ AND_SYMBOL:                      A N D;
 SHOW_SYMBOL:                     S H O W;
 PROCESSLIST_SYMBOL:              P R O C E S S L I S T;
 DESCRIPT_SYMBOL:                 D E S C R I P T;
-EXPLAIN_SYMBOL:                  E X P L A I N;`r`nJOIN_SYMBOL:                     J O I N;`r`nINNER_SYMBOL:                    I N N E R;`r`nLEFT_SYMBOL:                     L E F T;`r`nRIGHT_SYMBOL:                    R I G H T;`r`nFULL_SYMBOL:                     F U L L;`r`nOUTER_SYMBOL:                    O U T E R;`r`nCROSS_SYMBOL:                    C R O S S;`r`nON_SYMBOL:                       O N;`r`nAS_SYMBOL:                       A S;
+EXPLAIN_SYMBOL:                  E X P L A I N;
+UNION_SYMBOL:                    U N I O N;
+ALL_SYMBOL:                      A L L;
+JOIN_SYMBOL:                     J O I N;
+INNER_SYMBOL:                    I N N E R;
+LEFT_SYMBOL:                     L E F T;
+RIGHT_SYMBOL:                    R I G H T;
+FULL_SYMBOL:                     F U L L;
+OUTER_SYMBOL:                    O U T E R;
+CROSS_SYMBOL:                    C R O S S;
+ON_SYMBOL:                       O N;
+AS_SYMBOL:                       A S;
 
 // Identifiers (keep legacy behavior)
 LETTER: [a-zA-Z0-9_$\u0080-\uffff];
@@ -357,5 +404,4 @@ LETTERS: LETTER+;
 // Quoted identifiers
 BACKTICK_QUOTED_ID: '`' ( '``' | ~'`' )* '`';
 DOUBLE_QUOTED_ID: '"' ( '""' | ~('"'|'\r'|'\n') )* '"';
-
 
