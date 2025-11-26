@@ -82,8 +82,12 @@ tableName:
 // DML
 // ---------------------------
 insertTable:
-  // insert into user_info (a,b) values ('00001','20'),('00002','30')
-  INSERT_SYMBOL INTO_SYMBOL tableName ( START_PAR_SYMBOL fields CLOSE_PAR_SYMBOL )?  insertValues
+  INSERT_SYMBOL INTO_SYMBOL tableName
+    (
+      (START_PAR_SYMBOL fields CLOSE_PAR_SYMBOL)? insertValues
+    | (START_PAR_SYMBOL fields CLOSE_PAR_SYMBOL)? insertSelect
+    | SET_SYMBOL setAssignments
+    )
 ;
 
 fields:
@@ -106,6 +110,20 @@ valueList:
 
 values:
     expr (COMMA_SYMBOL expr)*
+;
+
+// INSERT ... SELECT support
+insertSelect:
+  selectBody (UNION_SYMBOL (ALL_SYMBOL)? selectBody)*
+;
+
+// INSERT ... SET support
+setAssignments:
+  setAssignment (COMMA_SYMBOL setAssignment)*
+;
+
+setAssignment:
+  insertIdentifier EQ_SYMBOL expr
 ;
 
 // ---------------------------
