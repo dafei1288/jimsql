@@ -5,15 +5,20 @@ import com.dafei1288.jimsql.common.meta.JqDatabase;
 import com.dafei1288.jimsql.common.meta.JqTable;
 import com.dafei1288.jimsql.server.plan.physical.PhysicalPlan;
 import com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan;
-import java.util.List;
-
-public class QueryLogicalPlan implements LogicalPlan{
+import java.util.ArrayList;
+import com.dafei1288.jimsql.server.plan.logical.OrderItem;
+import com.dafei1288.jimsql.server.plan.logical.JoinSpec;public class QueryLogicalPlan implements LogicalPlan{
   private boolean star;
   private List<JqColumn> jqColumnList;
   private JqTable fromTable;
-
-
-
+  // Optional SELECT clauses (not used by executor yet)
+  private java.util.List<OrderItem> orderBy = new ArrayList<>();
+  private Integer limit; // null means no limit
+  private Integer offset; // null means no offset
+  private java.util.List<JqColumn> groupByColumns = new ArrayList<>();
+  private String havingExpression; // raw text
+  private String whereExpression; // raw text
+  private java.util.List<JoinSpec> joins = new ArrayList<>();
   private OptimizeQueryLogicalPlan optimizeQueryLogicalPlan;
 
 
@@ -76,4 +81,18 @@ public class QueryLogicalPlan implements LogicalPlan{
   public PhysicalPlan transform() {
     return this.transform(this.optimizeQueryLogicalPlan);
   }
+  public java.util.List<OrderItem> getOrderBy() { return orderBy; }
+  public void setOrderBy(java.util.List<OrderItem> orderBy) { this.orderBy = orderBy; }
+  public Integer getLimit() { return limit; }
+  public void setLimit(Integer limit) { this.limit = limit; }
+  public Integer getOffset() { return offset; }
+  public void setOffset(Integer offset) { this.offset = offset; }
+  public java.util.List<JqColumn> getGroupByColumns() { return groupByColumns; }
+  public void setGroupByColumns(java.util.List<JqColumn> groupByColumns) { this.groupByColumns = groupByColumns; }
+  public String getHavingExpression() { return havingExpression; }
+  public void setHavingExpression(String havingExpression) { this.havingExpression = havingExpression; }
+  public String getWhereExpression() { return whereExpression; }
+  public void setWhereExpression(String whereExpression) { this.whereExpression = whereExpression; }
+  public java.util.List<JoinSpec> getJoins() { return joins; }
+  public void setJoins(java.util.List<JoinSpec> joins) { this.joins = joins; }
 }
