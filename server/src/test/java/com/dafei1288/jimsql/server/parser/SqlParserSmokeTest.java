@@ -5,7 +5,7 @@ import com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor;
 import com.dafei1288.jimsql.server.plan.logical.QueryLogicalPlan;
 import com.dafei1288.jimsql.server.plan.logical.OrderItem;
 import com.dafei1288.jimsql.server.plan.logical.JoinSpec;
-import org.snt.inmemantlr.exceptions.*;
+import org.snt.inmemantlr.exceptions.*;`r`nimport org.snt.inmemantlr.tree.ParseTreeProcessor;
 
 /**
  * Parser smoke test using server SqlParser and processors.
@@ -56,3 +56,4 @@ public class SqlParserSmokeTest {
     System.out.println("  joins=" + p.getJoins().stream().map(j-> j.getType()+" "+(j.getRightTable()==null?null:j.getRightTable().getTableName())+" ON "+j.getOnExpression()).toList());
   }
 }
+
