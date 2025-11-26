@@ -28,14 +28,11 @@ public class SqlParserSmokeTest {
       try {
         JqQueryReq req = new JqQueryReq();
         req.setDb("test"); req.setSql(sql);
-        ScriptParseTreeProcessor s = SqlParser.getInstance().parser(req);
-        ParseTreeProcessor proc = (ParseTreeProcessor) s.process();
-
-        System.out.println("[OK] (" + (i++) + ") " + sql);
+        ScriptParseTreeProcessor s = SqlParser.getInstance().parser(req); s.process(); System.out.println("[OK] (" + (i++) + ") " + sql);
         ok++;
 
         if (s.getSqlStatementEnum() != null && s.getSqlStatementEnum().name().equals("SELECT_TABLE")) {
-          SelectTableParseTreeProcessor stpp = (SelectTableParseTreeProcessor) ((ScriptParseTreeProcessor)proc).getCurrentParseTreeProcessor();
+          SelectTableParseTreeProcessor stpp = (SelectTableParseTreeProcessor) s.getCurrentParseTreeProcessor();
           QueryLogicalPlan plan = stpp.getResult();
           dumpPlan(plan);
         }
@@ -57,5 +54,6 @@ public class SqlParserSmokeTest {
     System.out.println("  joins=" + p.getJoins().stream().map(j-> j.getType()+" "+(j.getRightTable()==null?null:j.getRightTable().getTableName())+" ON "+j.getOnExpression()).toList());
   }
 }
+
 
 

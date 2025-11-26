@@ -139,7 +139,7 @@ tableName:
 ;
 
 columnName:
-  identifier
+  identifier (DOT_SYMBOL identifier)*
 ;
 
 // ---------------------------
@@ -204,8 +204,9 @@ expr:
   | stringLiteral
   | booleanLiteral
   | nullLiteral
-  | identifier
+  | qualifiedName
 ;
+
 
 expression:
     orExpr
@@ -253,8 +254,10 @@ unaryExpr:
 
 primary:
     START_PAR_SYMBOL expression CLOSE_PAR_SYMBOL
+  | functionCall
   | expr
 ;
+
 
 booleanLiteral:
     TRUE_SYMBOL
@@ -386,8 +389,19 @@ groupByList:
 ;
 
 columnList:
-    STAR_SYMBOL? (columnName (COMMA_SYMBOL columnName)* )?
+    STAR_SYMBOL
+  | selectItems
 ;
+
+selectItems:
+  selectItem (COMMA_SYMBOL selectItem)*
+;
+
+selectItem:
+    columnName
+  | valueExpr (AS_SYMBOL? alias)?
+;
+
 
 // FROM sources and JOINs
 
@@ -564,6 +578,11 @@ ENUM_SYMBOL:                     E N U M;
 FLOAT_SYMBOL:                    F L O A T;
 DOUBLE_SYMBOL:                   D O U B L E;
 DECIMAL_T_SYMBOL:                D E C I M A L;
+TINYINT_SYMBOL:                  T I N Y I N T;
+SMALLINT_SYMBOL:                 S M A L L I N T;
+MEDIUMINT_SYMBOL:                M E D I U M I N T;
+INT_SYMBOL:                      I N T;
+BIGINT_SYMBOL:                   B I G I N T;
 SELECT_SYMBOL:                   S E L E C T;
 DISTINCT_SYMBOL:                 D I S T I N C T;
 FROM_SYMBOL:                     F R O M;
@@ -620,4 +639,13 @@ BACKTICK_QUOTED_ID: '`' ( '``' | ~'`' )* '`';
 DOUBLE_QUOTED_ID: '"' ( '""' | ~('"'|'\r'|'\n') )* '"';
 
 
+
+
+qualifiedName:
+  identifier (DOT_SYMBOL identifier)*
+;
+
+functionCall:
+  identifier START_PAR_SYMBOL (expression (COMMA_SYMBOL expression)*)? CLOSE_PAR_SYMBOL
+;
 
