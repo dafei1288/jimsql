@@ -48,19 +48,23 @@ public class ExecPlanSmokeTest {
     ScriptParseTreeProcessor s = SqlParser.getInstance().parser(req);
     s.process();
 
-    QueryLogicalPlan plan = null;
-    if (s.getSqlStatementEnum() != null && "SELECT_TABLE".equals(s.getSqlStatementEnum().name())) {
-      Object cur = s.getCurrentParseTreeProcessor();
-    if (cur instanceof com.dafei1288.jimsql.server.parser.dql.DqlScriptParseTreeProcessor) {
-      Object r = ((com.dafei1288.jimsql.server.parser.dql.DqlScriptParseTreeProcessor) cur).getResult();
-      if (r instanceof QueryLogicalPlan) plan = (QueryLogicalPlan) r;
-    } else if (cur instanceof SelectTableParseTreeProcessor) {
-      plan = ((SelectTableParseTreeProcessor) cur).getResult();
-    }
-    }
-    if (plan == null) throw new IllegalStateException("no plan for SELECT (enum=" + (s.getSqlStatementEnum()==null?"null":s.getSqlStatementEnum().name()) + ")");
+      QueryLogicalPlan plan = null;
+      org.snt.inmemantlr.tree.ParseTreeProcessor cur = s.getCurrentParseTreeProcessor();
+      if (cur instanceof com.dafei1288.jimsql.server.parser.dql.DqlScriptParseTreeProcessor) {
+          Object r = ((com.dafei1288.jimsql.server.parser.dql.DqlScriptParseTreeProcessor) cur).getResult();
+          if (r instanceof QueryLogicalPlan) plan = (QueryLogicalPlan) r;
+      } else if (cur instanceof SelectTableParseTreeProcessor) {
+          plan = ((SelectTableParseTreeProcessor) cur).getResult();
+      }
+      if (plan == null) {
+          throw new IllegalStateException(
+                  "no plan for SELECT (cur=" +
+                          (cur==null ? "null" : cur.getClass().getName()) +
+                          ", enum=" + (s.getSqlStatementEnum()==null?"null":s.getSqlStatementEnum().name()) + ")"
+          );
+      }
 
-    // Optimize with current database
+      // Optimize with current database
     OptimizeQueryLogicalPlan opt = plan.optimizeQueryLogicalPlan(ServerMetadata.getInstance().fetchDatabaseByName("test"));
 
     // Physical and fake ctx
@@ -87,7 +91,7 @@ public class ExecPlanSmokeTest {
 
     ((QueryPhysicalPlan) pp).proxyWrite(ctx);
 
-    System.out.println("Rows: " + out.size());
+    System.out.println("Plan: limit="+plan.getLimit()+", offset="+plan.getOffset()+", where="+plan.getWhereExpression());\n    System.out.println("Rows: " + out.size());
     for (RowData r : out) {
       System.out.println(r.getDatas());
     }
