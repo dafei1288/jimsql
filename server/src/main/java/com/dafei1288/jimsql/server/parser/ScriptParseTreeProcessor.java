@@ -22,8 +22,6 @@ public class ScriptParseTreeProcessor extends ParseTreeProcessor {
     }
     return null;
   }
-    return ((ScriptParseTreeProcessor)this.getCurrentParseTreeProcessor()).getSqlStatementEnum();
-  }
 
   public void setSqlStatementEnum(SqlStatementEnum sqlStatementEnum) {
     this.sqlStatementEnum = sqlStatementEnum;
@@ -85,4 +83,5 @@ public class ScriptParseTreeProcessor extends ParseTreeProcessor {
 
   }
 }
+
 
