@@ -17,8 +17,23 @@ public class DqlScriptParseTreeProcessor extends ScriptParseTreeProcessor {
 
   @Override
   public Object getResult() {
-
-    return this.getCurrentParseTreeProcessor().getResult();
+    if (this.getCurrentParseTreeProcessor() != null) {
+      return this.getCurrentParseTreeProcessor().getResult();
+    }
+    // Fallback: try to locate selectTable subtree
+    for (ParseTreeNode n : this.parseTree.getNodes()) {
+      if ("selectTable".equals(n.getRule())) {
+        ParseTree sub = (ParseTree) smap.get(n);
+        if (sub != null) {
+          SelectTableParseTreeProcessor p = new SelectTableParseTreeProcessor(sub);
+          this.setCurrentParseTreeProcessor(p);
+          this.setSqlStatementEnum(SqlStatementEnum.SELECT_TABLE);
+          try { p.process(); } catch (Exception ignore) {}
+          return p.getResult();
+        }
+      }
+    }
+    return null;
   }
 
 
@@ -34,4 +49,5 @@ public class DqlScriptParseTreeProcessor extends ScriptParseTreeProcessor {
     }
   }
 }
+
 
