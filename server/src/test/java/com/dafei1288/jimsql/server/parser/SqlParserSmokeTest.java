@@ -36,7 +36,13 @@ public class SqlParserSmokeTest {
 
         if (s.getSqlStatementEnum() != null && s.getSqlStatementEnum().name().equals("SELECT_TABLE")) {
           org.snt.inmemantlr.tree.ParseTreeProcessor cur = s.getCurrentParseTreeProcessor();
-          QueryLogicalPlan plan = null;\r\n          if (cur instanceof com.dafei1288.jimsql.server.parser.dql.DqlScriptParseTreeProcessor) {\r\n            Object r = ((com.dafei1288.jimsql.server.parser.dql.DqlScriptParseTreeProcessor) cur).getResult();\r\n            if (r instanceof QueryLogicalPlan) plan = (QueryLogicalPlan) r;\r\n          } else if (cur instanceof SelectTableParseTreeProcessor) {\r\n            plan = ((SelectTableParseTreeProcessor) cur).getResult();\r\n          }
+          QueryLogicalPlan plan = null;
+          if (cur instanceof com.dafei1288.jimsql.server.parser.dql.DqlScriptParseTreeProcessor) {
+              Object r = ((com.dafei1288.jimsql.server.parser.dql.DqlScriptParseTreeProcessor) cur).getResult();
+            if (r instanceof QueryLogicalPlan) plan = (QueryLogicalPlan) r;
+          } else if (cur instanceof SelectTableParseTreeProcessor) {
+            plan = ((SelectTableParseTreeProcessor) cur).getResult();
+          }
           dumpPlan(plan);
         }
       } catch (Throwable e) {
