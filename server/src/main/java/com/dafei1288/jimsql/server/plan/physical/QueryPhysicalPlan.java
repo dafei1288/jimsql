@@ -149,7 +149,7 @@ public class QueryPhysicalPlan implements PhysicalPlan{
     for (OrderItem oi : items) {
       String col = normalizeColumn(oi.getColumn().getColumnName());
       int sqlType = columnSqlType(jt, col);
-      Comparator<Map<String,String>> c = (m1, m2) -> compareValues(m1.get(col), m2.get(col), sqlType);
+      Comparator<Map<String,String>> c = (m1, m2) -> compareValues(getCaseInsensitive(m1, col), getCaseInsensitive(m2, col), sqlType);
       if (!oi.isAsc()) c = c.reversed();
       cmp = cmp.thenComparing(c);
     }
@@ -157,12 +157,7 @@ public class QueryPhysicalPlan implements PhysicalPlan{
   }
 
   private static int columnSqlType(JqTable jt, String col) {
-    JqColumn jc = jt.getJqTableLinkedHashMap().get(col);
-    if (jc == null) {
-      // fallback to string
-      return java.sql.Types.VARCHAR;
-    }
-    return jc.getColumnType();
+    for (String k : jt.getJqTableLinkedHashMap().keySet()) { if (k.equalsIgnoreCase(col)) { JqColumn jc = jt.getJqTableLinkedHashMap().get(k); if (jc != null) return jc.getColumnType(); } } return java.sql.Types.VARCHAR;
   }
 
   private static int compareValues(String v1, String v2, int sqlType) {
@@ -324,5 +319,12 @@ public class QueryPhysicalPlan implements PhysicalPlan{
     String op;     // =, !=, >, >=, <, <=
     String literalString;
     BigDecimal literalNumeric;
+  }
+  private static String getCaseInsensitive(java.util.Map<String,String> row, String col) {
+      if (row == null || col == null) return null;
+      for (String k : row.keySet()) {
+          if (k.equalsIgnoreCase(col)) return row.get(k);
+      }
+      return null;
   }
 }
