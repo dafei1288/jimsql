@@ -34,23 +34,22 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
   @Override
   protected void process(ParseTreeNode parseTreeNode) throws ParseTreeProcessorException {
     // Columns
-    if ("columnList".equals(parseTreeNode.getRule())) {
-      if ("*".equals(parseTreeNode.getLabel())) {
-        queryLogicalPlan.setStar(true);
-      } else {
-        queryLogicalPlan.setStar(false);
-        List<JqColumn> jqColumnList = parseTreeNode.getChildren().stream()
-            .filter(it -> "columnName".equals(it.getRule()))
-            .map(it -> {
-              JqColumn jqColumn = new JqColumn();
-              jqColumn.setColumnName(stripQuotes(it.getLabel()));
-              return jqColumn;
-            }).collect(Collectors.toList());
-        queryLogicalPlan.setJqColumnList(jqColumnList);
+      if ("columnList".equals(parseTreeNode.getRule())) {
+          if ("*".equals(parseTreeNode.getLabel())) {
+              queryLogicalPlan.setStar(true);
+          } else {
+              // Collect columns from valueExpr subtree
+              java.util.List<JqColumn> cols = new java.util.ArrayList<>();
+              collectSelectColumns(parseTreeNode, cols);
+              if (!cols.isEmpty()) {
+                  queryLogicalPlan.setStar(false);
+                  queryLogicalPlan.setJqColumnList(cols);
+              }
+          }
       }
-    }
 
-    // FROM first table
+
+      // FROM first table
     if ("tableName".equals(parseTreeNode.getRule())) {
       if (queryLogicalPlan.getFromTable() == null) {
         JqTable jqTable = new JqTable();
@@ -59,7 +58,78 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
       }
     }
 
-    // ORDER BY
+    // Fallback: derive WHERE/LIMIT/OFFSET from selectBody text if not captured
+    if ("selectBody".equals(parseTreeNode.getRule())) {
+        java.util.List<ParseTreeNode> cs = parseTreeNode.getChildren();
+        for (int i = 0; i < cs.size(); i++) {
+            String r = cs.get(i).getRule();
+            if ("WHERE_SYMBOL".equals(r) && queryLogicalPlan.getWhereExpression() == null) {
+                for (int j = i + 1; j < cs.size(); j++) {
+                    if ("expression".equals(cs.get(j).getRule())) {
+                        queryLogicalPlan.setWhereExpression(extractText(cs.get(j)));
+                        break;
+                    }
+                }
+            }
+            if ("LIMIT_SYMBOL".equals(r) && queryLogicalPlan.getLimit() == null) {
+                for (int j = i + 1; j < cs.size(); j++) {
+                    if ("INT_LITERAL".equals(cs.get(j).getRule())) {
+                        try { queryLogicalPlan.setLimit(Integer.parseInt(cs.get(j).getLabel())); } catch (Exception ignore) {}
+                        break;
+                    }
+                }
+            }
+            if ("OFFSET_SYMBOL".equals(r) && queryLogicalPlan.getOffset() == null) {
+                for (int j = i + 1; j < cs.size(); j++) {
+                    if ("INT_LITERAL".equals(cs.get(j).getRule())) {
+                        try { queryLogicalPlan.setOffset(Integer.parseInt(cs.get(j).getLabel())); } catch (Exception ignore) {}
+                        break;
+                    }
+                }
+            }
+        }
+        String txt = extractText(parseTreeNode);
+      if (txt != null) {
+        String upper = txt.toUpperCase(java.util.Locale.ROOT);
+        // WHERE ... (GROUP BY|HAVING|ORDER BY|LIMIT|$)
+        if (queryLogicalPlan.getWhereExpression() == null) {
+          int w = upper.indexOf(" WHERE ");
+          if (w >= 0) {
+            int end = upper.length();
+            for (String kw : new String[]{" GROUP BY ", " HAVING ", " ORDER BY ", " LIMIT "}) {
+              int k = upper.indexOf(kw, w+1);
+              if (k >= 0 && k < end) end = k;
+            }
+            if (end > w+7) {
+              String we = txt.substring(w+7, end).trim();
+              if (!we.isEmpty()) queryLogicalPlan.setWhereExpression(we);
+            }
+          }
+        }
+        // LIMIT
+        if (queryLogicalPlan.getLimit() == null) {
+          int l = upper.indexOf(" LIMIT ");
+          if (l >= 0) {
+            String tail = upper.substring(l+7).trim();
+            java.util.regex.Matcher m = java.util.regex.Pattern.compile("^([0-9]+)").matcher(tail);
+            if (m.find()) {
+              try { queryLogicalPlan.setLimit(Integer.parseInt(m.group(1))); } catch (Exception ignore) {}
+            }
+          }
+        }
+        // OFFSET
+        if (queryLogicalPlan.getOffset() == null) {
+          int o = upper.indexOf(" OFFSET ");
+          if (o >= 0) {
+            String tail = upper.substring(o+8).trim();
+            java.util.regex.Matcher m = java.util.regex.Pattern.compile("^([0-9]+)").matcher(tail);
+            if (m.find()) {
+              try { queryLogicalPlan.setOffset(Integer.parseInt(m.group(1))); } catch (Exception ignore) {}
+            }
+          }
+        }
+      }
+    }    // ORDER BY
     if ("orderItem".equals(parseTreeNode.getRule())) {
       JqColumn col = new JqColumn();
       boolean asc = true;
@@ -176,13 +246,49 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
   }
 
   private void dfs(ParseTreeNode n, StringBuilder sb) {
-    String lbl = n.getLabel();
-    if (lbl != null && !lbl.isEmpty()) {
-      if (sb.length() > 0) sb.append(' ');
-      sb.append(lbl);
+  String lbl = n.getLabel();
+  if (lbl == null || lbl.isEmpty()) {
+    String r = n.getRule();
+    if (r != null && r.endsWith("_SYMBOL")) {
+      lbl = r.substring(0, r.length() - "_SYMBOL".length());
     }
+  }
+  if (lbl != null && !lbl.isEmpty()) {
+    if (sb.length() > 0) sb.append(' ');
+    sb.append(lbl);
+  }
+  for (ParseTreeNode c : n.getChildren()) dfs(c, sb);
+}
     for (ParseTreeNode c : n.getChildren()) dfs(c, sb);
   }
+  private void collectSelectColumns(org.snt.inmemantlr.tree.ParseTreeNode node, java.util.List<com.dafei1288.jimsql.common.meta.JqColumn> out) {
+  if ("columnName".equals(node.getRule())) {
+    com.dafei1288.jimsql.common.meta.JqColumn c = new com.dafei1288.jimsql.common.meta.JqColumn();
+    c.setColumnName(stripQuotes(node.getLabel()));
+    out.add(c);
+    return;
+  }
+  if ("qualifiedName".equals(node.getRule())) {
+    String last = null;
+    for (org.snt.inmemantlr.tree.ParseTreeNode ch : node.getChildren()) {
+      if ("identifier".equals(ch.getRule())) {
+        last = stripQuotes(ch.getLabel());
+      }
+    }
+    if (last != null) {
+      com.dafei1288.jimsql.common.meta.JqColumn c = new com.dafei1288.jimsql.common.meta.JqColumn();
+      c.setColumnName(last);
+      out.add(c);
+      return;
+    }
+  }
+  for (org.snt.inmemantlr.tree.ParseTreeNode ch : node.getChildren()) {
+    collectSelectColumns(ch, out);
+  }
 }
+    for (org.snt.inmemantlr.tree.ParseTreeNode ch : node.getChildren()) {
+      collectSelectColumns(ch, out);
+    }
+  }}
 
 
