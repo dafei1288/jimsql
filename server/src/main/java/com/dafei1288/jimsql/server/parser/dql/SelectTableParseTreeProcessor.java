@@ -129,6 +129,45 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
           }
         }
       }
+    }    if ("selectTable".equals(parseTreeNode.getRule())) {
+      String txt2 = extractText(parseTreeNode);
+      if (txt2 != null) {
+        String upper2 = txt2.toUpperCase(java.util.Locale.ROOT);
+        if (queryLogicalPlan.getWhereExpression() == null) {
+          int w2 = upper2.indexOf(" WHERE ");
+          if (w2 >= 0) {
+            int end2 = upper2.length();
+            for (String kw : new String[]{" GROUP BY ", " HAVING ", " ORDER BY ", " LIMIT "}) {
+              int k2 = upper2.indexOf(kw, w2+1);
+              if (k2 >= 0 && k2 < end2) end2 = k2;
+            }
+            if (end2 > w2+7) {
+              String we2 = txt2.substring(w2+7, end2).trim();
+              if (!we2.isEmpty()) queryLogicalPlan.setWhereExpression(we2);
+            }
+          }
+        }
+        if (queryLogicalPlan.getLimit() == null) {
+          int l2 = upper2.indexOf(" LIMIT ");
+          if (l2 >= 0) {
+            String tail2 = upper2.substring(l2+7).trim();
+            java.util.regex.Matcher m2 = java.util.regex.Pattern.compile("^([0-9]+)").matcher(tail2);
+            if (m2.find()) {
+              try { queryLogicalPlan.setLimit(Integer.parseInt(m2.group(1))); } catch (Exception ignore) {}
+            }
+          }
+        }
+        if (queryLogicalPlan.getOffset() == null) {
+          int o2 = upper2.indexOf(" OFFSET ");
+          if (o2 >= 0) {
+            String tailo2 = upper2.substring(o2+8).trim();
+            java.util.regex.Matcher mo2 = java.util.regex.Pattern.compile("^([0-9]+)").matcher(tailo2);
+            if (mo2.find()) {
+              try { queryLogicalPlan.setOffset(Integer.parseInt(mo2.group(1))); } catch (Exception ignore) {}
+            }
+          }
+        }
+      }
     }    // ORDER BY
     if ("orderItem".equals(parseTreeNode.getRule())) {
       JqColumn col = new JqColumn();
