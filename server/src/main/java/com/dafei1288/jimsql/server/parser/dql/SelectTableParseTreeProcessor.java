@@ -27,7 +27,50 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
   }
 
   @Override
-  public QueryLogicalPlan getResult() {
+    public QueryLogicalPlan getResult() {
+    // Ensure we have WHERE/LIMIT/OFFSET even if specific node handlers missed them
+    try {
+      if (queryLogicalPlan.getWhereExpression() == null || queryLogicalPlan.getLimit() == null || queryLogicalPlan.getOffset() == null) {
+        String whole = extractText(this.parseTree.getRoot());
+        if (whole != null) {
+          String U = whole.toUpperCase(java.util.Locale.ROOT);
+          if (queryLogicalPlan.getWhereExpression() == null) {
+            int w = U.indexOf(" WHERE ");
+            if (w >= 0) {
+              int end = U.length();
+              for (String kw : new String[]{" GROUP BY ", " HAVING ", " ORDER BY ", " LIMIT "}) {
+                int k = U.indexOf(kw, w+1);
+                if (k >= 0 && k < end) end = k;
+              }
+              if (end > w+7) {
+                String we = whole.substring(w+7, end).trim();
+                if (!we.isEmpty()) queryLogicalPlan.setWhereExpression(we);
+              }
+            }
+          }
+          if (queryLogicalPlan.getLimit() == null) {
+            int l = U.indexOf(" LIMIT ");
+            if (l >= 0) {
+              String tail = U.substring(l+7).trim();
+              java.util.regex.Matcher m2 = java.util.regex.Pattern.compile("^([0-9]+)").matcher(tail);
+              if (m2.find()) {
+                try { queryLogicalPlan.setLimit(Integer.parseInt(m2.group(1))); } catch (Exception ignore) {}
+              }
+            }
+          }
+          if (queryLogicalPlan.getOffset() == null) {
+            int o = U.indexOf(" OFFSET ");
+            if (o >= 0) {
+              String tailo = U.substring(o+8).trim();
+              java.util.regex.Matcher mo = java.util.regex.Pattern.compile("^([0-9]+)").matcher(tailo);
+              if (mo.find()) {
+                try { queryLogicalPlan.setOffset(Integer.parseInt(mo.group(1))); } catch (Exception ignore) {}
+              }
+            }
+          }
+        }
+      }
+    } catch (Exception ignore) {}
     return queryLogicalPlan;
   }
 
