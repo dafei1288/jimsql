@@ -469,7 +469,7 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
           if (!we.isEmpty()) this.queryLogicalPlan.setWhereExpression(we);
         }
       }
-    }
+    }\n    // ORDER BY (single item basic)\n    if (this.queryLogicalPlan.getOrderBy() == null || this.queryLogicalPlan.getOrderBy().isEmpty()) {\n      int ob = norm.indexOf("ORDERBY");\n      if (ob >= 0) {\n        int end2 = norm.length();\n        for (String kw2 : new String[]{"LIMIT","HAVING","GROUP"}) {\n          int k2 = norm.indexOf(kw2, ob+7);\n          if (k2 >= 0 && k2 < end2) end2 = k2;\n        }\n        if (end2 > ob+7) {\n          String ord = norm.substring(ob+7, end2);\n          java.util.regex.Matcher m1 = java.util.regex.Pattern.compile("^([A-Z0-9_\\\\.]+)(ASC|DESC)?").matcher(ord);\n          if (m1.find()) {\n            String col = m1.group(1);\n            boolean asc = true;\n            if (m1.groupCount() >= 2) {\n              String dir = m1.group(2);\n              if (dir != null && dir.equalsIgnoreCase("DESC")) asc = false;\n            }\n            com.dafei1288.jimsql.common.meta.JqColumn ccol = new com.dafei1288.jimsql.common.meta.JqColumn();\n            ccol.setColumnName(col.toLowerCase(java.util.Locale.ROOT));\n            this.queryLogicalPlan.getOrderBy().add(new com.dafei1288.jimsql.server.plan.logical.OrderItem(ccol, asc));\n          }\n        }\n      }\n    }
     // LIMIT
     if (this.queryLogicalPlan.getLimit() == null) {
       java.util.regex.Matcher m = java.util.regex.Pattern.compile("LIMIT([0-9]+)").matcher(norm);
