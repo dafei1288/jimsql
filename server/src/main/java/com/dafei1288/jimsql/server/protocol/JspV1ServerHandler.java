@@ -84,7 +84,7 @@ public class JspV1ServerHandler extends SimpleChannelInboundHandler<ProtocolFram
     sendSimple(ctx, MessageType.HELLO_ACK, msg.header.requestId, ack);
   }
 
-  private void handleQuery(ChannelHandlerContext ctx, ProtocolFrame msg) {
+    private void handleQuery(ChannelHandlerContext ctx, ProtocolFrame msg) {
     try {
       String payload = new String(msg.payload, StandardCharsets.UTF_8);
       String sql = extractJsonString(payload, "sql");
@@ -92,20 +92,20 @@ public class JspV1ServerHandler extends SimpleChannelInboundHandler<ProtocolFram
       String db = ctx.channel().attr(ATTR_DB).get();
       if (db == null) db = "test";
 
-      // Parse SQL (simple SELECT ... FROM ... parser to avoid runtime javac flags)
       ParsedSelect parsed = parseSelect(sql);
       if (parsed == null) {
         sendError(ctx, msg.header.requestId, 1001, "42000", "Only simple SELECT is supported in JSPv1 path");
         return;
       }
       String tableName = parsed.table;
-      List<String> selectedCols = parsed.columns; // null => '*'
-      JqTable jt = ServerMetadata.getInstance().fetchTableByName(db, tableName);
+      java.util.List<String> selectedCols = parsed.columns; // null => '*'
+      com.dafei1288.jimsql.common.meta.JqTable jt = ServerMetadata.getInstance().fetchTableByName(db, tableName);
       if (jt == null) { sendError(ctx, msg.header.requestId, 1001, "42P01", "table not found: "+tableName); return; }
       java.util.LinkedHashMap<String, com.dafei1288.jimsql.common.meta.JqColumn> all = jt.getJqTableLinkedHashMap();
-      List<String> projectCols = (selectedCols == null || selectedCols.isEmpty()) ? new java.util.ArrayList<>(all.keySet()) : selectedCols;
+      java.util.List<String> projectCols = (selectedCols == null || selectedCols.isEmpty()) ? new java.util.ArrayList<>(all.keySet()) : selectedCols;
 
-      // Build metadata
+      ClauseParts parts = extractClauses(sql);
+
       LinkedHashMap<String, JqColumnResultSetMetadata> cmap = new LinkedHashMap<>();
       for (int i = 0; i < projectCols.size(); i++) {
         String col = projectCols.get(i);
@@ -122,12 +122,11 @@ public class JspV1ServerHandler extends SimpleChannelInboundHandler<ProtocolFram
       }
       JqResultSetMetaData meta = new JqResultSetMetaData(cmap);
 
-      // Build HEADER JSON
       cmap = meta.getColumnMeta();
-      List<Map<String,Object>> cols = new ArrayList<>();
-      for (Map.Entry<String, JqColumnResultSetMetadata> e : cmap.entrySet()) {
+      java.util.List<java.util.Map<String,Object>> cols = new java.util.ArrayList<>();
+      for (java.util.Map.Entry<String, JqColumnResultSetMetadata> e : cmap.entrySet()) {
         JqColumnResultSetMetadata m = e.getValue();
-        cols.add(Map.of(
+        cols.add(java.util.Map.of(
             "name", e.getKey(),
             "label", m.getLabelName(),
             "type", m.getColumnType(),
@@ -144,17 +143,8 @@ public class JspV1ServerHandler extends SimpleChannelInboundHandler<ProtocolFram
       String headerJson = jsonOfHeader(cols, cursorId);
       sendSimple(ctx, MessageType.RESULTSET_HEADER, msg.header.requestId, headerJson);
 
-      // Stream data batches (simple CSV reader, aligned with existing QueryPhysicalPlan)
-      java.util.List<String> lines = java.nio.file.Files.readAllLines(jt.getBasepath().toPath());
-      // Determine projected columns order
-      // projectCols already determined
+      java.util.List<java.util.Map<String,String>> finalRows = buildFinalRows(jt, parts);
 
-      // Build header index
-      java.util.List<String> header = new java.util.ArrayList<>(jt.getJqTableLinkedHashMap().keySet());
-      java.util.Map<String,Integer> idx = new java.util.HashMap<>();
-      for (int c = 0; c < header.size(); c++) idx.put(header.get(c), c);
-
-      // types array from metadata (avoid lambda to keep locals effectively final)
       int[] types = new int[projectCols.size()];
       for (int i = 0; i < projectCols.size(); i++) {
         String k = projectCols.get(i);
@@ -163,27 +153,27 @@ public class JspV1ServerHandler extends SimpleChannelInboundHandler<ProtocolFram
       }
 
       if (openCursor) {
-        CursorState st = new CursorState(projectCols, types, lines, idx, 1);
-        java.util.Map<String, CursorState> map = ctx.channel().attr(ATTR_CURSORS).get();
-        if (map == null) { map = new java.util.HashMap<>(); ctx.channel().attr(ATTR_CURSORS).set(map); }
-        map.put(cursorId, st);
-        if (st.pos >= st.lines.size()) {
-          sendSimple(ctx, MessageType.RESULTSET_END, msg.header.requestId, String.format("{\"rows\":%d,\"warnings\":[]}", st.rowsSent));
-          map.remove(cursorId);
+        int fetchSize = extractInt(payload, "fetchSize", 500);
+        java.util.List<String[]> batch = new java.util.ArrayList<>(fetchSize);
+        int sent = 0;
+        for (int r = 0; r < finalRows.size(); r++) {
+          String[] outRow = new String[projectCols.size()];
+          for (int c = 0; c < projectCols.size(); c++) outRow[c] = getCaseInsensitive(finalRows.get(r), projectCols.get(c));
+          batch.add(outRow);
+          if (batch.size() >= fetchSize) { sendTypedBatch(ctx, msg.header.requestId, batch, types); batch.clear(); }
+          sent++;
         }
+        if (!batch.isEmpty()) sendTypedBatch(ctx, msg.header.requestId, batch, types);
+        String endJson = String.format("{\"rows\":%d,\"warnings\":[]}", sent);
+        sendSimple(ctx, MessageType.RESULTSET_END, msg.header.requestId, endJson);
       } else {
         int batchSize = 512;
+        java.util.List<String[]> batch = new java.util.ArrayList<>(batchSize);
         int rowCount = 0;
-        List<String[]> batch = new ArrayList<>(batchSize);
-        for (int i = 1; i < lines.size(); i++) { // skip header
-          String[] fields = lines.get(i).split(com.dafei1288.jimsql.common.Utils.COLUMN_SPILTOR, -1);
+        for (int r = 0; r < finalRows.size(); r++) {
           String[] outRow = new String[projectCols.size()];
-          for (int c = 0; c < projectCols.size(); c++) {
-            Integer pos = idx.get(projectCols.get(c));
-            outRow[c] = (pos != null && pos < fields.length) ? fields[pos] : null;
-          }
-          batch.add(outRow);
-          rowCount++;
+          for (int c = 0; c < projectCols.size(); c++) outRow[c] = getCaseInsensitive(finalRows.get(r), projectCols.get(c));
+          batch.add(outRow); rowCount++;
           if (batch.size() >= batchSize) { sendTypedBatch(ctx, msg.header.requestId, batch, types); batch.clear(); }
         }
         if (!batch.isEmpty()) { sendTypedBatch(ctx, msg.header.requestId, batch, types); }
@@ -195,7 +185,136 @@ public class JspV1ServerHandler extends SimpleChannelInboundHandler<ProtocolFram
     }
   }
 
-  private void sendTypedBatch(ChannelHandlerContext ctx, long requestId, List<String[]> rows, int[] types) throws java.io.IOException {
+  private static class ClauseParts { String where; java.util.List<OrderItem> order = new java.util.ArrayList<>(); Integer limit; Integer offset; }
+  private static class OrderItem { String col; boolean asc = true; }
+
+  private static ClauseParts extractClauses(String sql) {
+    ClauseParts p = new ClauseParts();
+    if (sql == null) return p;
+    String raw = sql.trim();
+    String sp = raw.replaceAll("\\s+", " ");
+    String Usp = sp.toUpperCase(java.util.Locale.ROOT);
+    String norm = raw.toUpperCase(java.util.Locale.ROOT).replaceAll("\\s+", "");
+    int w = Usp.indexOf(" WHERE ");
+    if (w >= 0) {
+      int end = Usp.length();
+      for (String kw : new String[]{" GROUP BY ", " HAVING ", " ORDER BY ", " LIMIT ", " OFFSET "}) {
+        int k = Usp.indexOf(kw, w+1); if (k >= 0 && k < end) end = k;
+      }
+      if (end > w+7) p.where = sp.substring(w+7, end).trim();
+    } else {
+      int wn = norm.indexOf("WHERE");
+      if (wn >= 0) {
+        int endn = norm.length();
+        for (String kw : new String[]{"GROUP","HAVING","ORDER","LIMIT","OFFSET"}) {
+          int k = norm.indexOf(kw, wn+5); if (k >= 0 && k < endn) endn = k;
+        }
+        if (endn > wn+5) p.where = norm.substring(wn+5, endn);
+      }
+    }
+    int ob = Usp.indexOf(" ORDER BY ");
+    if (ob >= 0) {
+      int endOb = Usp.length();
+      for (String kw2 : new String[]{" LIMIT ", " HAVING ", " GROUP BY ", " OFFSET "}) {
+        int k2 = Usp.indexOf(kw2, ob+1); if (k2 >= 0 && k2 < endOb) endOb = k2;
+      }
+      if (endOb > ob+10) {
+        String ordSeg = sp.substring(ob+10, endOb).trim();
+        String[] items = ordSeg.split(",");
+        for (String it : items) {
+          it = it.trim(); if (it.isEmpty()) continue;
+          String[] toks = it.split("\\s+");
+          OrderItem oi = new OrderItem();
+          oi.col = stripQuotes(toks[0]); oi.asc = true;
+          if (toks.length >= 2 && toks[1].equalsIgnoreCase("DESC")) oi.asc = false;
+          p.order.add(oi);
+        }
+      }
+    } else {
+      int ob2 = norm.indexOf("ORDERBY");
+      if (ob2 >= 0) {
+        int end2 = norm.length();
+        for (String kw : new String[]{"LIMIT","HAVING","GROUP","OFFSET"}) {
+          int k = norm.indexOf(kw, ob2+7); if (k >= 0 && k < end2) end2 = k;
+        }
+        if (end2 > ob2+7) {
+          String ord = norm.substring(ob2+7, end2);
+          String[] parts = ord.split(",");
+          for (String p2 : parts) {
+            p2 = p2.trim(); if (p2.isEmpty()) continue;
+            OrderItem oi = new OrderItem(); oi.asc = true; String col = p2;
+            if (p2.endsWith("ASC")) { oi.asc = true; col = p2.substring(0, p2.length()-3); }
+            else if (p2.endsWith("DESC")) { oi.asc = false; col = p2.substring(0, p2.length()-4); }
+            oi.col = stripQuotes(col);
+            p.order.add(oi);
+          }
+        }
+      }
+    }
+    java.util.regex.Matcher m = java.util.regex.Pattern.compile("LIMIT([0-9]+)").matcher(norm);
+    if (m.find()) { try { p.limit = Integer.parseInt(m.group(1)); } catch (Exception ignore) {} }
+    java.util.regex.Matcher mo = java.util.regex.Pattern.compile("OFFSET([0-9]+)").matcher(norm);
+    if (mo.find()) { try { p.offset = Integer.parseInt(mo.group(1)); } catch (Exception ignore) {} }
+    return p;
+  }
+
+  private static java.util.List<java.util.Map<String,String>> buildFinalRows(com.dafei1288.jimsql.common.meta.JqTable jt, ClauseParts parts) throws java.io.IOException {
+    java.util.List<String> lines = java.nio.file.Files.readAllLines(jt.getBasepath().toPath());
+    if (lines.isEmpty()) return java.util.Collections.emptyList();
+    java.util.List<String> header = new java.util.ArrayList<>(jt.getJqTableLinkedHashMap().keySet());
+    java.util.List<java.util.Map<String,String>> rows = new java.util.ArrayList<>();
+    for (int i = 1; i < lines.size(); i++) {
+      String[] arr = lines.get(i).split(com.dafei1288.jimsql.common.Utils.COLUMN_SPILTOR, -1);
+      java.util.LinkedHashMap<String,String> m = new java.util.LinkedHashMap<>();
+      for (int c = 0; c < header.size(); c++) m.put(header.get(c), (c < arr.length) ? arr[c] : "");
+      rows.add(m);
+    }
+    if (parts.where != null && !parts.where.trim().isEmpty()) rows = rows.stream().filter(r -> evalWhere(r, jt, parts.where)).collect(java.util.stream.Collectors.toList());
+    if (!parts.order.isEmpty()) {
+      java.util.Comparator<java.util.Map<String,String>> cmp = (a,b) -> 0;
+      for (OrderItem oi : parts.order) {
+        String col = normalizeColumn(oi.col);
+        int sqlType = columnSqlType(jt, col);
+        java.util.Comparator<java.util.Map<String,String>> c = (m1, m2) -> compareValues(getCaseInsensitive(m1,col), getCaseInsensitive(m2,col), sqlType);
+        if (!oi.asc) c = c.reversed();
+        cmp = cmp.thenComparing(c);
+      }
+      rows.sort(cmp);
+    }
+    int off = parts.offset == null ? 0 : Math.max(0, parts.offset);
+    Integer lim = parts.limit;
+    int from = Math.min(off, rows.size());
+    int to = (lim == null) ? rows.size() : Math.min(rows.size(), from + Math.max(0, lim));
+    return (from <= to) ? rows.subList(from, to) : java.util.Collections.emptyList();
+  }
+
+  private static boolean evalWhere(java.util.Map<String,String> row, com.dafei1288.jimsql.common.meta.JqTable jt, String where) {
+    java.util.List<Predicate> preds = parseWhere(where);
+    for (Predicate p : preds) { String col = normalizeColumn(p.column); if (!evalOne(getCaseInsensitive(row,col), p, jt)) return false; }
+    return true;
+  }
+
+  private static java.util.List<Predicate> parseWhere(String where) {
+    java.util.List<String> parts = splitByAnd(where);
+    java.util.List<Predicate> res = new java.util.ArrayList<>();
+    for (String p : parts) { Predicate pr = parsePredicate(p.trim()); if (pr != null) res.add(pr); }
+    return res;
+  }
+  private static java.util.List<String> splitByAnd(String s) {
+    java.util.List<String> out = new java.util.ArrayList<>();
+    StringBuilder buf = new StringBuilder(); boolean inStr = false; for (int i=0;i<s.length();i++){ char ch=s.charAt(i); if (ch=='\''){ inStr=!inStr; buf.append(ch); continue;} if(!inStr && i+3<=s.length()){ String sub=s.substring(i, Math.min(i+3,s.length())); if (sub.equalsIgnoreCase("AND")) { out.add(buf.toString()); buf.setLength(0); i+=2; continue; } } buf.append(ch);} if(buf.length()>0) out.add(buf.toString()); return out.stream().filter(t -> t!=null && !t.trim().isEmpty()).collect(java.util.stream.Collectors.toList());
+  }
+  private static Predicate parsePredicate(String s) {
+    String[] ops = new String[]{">=","<=","!=","=",">","<"}; String opFound=null; int pos=-1; for (String op:ops){ int idx=indexOfOp(s,op); if(idx>=0){ opFound=op; pos=idx; break; } } if (opFound==null) return null; String lhs=s.substring(0,pos).trim(); String rhs=s.substring(pos+opFound.length()).trim(); Predicate p=new Predicate(); p.column=lhs; p.op=opFound; if (rhs.startsWith("'")) { int end=rhs.lastIndexOf('\''); String content=(end>0)?rhs.substring(1,end):rhs.substring(1); p.literalString=content; p.literalNumeric=null; } else { p.literalString=rhs; try{ p.literalNumeric=new java.math.BigDecimal(rhs);}catch(Exception e){ p.literalNumeric=null; } } return p;
+  }
+  private static int indexOfOp(String s, String op) { boolean inStr=false; for (int i=0;i<=s.length()-op.length();i++){ char ch=s.charAt(i); if(ch=='\'') inStr=!inStr; if(!inStr && s.regionMatches(true,i,op,0,op.length())) return i; } return -1; }
+  private static class Predicate { String column; String op; String literalString; java.math.BigDecimal literalNumeric; }
+
+  private static String normalizeColumn(String c) { if (c==null) return null; c = stripQuotes(c); int dot=c.lastIndexOf('.'); if (dot>=0) c=c.substring(dot+1); return c; }
+  private static String stripQuotes(String s) { if (s==null || s.length()<2) return s; char f=s.charAt(0), l=s.charAt(s.length()-1); if ((f=='`'&&l=='`') || (f=='"'&&l=='"')) return s.substring(1,s.length()-1); return s; }
+  private static String getCaseInsensitive(java.util.Map<String,String> row, String col) { if (row==null || col==null) return null; for (String k : row.keySet()) if (k.equalsIgnoreCase(col)) return row.get(k); return null; }
+  private static int columnSqlType(com.dafei1288.jimsql.common.meta.JqTable jt, String col) { for (String k : jt.getJqTableLinkedHashMap().keySet()) { if (k.equalsIgnoreCase(col)) { com.dafei1288.jimsql.common.meta.JqColumn jc = jt.getJqTableLinkedHashMap().get(k); if (jc != null) return jc.getColumnType(); } } return java.sql.Types.VARCHAR; }
+  private static int compareValues(String v1, String v2, int sqlType) { if (java.util.Objects.equals(v1,v2)) return 0; if (v1==null) return -1; if (v2==null) return 1; switch(sqlType){ case java.sql.Types.INTEGER: case java.sql.Types.BIGINT: case java.sql.Types.SMALLINT: case java.sql.Types.TINYINT: case java.sql.Types.DOUBLE: case java.sql.Types.FLOAT: case java.sql.Types.DECIMAL: case java.sql.Types.NUMERIC: try { java.math.BigDecimal b1=new java.math.BigDecimal(v1.trim()); java.math.BigDecimal b2=new java.math.BigDecimal(v2.trim()); return b1.compareTo(b2);} catch(Exception ignore){} default: return v1.compareTo(v2);} }private void sendTypedBatch(ChannelHandlerContext ctx, long requestId, List<String[]> rows, int[] types) throws java.io.IOException {
     java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
     RowBinary.writeTypedBatch(baos, rows, types.length, types);
     byte[] payload = baos.toByteArray();
@@ -352,3 +471,4 @@ public class JspV1ServerHandler extends SimpleChannelInboundHandler<ProtocolFram
     return new ParsedSelect(table, list);
   }
 }
+
