@@ -421,44 +421,6 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
           if (!where.isEmpty()) this.queryLogicalPlan.setWhereExpression(where);
         }
       }
-        // ORDER BY via tokens (multi items, ASC/DESC)
-    if (this.queryLogicalPlan.getOrderBy() == null || this.queryLogicalPlan.getOrderBy().isEmpty()) {
-      java.util.List<String> toks = new java.util.ArrayList<>();
-      flattenTokens(root, toks);
-      int ord = -1;
-      for (int i = 0; i < toks.size() - 1; i++) {
-        if ("ORDER".equalsIgnoreCase(toks.get(i)) && "BY".equalsIgnoreCase(toks.get(i+1))) { ord = i; break; }
-      }
-      if (ord >= 0) {
-        int end = toks.size();
-        for (int i = ord + 2; i < toks.size(); i++) {
-          String t = toks.get(i).toUpperCase(java.util.Locale.ROOT);
-          if (t.equals("LIMIT") || t.equals("HAVING") || t.equals("GROUP")) { end = i; break; }
-        }
-        if (end > ord + 2) {
-          java.util.List<String> seg = toks.subList(ord + 2, end);
-          java.util.List<java.util.List<String>> items = new java.util.ArrayList<>();
-          java.util.List<String> cur = new java.util.ArrayList<>();
-          for (String tk : seg) {
-            if (",".equals(tk)) { if (!cur.isEmpty()) { items.add(cur); cur = new java.util.ArrayList<>(); } }
-            else { cur.add(tk); }
-          }
-          if (!cur.isEmpty()) items.add(cur);
-          for (java.util.List<String> it : items) {
-            if (it.isEmpty()) continue;
-            String col = it.get(0);
-            boolean asc = true;
-            if (it.size() >= 2) {
-              String d = it.get(it.size()-1);
-              if ("DESC".equalsIgnoreCase(d)) asc = false;
-            }
-            com.dafei1288.jimsql.common.meta.JqColumn ccol = new com.dafei1288.jimsql.common.meta.JqColumn();
-            ccol.setColumnName(stripQuotes(col).toLowerCase(java.util.Locale.ROOT));
-            this.queryLogicalPlan.getOrderBy().add(new com.dafei1288.jimsql.server.plan.logical.OrderItem(ccol, asc));
-          }
-        }
-      }
-    }
 
   }
   // Finalize WHERE/LIMIT/OFFSET by scanning normalized text without relying on spaces
