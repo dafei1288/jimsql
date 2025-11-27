@@ -156,14 +156,6 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
             }
           }
         }
-            // ORDER BY (multi items, basic ASC/DESC, comma-separated)
-    if (this.queryLogicalPlan.getOrderBy() == null || this.queryLogicalPlan.getOrderBy().isEmpty()) {
-      int ob = norm.indexOf("ORDERBY");
-      if (ob >= 0) {
-        int endOb = norm.length();
-        for (String kw2 : new String[]{"LIMIT","HAVING","GROUP"}) {
-          int k2 = norm.indexOf(kw2, ob + 7);
-          if (k2 >= 0 && k2 < endOb) endOb = k2;
         }
         if (endOb > ob + 7) {
           String ordSeg = norm.substring(ob + 7, endOb);
