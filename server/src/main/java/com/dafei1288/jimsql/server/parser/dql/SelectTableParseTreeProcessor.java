@@ -259,8 +259,6 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
   }
   for (ParseTreeNode c : n.getChildren()) dfs(c, sb);
 }
-    for (ParseTreeNode c : n.getChildren()) dfs(c, sb);
-  }
   private void collectSelectColumns(org.snt.inmemantlr.tree.ParseTreeNode node, java.util.List<com.dafei1288.jimsql.common.meta.JqColumn> out) {
   if ("columnName".equals(node.getRule())) {
     com.dafei1288.jimsql.common.meta.JqColumn c = new com.dafei1288.jimsql.common.meta.JqColumn();
@@ -286,9 +284,3 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
     collectSelectColumns(ch, out);
   }
 }
-    for (org.snt.inmemantlr.tree.ParseTreeNode ch : node.getChildren()) {
-      collectSelectColumns(ch, out);
-    }
-  }}
-
-
