@@ -383,8 +383,9 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
       if (lbl != null && !lbl.isEmpty()) out.add(lbl);
     }
     for (ParseTreeNode cnode : n.getChildren()) flattenTokens(cnode, out);
-    }
-// Finalize WHERE/LIMIT/OFFSET from tokens if still missing
+  }
+
+  // Finalize WHERE/LIMIT/OFFSET from tokens if still missing
   private void finalizeClausesFromTokens(ParseTreeNode root) {
     java.util.List<String> toks = new java.util.ArrayList<>();
     flattenTokens(root, toks);
@@ -420,103 +421,40 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
           if (!where.isEmpty()) this.queryLogicalPlan.setWhereExpression(where);
         }
       }
-}
+    }
+  }
   // Finalize WHERE/LIMIT/OFFSET by scanning normalized text without relying on spaces
   private void finalizeClausesFromText(ParseTreeNode root) {
-  String raw = extractText(root);
-  if (raw == null) return;
-  String sp = raw.trim().replaceAll("\\s+", " ");
-  String Usp = sp.toUpperCase(java.util.Locale.ROOT);
-  String norm = raw.toUpperCase(java.util.Locale.ROOT).replaceAll("\\s+", "");
+    String raw = extractText(root);
+    if (raw == null) return;
+    String norm = raw.toUpperCase(java.util.Locale.ROOT).replaceAll("\\s+", "");
 
-  // WHERE: prefer spaced form, fallback to compact
-  if (this.queryLogicalPlan.getWhereExpression() == null) {
-    int w = Usp.indexOf(" WHERE ");
-    if (w >= 0) {
-      int end = Usp.length();
-      for (String kw : new String[]{" GROUP BY ", " HAVING ", " ORDER BY ", " LIMIT "}) {
-        int k = Usp.indexOf(kw, w+1);
-        if (k >= 0 && k < end) end = k;
-      }
-      if (end > w+7) {
-        String we = sp.substring(w+7, end).trim();
-        if (!we.isEmpty()) this.queryLogicalPlan.setWhereExpression(we);
-      }
-    } else {
-      int wn = norm.indexOf("WHERE");
-      if (wn >= 0) {
-        int endn = norm.length();
+    // WHERE
+    if (this.queryLogicalPlan.getWhereExpression() == null) {
+      int w = norm.indexOf("WHERE");
+      if (w >= 0) {
+        int end = norm.length();
         for (String kw : new String[]{"GROUP","HAVING","ORDER","LIMIT"}) {
-          int k = norm.indexOf(kw, wn+5);
-          if (k >= 0 && k < endn) endn = k;
+          int k = norm.indexOf(kw, w+5);
+          if (k >= 0 && k < end) end = k;
         }
-        if (endn > wn+5) {
-          String we = norm.substring(wn+5, endn);
+        if (end > w+5) {
+          String we = norm.substring(w+5, end);
           if (!we.isEmpty()) this.queryLogicalPlan.setWhereExpression(we);
         }
       }
     }
-  }
-
-  // ORDER BY: prefer spaced form, fallback to compact; support multi items
-  if (this.queryLogicalPlan.getOrderBy() == null || this.queryLogicalPlan.getOrderBy().isEmpty()) {
-    int ob = Usp.indexOf(" ORDER BY ");
-    if (ob >= 0) {
-      int endOb = Usp.length();
-      for (String kw2 : new String[]{" LIMIT ", " HAVING ", " GROUP BY "}) {
-        int k2 = Usp.indexOf(kw2, ob+1);
-        if (k2 >= 0 && k2 < endOb) endOb = k2;
-      }
-      if (endOb > ob + 10) {
-        String ordSeg = sp.substring(ob + 10, endOb).trim();
-        String[] items = ordSeg.split(",");
-        for (String it : items) {
-          it = it.trim(); if (it.isEmpty()) continue;
-          String[] toks = it.split("\\s+");
-          String col = toks[0];
-          boolean asc = true;
-          if (toks.length >= 2 && toks[1].equalsIgnoreCase("DESC")) asc = false;
-          com.dafei1288.jimsql.common.meta.JqColumn ccol = new com.dafei1288.jimsql.common.meta.JqColumn();
-          ccol.setColumnName(stripQuotes(col).toLowerCase(java.util.Locale.ROOT));
-          this.queryLogicalPlan.getOrderBy().add(new com.dafei1288.jimsql.server.plan.logical.OrderItem(ccol, asc));
-        }
-      }
-    } else {
-      int ob2 = norm.indexOf("ORDERBY");
-      if (ob2 >= 0) {
-        int end2 = norm.length();
-        for (String kw : new String[]{"LIMIT","HAVING","GROUP"}) {
-          int k = norm.indexOf(kw, ob2+7);
-          if (k >= 0 && k < end2) end2 = k;
-        }
-        if (end2 > ob2 + 7) {
-          String ord = norm.substring(ob2 + 7, end2);
-          String[] parts = ord.split(",");
-          for (String p : parts) {
-            p = p.trim(); if (p.isEmpty()) continue;
-            boolean asc = true; String col = p;
-            if (p.endsWith("ASC")) { asc = true; col = p.substring(0, p.length()-3); }
-            else if (p.endsWith("DESC")) { asc = false; col = p.substring(0, p.length()-4); }
-            com.dafei1288.jimsql.common.meta.JqColumn ccol = new com.dafei1288.jimsql.common.meta.JqColumn();
-            ccol.setColumnName(stripQuotes(col).toLowerCase(java.util.Locale.ROOT));
-            this.queryLogicalPlan.getOrderBy().add(new com.dafei1288.jimsql.server.plan.logical.OrderItem(ccol, asc));
-          }
-        }
-      }
+    // LIMIT
+    if (this.queryLogicalPlan.getLimit() == null) {
+      java.util.regex.Matcher m = java.util.regex.Pattern.compile("LIMIT([0-9]+)").matcher(norm);
+      if (m.find()) { try { this.queryLogicalPlan.setLimit(Integer.parseInt(m.group(1))); } catch (Exception ignore) {} }
+    }
+    // OFFSET
+    if (this.queryLogicalPlan.getOffset() == null) {
+      java.util.regex.Matcher m = java.util.regex.Pattern.compile("OFFSET([0-9]+)").matcher(norm);
+      if (m.find()) { try { this.queryLogicalPlan.setOffset(Integer.parseInt(m.group(1))); } catch (Exception ignore) {} }
     }
   }
-
-  // LIMIT
-  if (this.queryLogicalPlan.getLimit() == null) {
-    java.util.regex.Matcher m = java.util.regex.Pattern.compile("LIMIT([0-9]+)").matcher(norm);
-    if (m.find()) { try { this.queryLogicalPlan.setLimit(Integer.parseInt(m.group(1))); } catch (Exception ignore) {} }
-  }
-  // OFFSET
-  if (this.queryLogicalPlan.getOffset() == null) {
-    java.util.regex.Matcher m = java.util.regex.Pattern.compile("OFFSET([0-9]+)").matcher(norm);
-    if (m.find()) { try { this.queryLogicalPlan.setOffset(Integer.parseInt(m.group(1))); } catch (Exception ignore) {} }
-  }
-}
 
 
   private void collectSelectColumns(org.snt.inmemantlr.tree.ParseTreeNode node, java.util.List<com.dafei1288.jimsql.common.meta.JqColumn> out) {
