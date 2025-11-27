@@ -71,7 +71,8 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
         }
       }
     } catch (Exception ignore) {}
-    finalizeClausesFromTokens(this.parseTree.getRoot());\n    return queryLogicalPlan;
+    finalizeClausesFromTokens(this.parseTree.getRoot());
+    return queryLogicalPlan;
   }
 
   @Override
