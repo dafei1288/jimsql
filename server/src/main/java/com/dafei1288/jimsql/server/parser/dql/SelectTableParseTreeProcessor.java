@@ -461,7 +461,7 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
   }
 
   // ORDER BY: prefer spaced form, fallback to compact; support multi items
-  if (this.queryLogicalPlan.getOrderBy() == null || this.queryLogicalPlan.getOrderBy().isEmpty()) {
+  { this.queryLogicalPlan.getOrderBy().clear();
     int ob = Usp.indexOf(" ORDER BY ");
     if (ob >= 0) {
       int endOb = Usp.length();
@@ -549,3 +549,4 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
 }
 
 }
+
