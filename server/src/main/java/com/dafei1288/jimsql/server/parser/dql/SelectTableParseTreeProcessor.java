@@ -71,7 +71,7 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
         }
       }
     } catch (Exception ignore) {}
-    finalizeClausesFromTokens(this.parseTree.getRoot());
+    finalizeClausesFromTokens(this.parseTree.getRoot()); finalizeClausesFromText(this.parseTree.getRoot());
     if (queryLogicalPlan.getWhereExpression() == null || queryLogicalPlan.getLimit() == null || queryLogicalPlan.getOffset() == null) {
       java.util.List<String> _toks = new java.util.ArrayList<>();
       flattenTokens(this.parseTree.getRoot(), _toks);
@@ -423,6 +423,39 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
       }
     }
   }
+  // Finalize WHERE/LIMIT/OFFSET by scanning normalized text without relying on spaces
+  private void finalizeClausesFromText(ParseTreeNode root) {
+    String raw = extractText(root);
+    if (raw == null) return;
+    String norm = raw.toUpperCase(java.util.Locale.ROOT).replaceAll("\\s+", "");
+
+    // WHERE
+    if (this.queryLogicalPlan.getWhereExpression() == null) {
+      int w = norm.indexOf("WHERE");
+      if (w >= 0) {
+        int end = norm.length();
+        for (String kw : new String[]{"GROUP","HAVING","ORDER","LIMIT"}) {
+          int k = norm.indexOf(kw, w+5);
+          if (k >= 0 && k < end) end = k;
+        }
+        if (end > w+5) {
+          String we = norm.substring(w+5, end);
+          if (!we.isEmpty()) this.queryLogicalPlan.setWhereExpression(we);
+        }
+      }
+    }
+    // LIMIT
+    if (this.queryLogicalPlan.getLimit() == null) {
+      java.util.regex.Matcher m = java.util.regex.Pattern.compile("LIMIT([0-9]+)").matcher(norm);
+      if (m.find()) { try { this.queryLogicalPlan.setLimit(Integer.parseInt(m.group(1))); } catch (Exception ignore) {} }
+    }
+    // OFFSET
+    if (this.queryLogicalPlan.getOffset() == null) {
+      java.util.regex.Matcher m = java.util.regex.Pattern.compile("OFFSET([0-9]+)").matcher(norm);
+      if (m.find()) { try { this.queryLogicalPlan.setOffset(Integer.parseInt(m.group(1))); } catch (Exception ignore) {} }
+    }
+  }
+
 
   private void collectSelectColumns(org.snt.inmemantlr.tree.ParseTreeNode node, java.util.List<com.dafei1288.jimsql.common.meta.JqColumn> out) {
   if ("columnName".equals(node.getRule())) {
