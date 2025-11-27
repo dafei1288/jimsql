@@ -465,7 +465,7 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
     int ob = Usp.indexOf(" ORDER BY ");
     if (ob >= 0) {
       int endOb = Usp.length();
-      for (String kw2 : new String[]{" LIMIT ", " HAVING ", " GROUP BY "}) {
+      for (String kw2 : new String[]{" LIMIT ", " HAVING ", " GROUP BY ", " OFFSET "}) {
         int k2 = Usp.indexOf(kw2, ob + 1);
         if (k2 >= 0 && k2 < endOb) endOb = k2;
       }
@@ -488,7 +488,7 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
       int ob2 = norm.indexOf("ORDERBY");
       if (ob2 >= 0) {
         int end2 = norm.length();
-        for (String kw : new String[]{"LIMIT", "HAVING", "GROUP"}) {
+        for (String kw : new String[]{"LIMIT", "HAVING", "GROUP", "OFFSET"}) {
           int k = norm.indexOf(kw, ob2 + 7);
           if (k >= 0 && k < end2) end2 = k;
         }
@@ -549,4 +549,5 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
 }
 
 }
+
 
