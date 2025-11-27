@@ -23,7 +23,6 @@ import java.util.List;
 
 public class ExecPlanSmokeRun {
   public static void main(String[] args) throws Exception {
-    // Prepare dataset under default data dir (./data)
     File dbDir = new File("data/test");
     dbDir.mkdirs();
     File tbl = new File(dbDir, "user." + Utils.DB_FILENAME_SUFFIX);
@@ -75,30 +74,7 @@ public class ExecPlanSmokeRun {
         }
     );
 
-    ((QueryPhysicalPlan) pp).proxyWrite(ctx);\n\n    try {
-      java.lang.reflect.Field f = org.snt.inmemantlr.tree.ParseTreeProcessor.class.getDeclaredField("parseTree");
-      f.setAccessible(true);
-      org.snt.inmemantlr.tree.ParseTree ptAll = (org.snt.inmemantlr.tree.ParseTree) f.get(s);
-      java.util.List<String> toks = new java.util.ArrayList<>();
-      java.util.function.BiConsumer<org.snt.inmemantlr.tree.ParseTreeNode, java.util.List<String>> fl = new java.util.function.BiConsumer<org.snt.inmemantlr.tree.ParseTreeNode, java.util.List<String>>() {
-        public void accept(org.snt.inmemantlr.tree.ParseTreeNode n, java.util.List<String> out) {
-          String r = n.getRule(); String lbl = n.getLabel();
-          if (r != null && r.endsWith("_SYMBOL")) {
-            String t = r.substring(0, r.length()-7);
-            out.add(t);
-          } else if ("INT_LITERAL".equals(r) || "DECIMAL_LITERAL".equals(r) || "STRING_LITERAL".equals(r)) {
-            if (lbl != null && !lbl.isEmpty()) out.add(lbl);
-          } else if ("identifier".equals(r) || "LETTERS".equals(r) || "columnName".equals(r) || "qualifiedName".equals(r)) {
-            if (lbl != null && !lbl.isEmpty()) out.add(lbl);
-          }
-          for (org.snt.inmemantlr.tree.ParseTreeNode ch : n.getChildren()) accept(ch, out);
-        }
-      };
-      for (org.snt.inmemantlr.tree.ParseTreeNode n : ptAll.getNodes()) fl.accept(n, toks);
-      System.out.println("TOKS=" + String.join(" ", toks));
-    } catch (Throwable t) {
-      System.out.println("TOKS=ERR " + t);
-    }
+    ((QueryPhysicalPlan) pp).proxyWrite(ctx);
 
     System.out.println("Plan: limit=" + plan.getLimit() + ", offset=" + plan.getOffset() + ", where=" + plan.getWhereExpression());
     System.out.println("Rows: " + out.size());
