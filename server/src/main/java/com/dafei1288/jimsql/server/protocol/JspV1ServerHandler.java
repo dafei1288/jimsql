@@ -309,6 +309,39 @@ public class JspV1ServerHandler extends SimpleChannelInboundHandler<ProtocolFram
   }
   private static int indexOfOp(String s, String op) { boolean inStr=false; for (int i=0;i<=s.length()-op.length();i++){ char ch=s.charAt(i); if(ch=='\'') inStr=!inStr; if(!inStr && s.regionMatches(true,i,op,0,op.length())) return i; } return -1; }
   private static class Predicate { String column; String op; String literalString; java.math.BigDecimal literalNumeric; }
+  private static boolean evalOne(String raw, Predicate p, com.dafei1288.jimsql.common.meta.JqTable jt) {
+    if (p == null) return true;
+    String col = normalizeColumn(p.column);
+    int sqlType = columnSqlType(jt, col);
+    if (raw == null) raw = "";
+    if (isNumericType(sqlType) && p.literalNumeric != null) {
+      try {
+        java.math.BigDecimal left = new java.math.BigDecimal(raw.trim());
+        java.math.BigDecimal right = p.literalNumeric;
+        int c = left.compareTo(right);
+        return switchOp(c, p.op);
+      } catch (Exception e) { /* fall through */ }
+    }
+    int c = raw.compareTo(p.literalString);
+    return switchOp(c, p.op);
+  }
+  private static boolean isNumericType(int t) {
+    switch (t) {
+      case java.sql.Types.INTEGER: case java.sql.Types.BIGINT: case java.sql.Types.SMALLINT: case java.sql.Types.TINYINT:
+      case java.sql.Types.DOUBLE: case java.sql.Types.FLOAT: case java.sql.Types.DECIMAL: case java.sql.Types.NUMERIC:
+        return true;
+      default: return false;
+    }
+  }
+  private static boolean switchOp(int cmp, String op) {
+    if ("=".equals(op)) return cmp == 0;
+    if ("!=".equals(op)) return cmp != 0;
+    if (">".equals(op)) return cmp > 0;
+    if (">=".equals(op)) return cmp >= 0;
+    if ("<".equals(op)) return cmp < 0;
+    if ("<=".equals(op)) return cmp <= 0;
+    return false;
+  }
 
   private static String normalizeColumn(String c) { if (c==null) return null; c = stripQuotes(c); int dot=c.lastIndexOf('.'); if (dot>=0) c=c.substring(dot+1); return c; }
   private static String stripQuotes(String s) { if (s==null || s.length()<2) return s; char f=s.charAt(0), l=s.charAt(s.length()-1); if ((f=='`'&&l=='`') || (f=='"'&&l=='"')) return s.substring(1,s.length()-1); return s; }
@@ -471,4 +504,5 @@ public class JspV1ServerHandler extends SimpleChannelInboundHandler<ProtocolFram
     return new ParsedSelect(table, list);
   }
 }
+
 
