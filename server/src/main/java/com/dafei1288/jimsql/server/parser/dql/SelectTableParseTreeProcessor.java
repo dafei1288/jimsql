@@ -284,3 +284,5 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
     collectSelectColumns(ch, out);
   }
 }
+
+}
