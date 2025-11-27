@@ -156,26 +156,7 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
             }
           }
         }
-        }
-        if (endOb > ob + 7) {
-          String ordSeg = norm.substring(ob + 7, endOb);
-          String[] parts = ordSeg.split(",");
-          for (String p : parts) {
-            if (p == null || p.isEmpty()) continue;
-            boolean asc = true;
-            String col = p;
-            if (p.endsWith("ASC")) { asc = true; col = p.substring(0, p.length()-3); }
-            else if (p.endsWith("DESC")) { asc = false; col = p.substring(0, p.length()-4); }
-            if (col.startsWith(".")) col = col.substring(1);
-            if (col.endsWith(".")) col = col.substring(0, col.length()-1);
-            if (col.isEmpty()) continue;
-            com.dafei1288.jimsql.common.meta.JqColumn ccol = new com.dafei1288.jimsql.common.meta.JqColumn();
-            ccol.setColumnName(col.toLowerCase(java.util.Locale.ROOT));
-            this.queryLogicalPlan.getOrderBy().add(new com.dafei1288.jimsql.server.plan.logical.OrderItem(ccol, asc));
-          }
-        }
-      }
-    }// LIMIT
+        // LIMIT
         if (queryLogicalPlan.getLimit() == null) {
           int l = upper.indexOf(" LIMIT ");
           if (l >= 0) {

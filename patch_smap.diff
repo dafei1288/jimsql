@@ -1,0 +1,18 @@
+*** Begin Patch
+*** Update File: server/src/main/java/com/dafei1288/jimsql/server/parser/ScriptParseTreeProcessor.java
+@@
+-    for (ParseTreeNode n : this.parseTree.getNodes()) {
+-//      System.out.println("initialize : "+n.getRule());
+-      ParseTree parseTree1 = this.parseTree.getSubtrees(it->{return  it.getRule().equals(n.getRule());}).stream().findFirst().get();
+-      smap.put(n, parseTree1);
+-    }
++    for (ParseTreeNode n : this.parseTree.getNodes()) {
++//      System.out.println("initialize : "+n.getRule());
++      // map each node to its exact subtree by identity; fallback to rule-name if unavailable
++      ParseTree sub = this.parseTree.getSubtrees(it -> it == n).stream().findFirst().orElse(null);
++      if (sub == null) {
++        sub = this.parseTree.getSubtrees(it -> it.getRule().equals(n.getRule())).stream().findFirst().orElse(null);
++      }
++      if (sub != null) smap.put(n, sub);
++    }
+*** End Patch

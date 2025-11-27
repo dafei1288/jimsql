@@ -1,0 +1,228 @@
+﻿package com.dafei1288.jimsql.ai;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.stereotype.Component;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Locale;
+
+/**
+ * Minimal MCP stdio server to expose JimsqlSqlService tools over JSON-RPC 2.0.
+ * Supports: initialize, tools/list, tools/call, shutdown/exit.
+ */
+@Component
+public class StdioMcpRunner {
+
+    private final JimsqlSqlService service;
+    private final ObjectMapper mapper = new ObjectMapper();
+
+    public StdioMcpRunner(JimsqlSqlService service) {
+        this.service = service;
+    }
+
+    public void runLoop() throws IOException {
+        InputStream in = System.in;
+        OutputStream out = System.out;
+        BufferedInputStream bin = new BufferedInputStream(in);
+        while (true) {
+            Map<String, String> headers = readHeaders(bin);
+            if (headers == null) break; // stream closed
+            String lenStr = headers.getOrDefault("content-length", "0");
+            int len;
+            try { len = Integer.parseInt(lenStr.trim()); } catch (Exception e) { len = 0; }
+            byte[] payload = readExact(bin, len);
+            if (payload == null) break;
+            JsonNode req;
+            try {
+                req = mapper.readTree(payload);
+            } catch (Exception e) {
+                // malformed JSON, ignore
+                continue;
+            }
+            ObjectNode resp = handle(req);
+            if (resp != null) {
+                byte[] outBytes = mapper.writeValueAsBytes(resp);
+                writeMessage(out, outBytes);
+            }
+        }
+    }
+
+    private ObjectNode handle(JsonNode req) {
+        ObjectNode resp = mapper.createObjectNode();
+        resp.put("jsonrpc", "2.0");
+        JsonNode id = req.get("id");
+        if (id != null) resp.set("id", id);
+        String method = req.has("method") ? req.get("method").asText("") : "";
+        JsonNode params = req.get("params");
+        try {
+            switch (method) {
+                case "initialize": {
+                    ObjectNode result = mapper.createObjectNode();
+                    result.put("protocolVersion", "2024-11-05");
+                    ObjectNode caps = mapper.createObjectNode();
+                    ObjectNode tools = mapper.createObjectNode();
+                    tools.put("listChanged", true);
+                    caps.set("tools", tools);
+                    result.set("capabilities", caps);
+                    resp.set("result", result);
+                    return resp;
+                }
+                case "tools/list": {
+                    ObjectNode result = mapper.createObjectNode();
+                    ArrayNode tools = mapper.createArrayNode();
+                    tools.add(tool("executeSql", "Execute SQL and return a JSON array. For SELECT, append LIMIT 100 if missing.",
+                            "?????????(???/English)???????????QL?????SON??,
+                            schema(new String[]{"question"}))
+                    );
+                    tools.add(tool("getSchema", "Get database schema (tables and columns).", tools);
+                    resp.set("result", result);
+                    return resp;
+                }
+                case "tools/call": {
+                    String name = params != null && params.has("name") ? params.get("name").asText("") : "";
+                    JsonNode args = params != null ? params.get("arguments") : null;
+                    String text;
+                    switch (name) {
+                        case "executeSql":
+                            text = service.executeSql(nonNullText(args, "sql"));
+                            break;
+                        case "nlQuery":
+                            text = service.nlQuery(nonNullText(args, "question"));
+                            break;
+                        case "getSchema":
+                            text = service.getSchema();
+                            break;
+                        default:
+                            return error(resp, -32601, "Tool not found: " + name);
+                    }
+                    ObjectNode result = mapper.createObjectNode();
+                    ArrayNode content = mapper.createArrayNode();
+                    ObjectNode textPart = mapper.createObjectNode();
+                    textPart.put("type", "text");
+                    textPart.put("text", text);
+                    content.add(textPart);
+                    result.set("content", content);
+                    resp.set("result", result);
+                    return resp;
+                }
+                case "shutdown":
+                case "exit": {
+                    ObjectNode result = mapper.createObjectNode();
+                    resp.set("result", result);
+                    return resp;
+                }
+                default:
+                    return error(resp, -32601, "Method not found: " + method);
+            }
+        } catch (Exception ex) {
+            return error(resp, -32000, ex.getMessage() == null ? ex.toString() : ex.getMessage());
+        }
+    }
+
+    private ObjectNode error(ObjectNode base, int code, String message) {
+        ObjectNode err = mapper.createObjectNode();
+        err.put("code", code);
+        err.put("message", message);
+        base.set("error", err);
+        return base;
+    }
+
+    private ObjectNode tool(String name, String desc, ObjectNode inputSchema) {
+        ObjectNode t = mapper.createObjectNode();
+        t.put("name", name);
+        t.put("description", desc);
+        t.set("inputSchema", inputSchema);
+        return t;
+    }
+
+    private ObjectNode schema(String[] required) {
+        ObjectNode schema = mapper.createObjectNode();
+        schema.put("type", "object");
+        ObjectNode props = mapper.createObjectNode();
+        for (String r : required) {
+            ObjectNode p = mapper.createObjectNode();
+            p.put("type", "string");
+            props.set(r, p);
+        }
+        schema.set("properties", props);
+        ArrayNode req = mapper.createArrayNode();
+        for (String r : required) req.add(r);
+        schema.set("required", req);
+        return schema;
+    }
+
+    private ObjectNode emptySchema() {
+        ObjectNode schema = mapper.createObjectNode();
+        schema.put("type", "object");
+        schema.set("properties", mapper.createObjectNode());
+        return schema;
+    }
+
+    private String nonNullText(JsonNode node, String field) {
+        if (node != null && node.has(field) && !node.get(field).isNull()) return node.get(field).asText("");
+        return "";
+    }
+
+    private Map<String, String> readHeaders(BufferedInputStream in) throws IOException {
+        Map<String, String> headers = new HashMap<>();
+        String line;
+        while ((line = readLine(in)) != null) {
+            if (line.isEmpty()) break; // end of headers
+            int idx = line.indexOf(":");
+            if (idx > 0) {
+                String k = line.substring(0, idx).trim();
+                String v = line.substring(idx + 1).trim();
+                headers.put(k.toLowerCase(Locale.ROOT), v);
+            }
+        }
+        if (line == null && headers.isEmpty()) return null; // stream closed
+        return headers;
+    }
+
+    private String readLine(BufferedInputStream in) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        while (true) {
+            int b = in.read();
+            if (b == -1) {
+                break;
+            }
+            if (b == 10) { // \n
+                break;
+            }
+            baos.write(b);
+        }
+        if (baos.size() == 0 && in.available() == 0) return null; // EOF when nothing read and no more available
+        String line = baos.toString(StandardCharsets.UTF_8);
+        if (line.endsWith("\r")) {
+            line = line.substring(0, line.length() - 1);
+        }
+        return line;
+    }
+
+    private byte[] readExact(BufferedInputStream in, int len) throws IOException {
+        byte[] buf = new byte[len];
+        int off = 0;
+        while (off < len) {
+            int r = in.read(buf, off, len - off);
+            if (r == -1) return null;
+            off += r;
+        }
+        return buf;
+    }
+
+    private void writeMessage(OutputStream out, byte[] payload) throws IOException {
+        String header = "Content-Length: " + payload.length + "\r\nContent-Type: application/json; charset=utf-8\r\n\r\n";
+        out.write(header.getBytes(StandardCharsets.US_ASCII));
+        out.write(payload);
+        out.flush();
+    }
+}
+
+
+

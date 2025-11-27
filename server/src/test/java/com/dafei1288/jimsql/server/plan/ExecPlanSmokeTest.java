@@ -91,7 +91,8 @@ public class ExecPlanSmokeTest {
 
     ((QueryPhysicalPlan) pp).proxyWrite(ctx);
 
-    System.out.println("Plan: limit="+plan.getLimit()+", offset="+plan.getOffset()+", where="+plan.getWhereExpression());\n    System.out.println("Rows: " + out.size());
+    System.out.println("Plan: limit="+plan.getLimit()+", offset="+plan.getOffset()+", where="+plan.getWhereExpression());
+    System.out.println("Rows: " + out.size());
     for (RowData r : out) {
       System.out.println(r.getDatas());
     }

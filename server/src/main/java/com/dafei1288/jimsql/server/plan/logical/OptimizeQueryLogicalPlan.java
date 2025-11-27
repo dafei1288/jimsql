@@ -83,9 +83,13 @@ public class OptimizeQueryLogicalPlan implements LogicalPlan {
       Set<String> cols = serverMetadata.fetchTableByName(currentDatabaseName,currentTableName).getJqTableLinkedHashMap().keySet();
       colNames = cols.stream().toList();
     }else{
-      colNames = this.queryLogicalPlan.getJqColumnList().stream().map(it->it.getColumnName()).collect(Collectors.toList());
+      colNames = (this.queryLogicalPlan.getJqColumnList()==null?java.util.Collections.<String>emptyList():this.queryLogicalPlan.getJqColumnList().stream().map(it->it.getColumnName()).collect(Collectors.toList()));
     }
 
+    if (colNames==null || colNames.isEmpty()) {
+      java.util.Set<String> cols = serverMetadata.fetchTableByName(currentDatabaseName,currentTableName).getJqTableLinkedHashMap().keySet();
+      colNames = new java.util.ArrayList<>(cols);
+    }
     List<JqColumn> jqColumnList = serverMetadata.fetchColumnsByName(currentDatabaseName,currentTableName,colNames);
     for(int i = 0; i < jqColumnList.size(); i++ ){
       JqColumn jqColumn = jqColumnList.get(i);
@@ -103,6 +107,22 @@ public class OptimizeQueryLogicalPlan implements LogicalPlan {
 
 
 
+    // Fallback: if selection is empty, default to all columns
+    if (this.jqColumnResultSetMetadataList.isEmpty()) {
+      com.dafei1288.jimsql.common.meta.JqTable _jt = ServerMetadata.getInstance().fetchTableByName(currentDatabaseName,currentTableName);
+      java.util.List<com.dafei1288.jimsql.common.meta.JqColumn> _all = new java.util.ArrayList<>(_jt.getJqTableLinkedHashMap().values());
+      for (int i = 0; i < _all.size(); i++) {
+        com.dafei1288.jimsql.common.meta.JqColumn jqColumn = _all.get(i);
+        JqColumnResultSetMetadata jqColumnMetadata = new JqColumnResultSetMetadata();
+        jqColumnMetadata.setIndex(i+1);
+        jqColumnMetadata.setLabelName(jqColumn.getColumnName());
+        jqColumnMetadata.setClazz(jqColumn.getColumnClazzType());
+        jqColumnMetadata.setClazzStr(jqColumn.getColumnClazzType().getName());
+        jqColumnMetadata.setTableName(jqColumn.getTable().getTableName());
+        jqColumnMetadata.setColumnType(jqColumn.getColumnType());
+        this.jqColumnResultSetMetadataList.put(jqColumnMetadata.getLabelName(),jqColumnMetadata);
+      }
+    }
     this.jqResultSetMetaData.setColumnMeta(this.jqColumnResultSetMetadataList);
   }
 
