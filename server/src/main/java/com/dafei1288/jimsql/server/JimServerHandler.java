@@ -55,23 +55,32 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
     try{
 //      System.out.println(processor);
       System.out.println("processQuery");
-      // 解析解析树
-      SelectTableParseTreeProcessor selectTableParseTreeProcessor = (SelectTableParseTreeProcessor) ((ScriptParseTreeProcessor)processor).getCurrentParseTreeProcessor();
-      //获取逻辑执行计划
-      QueryLogicalPlan queryLogicalPlan = selectTableParseTreeProcessor.getResult();
-      //构建优化逻辑执行计划
+      // ????????
+            // parse and get query plan (support both DQL wrapper and direct selectTable)
+      org.snt.inmemantlr.tree.ParseTreeProcessor cur = ((ScriptParseTreeProcessor)processor).getCurrentParseTreeProcessor();
+      QueryLogicalPlan queryLogicalPlan = null;
+      if (cur instanceof com.dafei1288.jimsql.server.parser.dql.DqlScriptParseTreeProcessor) {
+        Object r = ((com.dafei1288.jimsql.server.parser.dql.DqlScriptParseTreeProcessor) cur).getResult();
+        if (r instanceof QueryLogicalPlan) { queryLogicalPlan = (QueryLogicalPlan) r; }
+      } else if (cur instanceof SelectTableParseTreeProcessor) {
+        queryLogicalPlan = ((SelectTableParseTreeProcessor) cur).getResult();
+      }
+      if (queryLogicalPlan == null) { throw new IllegalStateException("no plan for SELECT"); }
+      //????????????
+      
+      //???????????????
       JqDatabase jqDatabase = new JqDatabase();
       jqDatabase.setDatabaseName(jqQueryReq.getDb());
       OptimizeQueryLogicalPlan optimizeQueryLogicalPlan = queryLogicalPlan.optimizeQueryLogicalPlan(jqDatabase);
 
-      //获取物理执行计划
+      //????????????
       PhysicalPlan queryPysicalPlan = queryLogicalPlan.transform(optimizeQueryLogicalPlan);
       System.out.println("get jqResultSetMetaData");
       JqResultSetMetaData jqResultSetMetaData = ((OptimizeQueryLogicalPlan)queryPysicalPlan.getLogicalPlan()).getJqResultSetMetaData();
 
       System.out.println("write metadata .... ");
 
-      //写入metadata
+      //???metadata
       ctx.writeAndFlush(jqResultSetMetaData);
 
 
@@ -117,3 +126,4 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
   }
 
 }
+
