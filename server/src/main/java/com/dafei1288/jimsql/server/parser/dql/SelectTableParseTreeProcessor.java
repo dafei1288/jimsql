@@ -72,6 +72,12 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
       }
     } catch (Exception ignore) {}
     finalizeClausesFromTokens(this.parseTree.getRoot());
+    if (queryLogicalPlan.getWhereExpression() == null || queryLogicalPlan.getLimit() == null || queryLogicalPlan.getOffset() == null) {
+      java.util.List<String> _toks = new java.util.ArrayList<>();
+      flattenTokens(this.parseTree.getRoot(), _toks);
+      System.out.println("DBG TOKENS=" + String.join(" ", _toks));
+      System.out.println("DBG TEXT=" + extractText(this.parseTree.getRoot()));
+    }
     return queryLogicalPlan;
   }
 
