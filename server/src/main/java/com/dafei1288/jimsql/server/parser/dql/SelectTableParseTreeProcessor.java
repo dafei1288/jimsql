@@ -424,20 +424,70 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
     }
   }
   // Finalize WHERE/LIMIT/OFFSET by scanning normalized text without relying on spaces
-  private void finalizeClausesFromText(ParseTreeNode root) {
+    private void finalizeClausesFromText(ParseTreeNode root) {
     String raw = extractText(root);
     if (raw == null) return;
+    String sp = raw.trim().replaceAll("\\s+", " ");
     String norm = raw.toUpperCase(java.util.Locale.ROOT).replaceAll("\\s+", "");
 
     // WHERE
     if (this.queryLogicalPlan.getWhereExpression() == null) {
-      int w = norm.indexOf("WHERE");
+      String Usp = sp.toUpperCase(java.util.Locale.ROOT);
+      int w = Usp.indexOf(" WHERE ");
       if (w >= 0) {
-        int end = norm.length();
-        for (String kw : new String[]{"GROUP","HAVING","ORDER","LIMIT"}) {
-          int k = norm.indexOf(kw, w+5);
+        int end = Usp.length();
+        for (String kw : new String[]{" GROUP BY ", " HAVING ", " ORDER BY ", " LIMIT "}) {
+          int k = Usp.indexOf(kw, w+1);
           if (k >= 0 && k < end) end = k;
         }
+        if (end > w+7) {
+          String we = sp.substring(w+7, end).trim();
+          if (!we.isEmpty()) this.queryLogicalPlan.setWhereExpression(we);
+        }
+      }
+    }
+
+    // ORDER BY (multi items)
+    if (this.queryLogicalPlan.getOrderBy() == null || this.queryLogicalPlan.getOrderBy().isEmpty()) {
+      String Usp = sp.toUpperCase(java.util.Locale.ROOT);
+      int ob = Usp.indexOf(" ORDER BY ");
+      if (ob >= 0) {
+        int endOb = Usp.length();
+        for (String kw2 : new String[]{" LIMIT ", " HAVING ", " GROUP BY "}) {
+          int k2 = Usp.indexOf(kw2, ob+1);
+          if (k2 >= 0 && k2 < endOb) endOb = k2;
+        }
+        if (endOb > ob + 10) {
+          String ordSeg = sp.substring(ob + 10, endOb).trim();
+          String[] items = ordSeg.split(",");
+          for (String it : items) {
+            it = it.trim();
+            if (it.isEmpty()) continue;
+            String[] toks = it.split("\\s+");
+            String col = toks[0];
+            boolean asc = true;
+            if (toks.length >= 2) {
+              if (toks[1].equalsIgnoreCase("DESC")) asc = false;
+            }
+            com.dafei1288.jimsql.common.meta.JqColumn ccol = new com.dafei1288.jimsql.common.meta.JqColumn();
+            ccol.setColumnName(col);
+            this.queryLogicalPlan.getOrderBy().add(new com.dafei1288.jimsql.server.plan.logical.OrderItem(ccol, asc));
+          }
+        }
+      }
+    }
+
+    // LIMIT
+    if (this.queryLogicalPlan.getLimit() == null) {
+      java.util.regex.Matcher m = java.util.regex.Pattern.compile("LIMIT([0-9]+)").matcher(norm);
+      if (m.find()) { try { this.queryLogicalPlan.setLimit(Integer.parseInt(m.group(1))); } catch (Exception ignore) {} }
+    }
+    // OFFSET
+    if (this.queryLogicalPlan.getOffset() == null) {
+      java.util.regex.Matcher m = java.util.regex.Pattern.compile("OFFSET([0-9]+)").matcher(norm);
+      if (m.find()) { try { this.queryLogicalPlan.setOffset(Integer.parseInt(m.group(1))); } catch (Exception ignore) {} }
+    }
+  }
         if (end > w+5) {
           String we = norm.substring(w+5, end);
           if (!we.isEmpty()) this.queryLogicalPlan.setWhereExpression(we);
