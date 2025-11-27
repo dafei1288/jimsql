@@ -53,8 +53,7 @@ public class ScriptParseTreeProcessor extends ParseTreeProcessor {
 //    System.out.println(this+" => initialize()");
     for (ParseTreeNode n : this.parseTree.getNodes()) {
 //      System.out.println("initialize : "+n.getRule());
-      ParseTree parseTree1 = this.parseTree.getSubtrees(it->{return  it.getRule().equals(n.getRule());}).stream().findFirst().get();
-      smap.put(n, parseTree1);
+      ParseTree sub = this.parseTree.getSubtrees(it -> it == n).stream().findFirst().orElse(null); if (sub == null) { sub = this.parseTree.getSubtrees(it -> it.getRule().equals(n.getRule())).stream().findFirst().orElse(null); } if (sub != null) smap.put(n, sub);
     }
   }
 
