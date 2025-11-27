@@ -71,7 +71,7 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
         }
       }
     } catch (Exception ignore) {}
-    return queryLogicalPlan;
+    finalizeClausesFromTokens(this.parseTree.getRoot());\n    return queryLogicalPlan;
   }
 
   @Override
@@ -341,6 +341,82 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
   }
   for (ParseTreeNode c : n.getChildren()) dfs(c, sb);
 }
+  // Flatten subtree into tokens in appearance order for robust clause extraction
+  private void flattenTokens(ParseTreeNode n, java.util.List<String> out) {
+    String r = n.getRule();
+    String lbl = n.getLabel();
+    if (r != null && r.endsWith("_SYMBOL")) {
+      if ("WHERE_SYMBOL".equals(r)) out.add("WHERE");
+      else if ("GROUP_SYMBOL".equals(r)) out.add("GROUP");
+      else if ("HAVING_SYMBOL".equals(r)) out.add("HAVING");
+      else if ("ORDER_SYMBOL".equals(r)) out.add("ORDER");
+      else if ("BY_SYMBOL".equals(r)) out.add("BY");
+      else if ("LIMIT_SYMBOL".equals(r)) out.add("LIMIT");
+      else if ("OFFSET_SYMBOL".equals(r)) out.add("OFFSET");
+      else if ("AND_SYMBOL".equals(r)) out.add("AND");
+      else if ("OR_SYMBOL".equals(r)) out.add("OR");
+      else if ("NOT_SYMBOL".equals(r)) out.add("NOT");
+      else if ("IS_SYMBOL".equals(r)) out.add("IS");
+      else if ("LIKE_SYMBOL".equals(r)) out.add("LIKE");
+      else if ("IN_SYMBOL".equals(r)) out.add("IN");
+      else if ("BETWEEN_SYMBOL".equals(r)) out.add("BETWEEN");
+      else if ("EQ_SYMBOL".equals(r)) out.add("=");
+      else if ("NE_SYMBOL".equals(r)) out.add("!=");
+      else if ("GT_SYMBOL".equals(r)) out.add(">");
+      else if ("GTE_SYMBOL".equals(r)) out.add(">=");
+      else if ("LT_SYMBOL".equals(r)) out.add("<");
+      else if ("LTE_SYMBOL".equals(r)) out.add("<=");
+      else if ("START_PAR_SYMBOL".equals(r)) out.add("(");
+      else if ("CLOSE_PAR_SYMBOL".equals(r)) out.add(")");
+      else if ("COMMA_SYMBOL".equals(r)) out.add(",");
+      else if ("DOT_SYMBOL".equals(r)) out.add(".");
+    } else if ("INT_LITERAL".equals(r) || "DECIMAL_LITERAL".equals(r) || "STRING_LITERAL".equals(r)) {
+      if (lbl != null && !lbl.isEmpty()) out.add(lbl);
+    } else if ("identifier".equals(r) || "LETTERS".equals(r) || "columnName".equals(r) || "qualifiedName".equals(r)) {
+      if (lbl != null && !lbl.isEmpty()) out.add(lbl);
+    }
+    for (ParseTreeNode cnode : n.getChildren()) flattenTokens(cnode, out);
+  }
+
+  // Finalize WHERE/LIMIT/OFFSET from tokens if still missing
+  private void finalizeClausesFromTokens(ParseTreeNode root) {
+    java.util.List<String> toks = new java.util.ArrayList<>();
+    flattenTokens(root, toks);
+    // LIMIT
+    if (this.queryLogicalPlan.getLimit() == null) {
+      for (int i = 0; i < toks.size(); i++) {
+        if ("LIMIT".equalsIgnoreCase(toks.get(i)) && i+1 < toks.size()) {
+          try { this.queryLogicalPlan.setLimit(Integer.parseInt(toks.get(i+1).replaceAll("[^0-9]", ""))); } catch (Exception ignore) {}
+          break;
+        }
+      }
+    }
+    // OFFSET
+    if (this.queryLogicalPlan.getOffset() == null) {
+      for (int i = 0; i < toks.size(); i++) {
+        if ("OFFSET".equalsIgnoreCase(toks.get(i)) && i+1 < toks.size()) {
+          try { this.queryLogicalPlan.setOffset(Integer.parseInt(toks.get(i+1).replaceAll("[^0-9]", ""))); } catch (Exception ignore) {}
+          break;
+        }
+      }
+    }
+    // WHERE
+    if (this.queryLogicalPlan.getWhereExpression() == null) {
+      int w = -1, end = toks.size();
+      for (int i = 0; i < toks.size(); i++) { if ("WHERE".equalsIgnoreCase(toks.get(i))) { w = i; break; } }
+      if (w >= 0) {
+        for (int i = w+1; i < toks.size(); i++) {
+          String t = toks.get(i).toUpperCase(java.util.Locale.ROOT);
+          if (t.equals("GROUP") || t.equals("HAVING") || t.equals("ORDER") || t.equals("LIMIT")) { end = i; break; }
+        }
+        if (end > w+1) {
+          String where = String.join(" ", toks.subList(w+1, end)).trim();
+          if (!where.isEmpty()) this.queryLogicalPlan.setWhereExpression(where);
+        }
+      }
+    }
+  }
+
   private void collectSelectColumns(org.snt.inmemantlr.tree.ParseTreeNode node, java.util.List<com.dafei1288.jimsql.common.meta.JqColumn> out) {
   if ("columnName".equals(node.getRule())) {
     com.dafei1288.jimsql.common.meta.JqColumn c = new com.dafei1288.jimsql.common.meta.JqColumn();
