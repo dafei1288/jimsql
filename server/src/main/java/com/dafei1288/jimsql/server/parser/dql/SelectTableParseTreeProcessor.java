@@ -383,8 +383,6 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
       if (lbl != null && !lbl.isEmpty()) out.add(lbl);
     }
     for (ParseTreeNode cnode : n.getChildren()) flattenTokens(cnode, out);
-  }
-
   // Finalize WHERE/LIMIT/OFFSET from tokens if still missing
   private void finalizeClausesFromTokens(ParseTreeNode root) {
     java.util.List<String> toks = new java.util.ArrayList<>();
@@ -422,7 +420,6 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
         }
       }
 
-  }
   // Finalize WHERE/LIMIT/OFFSET by scanning normalized text without relying on spaces
   private void finalizeClausesFromText(ParseTreeNode root) {
   String raw = extractText(root);
