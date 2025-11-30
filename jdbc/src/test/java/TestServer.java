@@ -14,12 +14,15 @@ public class TestServer {
 
 
     Class.forName("com.dafei1288.jimsql.jdbc.JqDriver");
-    Connection conn = DriverManager.getConnection("jdbc:jimsql://localhost:8821/test?protocol=jspv1&&wirelog=json");
+    Connection conn = DriverManager.getConnection("jdbc:jimsql://localhost:8821/test?protocol=jspv1");
+//      -Djimsql.protocol=jspv1  &&wirelog=json
+//    Connection conn = DriverManager.getConnection("jdbc:jimsql://localhost:8821/test?protocol=legacy");
+
     System.out.println(conn);
 
     Statement statement = conn.createStatement();
     System.out.println(statement);
-    String sql = "select id,name from user";
+    String sql = "select id,name,age from user where age = 3";
     ResultSet resultSet = statement.executeQuery(sql);
     System.out.println(sql);
     System.out.println(resultSet);

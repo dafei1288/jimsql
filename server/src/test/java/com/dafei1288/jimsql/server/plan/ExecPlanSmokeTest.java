@@ -40,7 +40,7 @@ public class ExecPlanSmokeTest {
     }
 
     // Build SELECT
-    String sql = "SELECT id, name FROM user WHERE age >= 20 ORDER BY id ASC LIMIT 2 OFFSET 1";
+    String sql = "SELECT id, name FROM user WHERE age >= 20 ORDER BY id desc LIMIT 2 OFFSET 1";
     JqQueryReq req = new JqQueryReq();
     req.setDb("test");
     req.setSql(sql);
