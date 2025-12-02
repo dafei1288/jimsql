@@ -119,7 +119,9 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
       }
       if (plan == null) throw new IllegalStateException("no plan for UPDATE");
       String db = jqQueryReq.getDb(); if (db == null || db.isEmpty()) db = "test";
-      com.dafei1288.jimsql.server.plan.physical.DmlCsvExecutor.int cnt = com.dafei1288.jimsql.server.plan.physical.DmlCsvExecutor.executeUpdate(db, plan);\n      ctx.writeAndFlush(Integer.valueOf(cnt));\n      ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
+      int cnt = com.dafei1288.jimsql.server.plan.physical.DmlCsvExecutor.executeUpdate(db, plan);
+      ctx.writeAndFlush(Integer.valueOf(cnt));
+      ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -135,7 +137,9 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
       }
       if (plan == null) throw new IllegalStateException("no plan for DELETE");
       String db = jqQueryReq.getDb(); if (db == null || db.isEmpty()) db = "test";
-      com.dafei1288.jimsql.server.plan.physical.DmlCsvExecutor.int cnt = com.dafei1288.jimsql.server.plan.physical.DmlCsvExecutor.executeDelete(db, plan);\n      ctx.writeAndFlush(Integer.valueOf(cnt));\n      ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
+      int cnt = com.dafei1288.jimsql.server.plan.physical.DmlCsvExecutor.executeDelete(db, plan);
+      ctx.writeAndFlush(Integer.valueOf(cnt));
+      ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -155,6 +159,8 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
   }
 
 }
+
+
 
 
 
