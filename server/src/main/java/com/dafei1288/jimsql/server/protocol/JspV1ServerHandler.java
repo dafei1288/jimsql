@@ -91,6 +91,37 @@ public class JspV1ServerHandler extends SimpleChannelInboundHandler<ProtocolFram
       boolean openCursor = payload.contains("\"openCursor\":true");
       String db = ctx.channel().attr(ATTR_DB).get();
       if (db == null) db = "test";
+      // DML (UPDATE/DELETE) path via ANTLR + CSV executor
+      String sTrim = (sql == null) ? "" : sql.trim();
+      String lowerTrim = sTrim.toLowerCase(java.util.Locale.ROOT);
+      if (lowerTrim.startsWith("update") || lowerTrim.startsWith("delete")) {
+        try {
+          com.dafei1288.jimsql.server.parser.SqlParser p = com.dafei1288.jimsql.server.parser.SqlParser.getInstance();
+          com.dafei1288.jimsql.common.JqQueryReq req = new com.dafei1288.jimsql.common.JqQueryReq();
+          req.setDb(db); req.setSql(sql);
+          com.dafei1288.jimsql.server.parser.ScriptParseTreeProcessor spp = p.parser(req);
+          org.snt.inmemantlr.tree.ParseTreeProcessor sub = (org.snt.inmemantlr.tree.ParseTreeProcessor) spp.process();
+          com.dafei1288.jimsql.server.parser.SqlStatementEnum kind = spp.getSqlStatementEnum();
+          if (kind == com.dafei1288.jimsql.server.parser.SqlStatementEnum.UPDATE_TABLE) {
+            Object r = ((com.dafei1288.jimsql.server.parser.dml.DmlScriptParseTreeProcessor) sub).getResult();
+            com.dafei1288.jimsql.server.plan.logical.UpdateLogicalPlan plan = (com.dafei1288.jimsql.server.plan.logical.UpdateLogicalPlan) r;
+            int cnt = com.dafei1288.jimsql.server.plan.physical.DmlCsvExecutor.executeUpdate(db, plan);
+            String payloadJson = String.format("{\"rows\":%d,\"warnings\":[]}", cnt);
+            sendSimple(ctx, com.dafei1288.jimsql.common.protocol.MessageType.UPDATE_COUNT, msg.header.requestId, payloadJson);
+            return;
+          } else if (kind == com.dafei1288.jimsql.server.parser.SqlStatementEnum.DELETE_TABLE) {
+            Object r = ((com.dafei1288.jimsql.server.parser.dml.DmlScriptParseTreeProcessor) sub).getResult();
+            com.dafei1288.jimsql.server.plan.logical.DeleteLogicalPlan plan = (com.dafei1288.jimsql.server.plan.logical.DeleteLogicalPlan) r;
+            int cnt = com.dafei1288.jimsql.server.plan.physical.DmlCsvExecutor.executeDelete(db, plan);
+            String payloadJson = String.format("{\"rows\":%d,\"warnings\":[]}", cnt);
+            sendSimple(ctx, com.dafei1288.jimsql.common.protocol.MessageType.UPDATE_COUNT, msg.header.requestId, payloadJson);
+            return;
+          }
+        } catch (Exception ex) {
+          sendError(ctx, msg.header.requestId, 1999, "HY000", ex.getMessage()==null?"internal":ex.getMessage());
+          return;
+        }
+      }
 
       ParsedSelect parsed = parseSelect(sql);
       if (parsed == null) {
@@ -504,5 +535,6 @@ public class JspV1ServerHandler extends SimpleChannelInboundHandler<ProtocolFram
     return new ParsedSelect(table, list);
   }
 }
+
 
 
