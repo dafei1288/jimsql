@@ -42,41 +42,30 @@ Then use jdbc to connect
 </dependency>
 ```
 
-
 ```java
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.*;
 
 public class TestServer {
-
   public static void main(String[] args) throws Exception {
-    
     Class.forName("com.dafei1288.jimsql.jdbc.JqDriver");
-    Connection conn = DriverManager.getConnection("jdbc:jimsql://localhost:8821/test");
-    System.out.println(conn);
+    // legacy: OK only for DML; jspv1: returns UPDATE_COUNT
+    Connection conn = DriverManager.getConnection("jdbc:jimsql://localhost:8821/test?protocol=jspv1");
+    Statement stmt = conn.createStatement();
 
-    Statement statement = conn.createStatement();
-    System.out.println(statement);
-    String sql = "select id,name from user";
-    ResultSet resultSet = statement.executeQuery(sql);
-    System.out.println(sql);
-    System.out.println(resultSet);
-    while(resultSet.next()){
-
-      ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-      List<String> colNames = new ArrayList<>();
-      for(int i=0;i<resultSetMetaData.getColumnCount();i++){
-        String colName = resultSetMetaData.getColumnLabel(i);
-        System.out.println(colName+" => "+resultSet.getString(colName));
+    // SELECT
+    try (ResultSet rs = stmt.executeQuery("select id,name,age from user where age >= 3 order by id desc")) {
+      while (rs.next()) {
+        System.out.printf("id=%s name=%s age=%s%n", rs.getString("id"), rs.getString("name"), rs.getString("age"));
       }
-      System.out.println();
     }
 
+    // UPDATE (jspv1 only returns affected rows)
+    int n1 = stmt.executeUpdate("UPDATE test.user SET age = 23 WHERE id = 1");
+    // DELETE
+    int n2 = stmt.executeUpdate("DELETE FROM test.user WHERE id = 3");
+    System.out.printf("updated=%d deleted=%d%n", n1, n2);
   }
 }
 ```
+
+See more examples in `docs/dml-examples.md`.
