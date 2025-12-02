@@ -25,6 +25,8 @@ public class JqStatement implements Statement {
 //  private PrintWriter out;
   private ObjectEncoderOutputStream out;
   private InputStream in;
+  private JqResultSet lastResultSet;
+  private int lastUpdateCount = -1;
 
   public JqStatement(JqConnection jqConnection) throws SQLException{
     this.jqConnection = jqConnection;
@@ -158,19 +160,37 @@ public class JqStatement implements Statement {
   }
 
   @Override
-  public boolean execute(String sql) throws SQLException {
-    return false;
-  }
+    public boolean execute(String sql) throws SQLException {
+    String t = sql.trim().toLowerCase(java.util.Locale.ROOT);
+    if (t.startsWith("select") || t.startsWith("show") || t.startsWith("describe") || t.startsWith("explain")) {
+      this.lastResultSet = (JqResultSet) this.executeQuery(sql);
+      this.lastUpdateCount = -1;
+      return true;
+    } else {
+      // send as generic request and wait for FINISH/OK
+      JqQueryReq jqQueryReq = new JqQueryReq();
+      jqQueryReq.setSql(sql);
+      jqQueryReq.setDb(this.jqConnection.getInfo().getProperty("db"));
+      try { out.writeObject(jqQueryReq); } catch (IOException e) { throw new SQLWarning(e); }
+      ObjectDecoderInputStream decoder = new ObjectDecoderInputStream(in);
+      try {
+        Object obj;
+        while ((obj = decoder.readObject()) != null) {
+          if (obj instanceof JimSQueryStatus) {
+            JimSQueryStatus s = (JimSQueryStatus) obj;
+            if (s.equals(JimSQueryStatus.OK)) { this.lastUpdateCount = 0; }
+            if (s.equals(JimSQueryStatus.FINISH)) break;
+          }
+        }
+      } catch (Exception e) { throw new SQLException(e); }
+      this.lastResultSet = null;
+      return false;
+    }
+  }@Override
+  public ResultSet getResultSet() throws SQLException { return lastResultSet; }
 
   @Override
-  public ResultSet getResultSet() throws SQLException {
-    return null;
-  }
-
-  @Override
-  public int getUpdateCount() throws SQLException {
-    return 0;
-  }
+  public int getUpdateCount() throws SQLException { return lastUpdateCount; }
 
   @Override
   public boolean getMoreResults() throws SQLException {
