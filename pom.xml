@@ -1,15 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
   <groupId>com.dafei1288</groupId>
   <artifactId>jimsql-parent</artifactId>
   <packaging>pom</packaging>
   <version>1.0.0-SNAPSHOT</version>
   <url>https://github.com/dafei1288/jimsql</url>
-
   <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
@@ -18,7 +14,6 @@
       <comments>A business-friendly OSS license</comments>
     </license>
   </licenses>
-
   <developers>
     <developer>
       <name>dafei1288</name>
@@ -26,21 +21,18 @@
       <organization>dafei1288.com</organization>
     </developer>
   </developers>
-
   <modules>
     <module>common</module>
     <module>server</module>
     <module>jdbc</module>
     <module>jimsql_mcp_server</module>
+    <module xmlns="">cli</module>
   </modules>
-
   <properties>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-
     <calcite.version>1.30.0</calcite.version>
     <guava.version>31.1-jre</guava.version>
     <antlr.version>4.9.3</antlr.version>
@@ -48,7 +40,6 @@
     <netty.version>4.1.77.Final</netty.version>
     <jimsql.version>1.0.0-SNAPSHOT</jimsql.version>
   </properties>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -56,100 +47,76 @@
         <artifactId>common</artifactId>
         <version>${jimsql.version}</version>
       </dependency>
-
       <dependency>
         <groupId>com.dafei1288</groupId>
         <artifactId>server</artifactId>
         <version>${jimsql.version}</version>
       </dependency>
-
       <dependency>
         <groupId>com.dafei1288</groupId>
         <artifactId>jdbc</artifactId>
         <version>${jimsql.version}</version>
       </dependency>
-
       <dependency>
         <groupId>org.apache.calcite</groupId>
         <artifactId>calcite-core</artifactId>
         <version>${calcite.version}</version>
       </dependency>
-
       <dependency>
         <groupId>org.apache.calcite</groupId>
         <artifactId>calcite-file</artifactId>
         <version>${calcite.version}</version>
       </dependency>
-
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
         <version>${guava.version}</version>
       </dependency>
-
       <dependency>
         <groupId>org.antlr</groupId>
         <artifactId>antlr4</artifactId>
         <version>${antlr.version}</version>
       </dependency>
-
       <dependency>
         <groupId>com.github.julianthome</groupId>
         <artifactId>inmemantlr-api</artifactId>
         <version>${inmemantlr.version}</version>
       </dependency>
-
-
       <dependency>
         <groupId>io.netty</groupId>
         <artifactId>netty-all</artifactId>
         <version>${netty.version}</version>
       </dependency>
-
-
     </dependencies>
   </dependencyManagement>
-
-
   <dependencies>
     <dependency>
       <groupId>org.apache.calcite</groupId>
       <artifactId>calcite-core</artifactId>
     </dependency>
-
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.antlr</groupId>
       <artifactId>antlr4</artifactId>
     </dependency>
-
     <dependency>
       <groupId>com.github.julianthome</groupId>
       <artifactId>inmemantlr-api</artifactId>
     </dependency>
-
-
   </dependencies>
-
-
-
-
-<!--  <distributionManagement>-->
-<!--    <repository>-->
-<!--      <id>nexus-releases</id>-->
-<!--      <name>Nexus Release Repository</name>-->
-<!--      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>-->
-<!--    </repository>-->
-<!--    <snapshotRepository>-->
-<!--      <id>ossrh</id>-->
-<!--      <name>ossrh</name>-->
-<!--      <url>https://oss.sonatype.org/content/repositories/snapshots</url>-->
-<!--    </snapshotRepository>-->
-<!--  </distributionManagement>-->
-
-
+  <distributionManagement>
+    <repository>
+      <id>nexus-releases</id>
+      <name>Nexus Release Repository</name>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+    </repository>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <name>ossrh</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
 </project>
