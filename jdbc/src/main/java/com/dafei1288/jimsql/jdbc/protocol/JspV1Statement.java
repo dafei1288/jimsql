@@ -14,6 +14,7 @@ public class JspV1Statement implements Statement {
   private final JqConnection conn;
   private final JspV1Wire wire;
   private int fetchSize = 0;
+  private int lastUpdateCount = -1;
 
   public JspV1Statement(JqConnection conn) throws SQLException {
     this.conn = conn;
@@ -50,7 +51,12 @@ public class JspV1Statement implements Statement {
     }
   }
 
-  @Override public int executeUpdate(String sql) { return 0; }
+    @Override
+  public int executeUpdate(String sql) throws SQLException {
+    boolean hasRs = execute(sql);
+    if (hasRs) throw new SQLException("Query returned a result set");
+    return (lastUpdateCount < 0) ? 0 : lastUpdateCount;
+  }
   @Override public void close() {}
   @Override public int getMaxFieldSize() { return 0; }
   @Override public void setMaxFieldSize(int max) {}
@@ -63,9 +69,36 @@ public class JspV1Statement implements Statement {
   @Override public SQLWarning getWarnings() { return null; }
   @Override public void clearWarnings() {}
   @Override public void setCursorName(String name) {}
-  @Override public boolean execute(String sql) { return false; }
+    @Override
+  public boolean execute(String sql) throws SQLException {
+    try {
+      this.lastUpdateCount = -1;
+      boolean openCursor = false;
+      wire.query(sql, openCursor, 0, 0);
+      ProtocolFrame f = wire.readFrame();
+      int type = f.header.type & 0xFF;
+      if (type == MessageType.ERROR.code) {
+        throw new SQLException("Server error: " + new String(f.payload, StandardCharsets.UTF_8));
+      }
+      if (type == MessageType.UPDATE_COUNT.code) {
+        String js = new String(f.payload, StandardCharsets.UTF_8);
+        int i = js.indexOf("\"rows\":");
+        int val = 0;
+        if (i >= 0) {
+          int p = i + 7; int e = p; while (e < js.length() && Character.isDigit(js.charAt(e))) e++;
+          try { val = Integer.parseInt(js.substring(p, e)); } catch (Exception ignore) {}
+        }
+        this.lastUpdateCount = val;
+        return false;
+      }
+      if (type == MessageType.RESULTSET_HEADER.code) { return true; }
+      this.lastUpdateCount = 0; return false;
+    } catch (IOException e) {
+      throw new SQLException(e);
+    }
+  }
   @Override public ResultSet getResultSet() { return null; }
-  @Override public int getUpdateCount() { return 0; }
+  @Override public int getUpdateCount() { return (lastUpdateCount < 0) ? 0 : lastUpdateCount; }
   @Override public boolean getMoreResults() { return false; }
   @Override public void setFetchDirection(int direction) {}
   @Override public int getFetchDirection() { return 0; }
@@ -93,4 +126,10 @@ public class JspV1Statement implements Statement {
   @Override public boolean isCloseOnCompletion() { return false; }
   @Override public <T> T unwrap(Class<T> iface) { return null; }
   @Override public boolean isWrapperFor(Class<?> iface) { return false; }
+
 }
+
+
+
+
+
