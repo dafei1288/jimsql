@@ -67,12 +67,12 @@ public class JqResultSetMetaData implements ResultSetMetaData, Serializable {
 
   @Override
   public String getColumnLabel(int column) throws SQLException {
-    return this._columnMeta.values().stream().skip(column).findFirst().get().getLabelName();
+    return this._columnMeta.values().stream().skip(column-1).findFirst().get().getLabelName();
   }
 
   @Override
   public String getColumnName(int column) throws SQLException {
-    return this._columnMeta.values().stream().skip(column).findFirst().get().getLabelName();
+    return this._columnMeta.values().stream().skip(column-1).findFirst().get().getLabelName();
   }
 
   @Override
@@ -92,7 +92,7 @@ public class JqResultSetMetaData implements ResultSetMetaData, Serializable {
 
   @Override
   public String getTableName(int column) throws SQLException {
-    return this._columnMeta.values().stream().skip(column).findFirst().get().getTableName();
+    return this._columnMeta.values().stream().skip(column-1).findFirst().get().getTableName();
   }
 
   @Override
@@ -102,12 +102,12 @@ public class JqResultSetMetaData implements ResultSetMetaData, Serializable {
 
   @Override
   public int getColumnType(int column) throws SQLException {
-    return this._columnMeta.values().stream().skip(column).findFirst().get().getColumnType();
+    return this._columnMeta.values().stream().skip(column-1).findFirst().get().getColumnType();
   }
 
   @Override
   public String getColumnTypeName(int column) throws SQLException {
-    return this._columnMeta.values().stream().skip(column).findFirst().get().getClazzStr();
+    return this._columnMeta.values().stream().skip(column-1).findFirst().get().getClazzStr();
   }
 
   @Override
