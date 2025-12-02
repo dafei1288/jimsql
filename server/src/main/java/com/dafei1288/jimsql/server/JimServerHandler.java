@@ -44,6 +44,8 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
     //, (SelectTableParseTreeProcessor) processor
     switch(scriptParseTreeProcessor.getSqlStatementEnum()){
       case SELECT_TABLE:this.processQuery(ctx, processor,reNew) ;break;
+      case UPDATE_TABLE: this.processUpdate(ctx, processor, reNew); break;
+      case DELETE_TABLE: this.processDelete(ctx, processor, reNew); break;
       default: ctx.writeAndFlush(JimSQueryStatus.OK); break;
     }
     ctx.flush();
@@ -107,10 +109,39 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
 
 
   }
+  private void processUpdate(io.netty.channel.ChannelHandlerContext ctx, org.snt.inmemantlr.tree.ParseTreeProcessor processor, com.dafei1288.jimsql.common.JqQueryReq jqQueryReq) {
+    try {
+      org.snt.inmemantlr.tree.ParseTreeProcessor cur = ((com.dafei1288.jimsql.server.parser.ScriptParseTreeProcessor)processor).getCurrentParseTreeProcessor();
+      com.dafei1288.jimsql.server.plan.logical.UpdateLogicalPlan plan = null;
+      if (cur instanceof com.dafei1288.jimsql.server.parser.dml.DmlScriptParseTreeProcessor) {
+        Object r = ((com.dafei1288.jimsql.server.parser.dml.DmlScriptParseTreeProcessor) cur).getResult();
+        if (r instanceof com.dafei1288.jimsql.server.plan.logical.UpdateLogicalPlan) { plan = (com.dafei1288.jimsql.server.plan.logical.UpdateLogicalPlan) r; }
+      }
+      if (plan == null) throw new IllegalStateException("no plan for UPDATE");
+      String db = jqQueryReq.getDb(); if (db == null || db.isEmpty()) db = "test";
+      com.dafei1288.jimsql.server.plan.physical.DmlCsvExecutor.executeUpdate(db, plan);
+      ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
-
-
-
+  private void processDelete(io.netty.channel.ChannelHandlerContext ctx, org.snt.inmemantlr.tree.ParseTreeProcessor processor, com.dafei1288.jimsql.common.JqQueryReq jqQueryReq) {
+    try {
+      org.snt.inmemantlr.tree.ParseTreeProcessor cur = ((com.dafei1288.jimsql.server.parser.ScriptParseTreeProcessor)processor).getCurrentParseTreeProcessor();
+      com.dafei1288.jimsql.server.plan.logical.DeleteLogicalPlan plan = null;
+      if (cur instanceof com.dafei1288.jimsql.server.parser.dml.DmlScriptParseTreeProcessor) {
+        Object r = ((com.dafei1288.jimsql.server.parser.dml.DmlScriptParseTreeProcessor) cur).getResult();
+        if (r instanceof com.dafei1288.jimsql.server.plan.logical.DeleteLogicalPlan) { plan = (com.dafei1288.jimsql.server.plan.logical.DeleteLogicalPlan) r; }
+      }
+      if (plan == null) throw new IllegalStateException("no plan for DELETE");
+      String db = jqQueryReq.getDb(); if (db == null || db.isEmpty()) db = "test";
+      com.dafei1288.jimsql.server.plan.physical.DmlCsvExecutor.executeDelete(db, plan);
+      ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
   @Override
   public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
     ctx.writeAndFlush(JimSQueryStatus.FINISH);
@@ -126,4 +157,9 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
   }
 
 }
+
+
+
+
+
 
