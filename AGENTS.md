@@ -2,10 +2,10 @@
 
 ## Project Structure & Modules
 - Maven multi-module layout:
-  - `common/` — shared models, metadata, and utilities.
-  - `server/` — Netty-based JimSQL server; Dockerfile and compose in `server/`.
-  - `jdbc/` — JDBC driver (`com.dafei1288.jimsql.jdbc`).
-  - `jimsql_mcp_server/` — Spring Boot MCP integration.
+  - `common/` ??shared models, metadata, and utilities.
+  - `server/` ??Netty-based JimSQL server; Dockerfile and compose in `server/`.
+  - `jdbc/` ??JDBC driver (`com.dafei1288.jimsql.jdbc`).
+  - `jimsql_mcp_server/` ??Spring Boot MCP integration.
 - Standard layout: `src/main/java`, `src/main/resources`, tests in `src/test/java`.
 
 ## Build, Test, and Development Commands
@@ -16,7 +16,7 @@
 - Run tests: `mvn test` (per module: `mvn -pl jdbc test`)
 - CI builds on JDK 17 with `mvn -B package -DskipTests=true` and publishes artifacts and Docker images.
 
-## Coding Style & Naming Conventions
+- DML supported: UPDATE/DELETE (CSV backend)\n  - legacy protocol: returns OK for non-query\n  - jspv1 protocol: returns UPDATE_COUNT with affected rows\n\n## Coding Style & Naming Conventions
 - Java 17+ (CI uses 17). Ensure `JAVA_HOME` points to a 17-compatible JDK.
 - Indentation: 2 spaces; K&R braces; keep diffs small and focused.
 - Packages lower-case under `com.dafei1288.jimsql.*`; classes `PascalCase`; constants `UPPER_SNAKE_CASE`.
@@ -94,3 +94,4 @@ Example MCP client config (env + args):
 
 Notes:
 - Connection details are read from env only; `-D` flags are used only for `mcp.stdio`. If desired, we can extend the code to also read `-Djimsql.*`.
+
