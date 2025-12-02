@@ -56,7 +56,7 @@ public class JqStatement implements Statement {
     try {
       Object obj = decoderInputStream.readObject();
       if(obj instanceof JimSQueryStatus && JimSQueryStatus.BEGIN.equals((JimSQueryStatus) obj)){
-        //读取metadata
+        //???metadata
         obj =  decoderInputStream.readObject();
 
         jqResultSet = new JqResultSet(decoderInputStream);
@@ -68,7 +68,7 @@ public class JqStatement implements Statement {
 
     }catch (Exception e){
       e.printStackTrace();
-      throw new SQLException("can‘t start query ");
+      throw new SQLException("can?? start query ");
     }
     return jqResultSet;
   }
@@ -175,13 +175,7 @@ public class JqStatement implements Statement {
       ObjectDecoderInputStream decoder = new ObjectDecoderInputStream(in);
       try {
         Object obj;
-        while ((obj = decoder.readObject()) != null) {
-          if (obj instanceof JimSQueryStatus) {
-            JimSQueryStatus s = (JimSQueryStatus) obj;
-            if (s.equals(JimSQueryStatus.OK)) { this.lastUpdateCount = 0; }
-            if (s.equals(JimSQueryStatus.FINISH)) break;
-          }
-        }
+        while ((obj = decoder.readObject()) != null) {\n          if (obj instanceof Integer) { this.lastUpdateCount = ((Integer)obj).intValue(); continue; }\n          if (obj instanceof JimSQueryStatus) {\n            JimSQueryStatus s = (JimSQueryStatus) obj;\n            if (s.equals(JimSQueryStatus.OK)) { if (this.lastUpdateCount < 0) this.lastUpdateCount = 0; }\n            if (s.equals(JimSQueryStatus.FINISH)) break;\n          }\n        }
       } catch (Exception e) { throw new SQLException(e); }
       this.lastResultSet = null;
       return false;
@@ -327,3 +321,4 @@ public class JqStatement implements Statement {
     return false;
   }
 }
+
