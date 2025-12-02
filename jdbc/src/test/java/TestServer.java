@@ -23,6 +23,7 @@ public class TestServer {
     Statement statement = conn.createStatement();
     System.out.println(statement);
     String sql = "select id,name,age from user where age = 3";
+    sql = "show tables ;";
     ResultSet resultSet = statement.executeQuery(sql);
     System.out.println(sql);
     System.out.println(resultSet);
