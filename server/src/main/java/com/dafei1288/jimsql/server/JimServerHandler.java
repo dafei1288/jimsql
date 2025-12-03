@@ -21,6 +21,12 @@ import org.snt.inmemantlr.tree.ParseTreeProcessor;
 public class JimServerHandler extends ChannelInboundHandlerAdapter {
 
   @Override
+  public void channelReadComplete(io.netty.channel.ChannelHandlerContext ctx) throws Exception {
+    ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.FINISH);
+    ctx.flush();
+  }
+
+  @Override
   public void channelActive(ChannelHandlerContext ctx) throws Exception {
     ctx.writeAndFlush(JimSQueryStatus.BEGIN);
     ctx.flush();
@@ -144,7 +150,8 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }private void processShow(io.netty.channel.ChannelHandlerContext ctx, org.snt.inmemantlr.tree.ParseTreeProcessor processor, com.dafei1288.jimsql.common.JqQueryReq req) {
+  }
+private void processShow(io.netty.channel.ChannelHandlerContext ctx, org.snt.inmemantlr.tree.ParseTreeProcessor processor, com.dafei1288.jimsql.common.JqQueryReq req) {
     try {
       org.snt.inmemantlr.tree.ParseTreeProcessor cur = ((com.dafei1288.jimsql.server.parser.ScriptParseTreeProcessor)processor).getCurrentParseTreeProcessor();
       com.dafei1288.jimsql.server.parser.dcl.DclScriptParseTreeProcessor.DclRequest dr = null;
@@ -206,7 +213,8 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
       }
       ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
     } catch (Exception e) { e.printStackTrace(); }
-  }private String sqlTypeToName(int t) {
+  }
+private String sqlTypeToName(int t) {
     switch (t) {
       case java.sql.Types.INTEGER: return "INT";
       case java.sql.Types.BIGINT: return "BIGINT";
@@ -232,4 +240,3 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
     return sb.toString();
   }
 }
-

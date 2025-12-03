@@ -27,7 +27,7 @@ if not defined PROTOCOL if defined JIMSQL_PROTOCOL set "PROTOCOL=%JIMSQL_PROTOCO
 set "JAVA_OPTS=%JAVA_OPTS%"
 if defined JIMSQL_WIRELOG set "JAVA_OPTS=%JAVA_OPTS% -Djimsql.wirelog=%JIMSQL_WIRELOG%"
 
-set "ARGS=%PORT% %HOST% \"%DATADIR%\""
+set "ARGS=%PORT% %HOST% "%DATADIR%""
 if defined PROTOCOL set "ARGS=%ARGS% %PROTOCOL%"
 
 echo Running: java %JAVA_OPTS% -jar "%JAR%" %ARGS%
