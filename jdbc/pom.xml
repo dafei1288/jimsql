@@ -46,4 +46,4 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  </project>
+    <build>\r\n    <plugins>\r\n      <plugin>\r\n        <groupId>org.apache.maven.plugins</groupId>\r\n        <artifactId>maven-surefire-plugin</artifactId>\r\n        <version>3.2.5</version>\r\n        <configuration>\r\n          <useModulePath>false</useModulePath>\r\n        </configuration>\r\n      </plugin>\r\n    </plugins>\r\n  </build>\r\n</project>
