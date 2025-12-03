@@ -17,7 +17,7 @@
 - CI builds on JDK 17 with `mvn -B package -DskipTests=true` and publishes artifacts and Docker images.
 
 - DML supported: UPDATE/DELETE (CSV backend)\n  - legacy protocol: returns OK for non-query\n  - jspv1 protocol: returns UPDATE_COUNT with affected rows\n\n## Coding Style & Naming Conventions
-- Java 17+ (CI uses 17). Ensure `JAVA_HOME` points to a 17-compatible JDK.
+- DCL/SHOW supported: SHOW DATABASES, SHOW TABLES, DESCRIBE/DESC, SHOW CREATE TABLE (same columns across legacy/jspv1)\n  - SHOW DATABASES: `database`\n  - SHOW TABLES: `table`\n  - DESCRIBE/DESC t: `Field`, `Type`\n  - SHOW CREATE TABLE t: `Table`, `Create Table`\n- Java 17+ (CI uses 17). Ensure `JAVA_HOME` points to a 17-compatible JDK.
 - Indentation: 2 spaces; K&R braces; keep diffs small and focused.
 - Packages lower-case under `com.dafei1288.jimsql.*`; classes `PascalCase`; constants `UPPER_SNAKE_CASE`.
 - No formatter configured in Maven; align with surrounding code.
@@ -35,7 +35,7 @@
 
 ## Security & Configuration Tips
 - Default ports: `8821` (server), `8825` (debug). Default data dir: `server/src/main/resources/datadir`.
-- Docker env: set `JAVA_ARGS` (e.g., `8821 0.0.0.0 /jimsql/data`) and optional `JAVA_OPTS` for JVM flags.
+- Docker env: set `JAVA_ARGS` (e.\n- Windows: server/bin/start-server.cmd handles DATADIR quoting correctly; pass the directory without extra escaping.g., `8821 0.0.0.0 /jimsql/data`) and optional `JAVA_OPTS` for JVM flags.
 
 
 ## MCP Startup & Connection Configuration
