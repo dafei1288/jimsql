@@ -63,7 +63,7 @@ public class ScriptParseTreeProcessor extends ParseTreeProcessor {
     simpleProp(parseTreeNode);
 
     if("dcl".equals(parseTreeNode.getRule())){
-      currentParseTreeProcessor = new DclScriptParseTreeProcessor((ParseTree) smap.get(parseTreeNode));
+      currentParseTreeProcessor = new com.dafei1288.jimsql.server.parser.dcl.DclScriptParseTreeProcessor((ParseTree) smap.get(parseTreeNode));
 //      System.out.println("parseTreeNode.getChild(0) -->"+parseTreeNode.getChild(0).getRule());
       currentParseTreeProcessor.process();
     }else if("dql".equals(parseTreeNode.getRule())){
@@ -82,5 +82,6 @@ public class ScriptParseTreeProcessor extends ParseTreeProcessor {
 
   }
 }
+
 
 

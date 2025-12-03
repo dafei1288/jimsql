@@ -46,6 +46,7 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
       case SELECT_TABLE:this.processQuery(ctx, processor,reNew) ;break;
       case UPDATE_TABLE: this.processUpdate(ctx, processor, reNew); break;
       case DELETE_TABLE: this.processDelete(ctx, processor, reNew); break;
+      case SHOW_DATABASES: case SHOW_TABLES: case SHOW_TABLEDESC: case SHOW_CREATE_TABLE: this.processShow(ctx, processor, reNew); break;
       default: ctx.writeAndFlush(JimSQueryStatus.OK); break;
     }
     ctx.flush();
@@ -143,28 +144,92 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }private void processShow(io.netty.channel.ChannelHandlerContext ctx, org.snt.inmemantlr.tree.ParseTreeProcessor processor, com.dafei1288.jimsql.common.JqQueryReq req) {
+    try {
+      org.snt.inmemantlr.tree.ParseTreeProcessor cur = ((com.dafei1288.jimsql.server.parser.ScriptParseTreeProcessor)processor).getCurrentParseTreeProcessor();
+      com.dafei1288.jimsql.server.parser.dcl.DclScriptParseTreeProcessor.DclRequest dr = null;
+      if (cur instanceof com.dafei1288.jimsql.server.parser.dcl.DclScriptParseTreeProcessor) {
+        Object r = ((com.dafei1288.jimsql.server.parser.dcl.DclScriptParseTreeProcessor) cur).getResult();
+        if (r instanceof com.dafei1288.jimsql.server.parser.dcl.DclScriptParseTreeProcessor.DclRequest) dr = (com.dafei1288.jimsql.server.parser.dcl.DclScriptParseTreeProcessor.DclRequest) r;
+      }
+      if (dr == null) { ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK); return; }
+      String db = req.getDb(); if (db == null || db.isEmpty()) db = "test";
+      com.dafei1288.jimsql.server.instance.ServerMetadata SM = com.dafei1288.jimsql.server.instance.ServerMetadata.getInstance();
+      if (dr.type == com.dafei1288.jimsql.server.parser.SqlStatementEnum.SHOW_DATABASES) {
+        java.util.List<String> dbs = new java.util.ArrayList<>(SM.getJqDatabaseLinkedHashMap().keySet());
+        com.dafei1288.jimsql.common.JqColumnResultSetMetadata c = new com.dafei1288.jimsql.common.JqColumnResultSetMetadata();
+        c.setIndex(1); c.setLabelName("database"); c.setTableName(""); c.setColumnType(java.sql.Types.VARCHAR); c.setClazzStr("java.lang.String"); c.setClazz(String.class);
+        java.util.LinkedHashMap<String, com.dafei1288.jimsql.common.JqColumnResultSetMetadata> map = new java.util.LinkedHashMap<>(); map.put("database", c);
+        com.dafei1288.jimsql.common.JqResultSetMetaData meta = new com.dafei1288.jimsql.common.JqResultSetMetaData(map);
+        ctx.writeAndFlush(meta);
+        for (String name : dbs) { com.dafei1288.jimsql.common.RowData rd = new com.dafei1288.jimsql.common.RowData(); rd.setNext(true); java.util.LinkedHashMap<String,Object> row = new java.util.LinkedHashMap<>(); row.put("database", name); rd.setDatas(row); ctx.writeAndFlush(rd);}      
+        return;
+      }
+      if (dr.type == com.dafei1288.jimsql.server.parser.SqlStatementEnum.SHOW_TABLES) {
+        com.dafei1288.jimsql.common.meta.JqDatabase jdb = SM.fetchDatabaseByName(db);
+        java.util.List<String> tables = (jdb==null)? java.util.Collections.emptyList() : new java.util.ArrayList<>(jdb.getJqTableListMap().keySet());
+        com.dafei1288.jimsql.common.JqColumnResultSetMetadata c = new com.dafei1288.jimsql.common.JqColumnResultSetMetadata();
+        c.setIndex(1); c.setLabelName("table"); c.setTableName(""); c.setColumnType(java.sql.Types.VARCHAR); c.setClazzStr("java.lang.String"); c.setClazz(String.class);
+        java.util.LinkedHashMap<String, com.dafei1288.jimsql.common.JqColumnResultSetMetadata> map = new java.util.LinkedHashMap<>(); map.put("table", c);
+        com.dafei1288.jimsql.common.JqResultSetMetaData meta = new com.dafei1288.jimsql.common.JqResultSetMetaData(map);
+        ctx.writeAndFlush(meta);
+        for (String t : tables) { com.dafei1288.jimsql.common.RowData rd = new com.dafei1288.jimsql.common.RowData(); rd.setNext(true); java.util.LinkedHashMap<String,Object> row = new java.util.LinkedHashMap<>(); row.put("table", t); rd.setDatas(row); ctx.writeAndFlush(rd);}      
+        return;
+      }
+      if (dr.type == com.dafei1288.jimsql.server.parser.SqlStatementEnum.SHOW_TABLEDESC) {
+        String t = dr.tableName;
+        com.dafei1288.jimsql.common.meta.JqTable jt = SM.fetchTableByName(db, t);
+        java.util.LinkedHashMap<String, com.dafei1288.jimsql.common.meta.JqColumn> cols = (jt==null)? new java.util.LinkedHashMap<>() : jt.getJqTableLinkedHashMap();
+        com.dafei1288.jimsql.common.JqColumnResultSetMetadata c1 = new com.dafei1288.jimsql.common.JqColumnResultSetMetadata(); c1.setIndex(1); c1.setLabelName("Field"); c1.setColumnType(java.sql.Types.VARCHAR); c1.setClazzStr("java.lang.String"); c1.setClazz(String.class); c1.setTableName(t);
+        com.dafei1288.jimsql.common.JqColumnResultSetMetadata c2 = new com.dafei1288.jimsql.common.JqColumnResultSetMetadata(); c2.setIndex(2); c2.setLabelName("Type"); c2.setColumnType(java.sql.Types.VARCHAR); c2.setClazzStr("java.lang.String"); c2.setClazz(String.class); c2.setTableName(t);
+        java.util.LinkedHashMap<String, com.dafei1288.jimsql.common.JqColumnResultSetMetadata> map = new java.util.LinkedHashMap<>(); map.put("Field", c1); map.put("Type", c2);
+        com.dafei1288.jimsql.common.JqResultSetMetaData meta = new com.dafei1288.jimsql.common.JqResultSetMetaData(map);
+        ctx.writeAndFlush(meta);
+        for (java.util.Map.Entry<String, com.dafei1288.jimsql.common.meta.JqColumn> e : cols.entrySet()) {
+          String name = e.getKey(); int sqlType = e.getValue().getColumnType(); String typeName = sqlTypeToName(sqlType);
+          com.dafei1288.jimsql.common.RowData rd = new com.dafei1288.jimsql.common.RowData(); rd.setNext(true); java.util.LinkedHashMap<String,Object> row = new java.util.LinkedHashMap<>(); row.put("Field", name); row.put("Type", typeName); rd.setDatas(row); ctx.writeAndFlush(rd);
+        }
+        return;
+      }
+      if (dr.type == com.dafei1288.jimsql.server.parser.SqlStatementEnum.SHOW_CREATE_TABLE) {
+        String t = dr.tableName;
+        com.dafei1288.jimsql.common.meta.JqTable jt = SM.fetchTableByName(db, t);
+        java.util.LinkedHashMap<String, com.dafei1288.jimsql.common.meta.JqColumn> cols = (jt==null)? new java.util.LinkedHashMap<>() : jt.getJqTableLinkedHashMap();
+        com.dafei1288.jimsql.common.JqColumnResultSetMetadata c1 = new com.dafei1288.jimsql.common.JqColumnResultSetMetadata(); c1.setIndex(1); c1.setLabelName("Table"); c1.setColumnType(java.sql.Types.VARCHAR); c1.setClazzStr("java.lang.String"); c1.setClazz(String.class);
+        com.dafei1288.jimsql.common.JqColumnResultSetMetadata c2 = new com.dafei1288.jimsql.common.JqColumnResultSetMetadata(); c2.setIndex(2); c2.setLabelName("Create Table"); c2.setColumnType(java.sql.Types.VARCHAR); c2.setClazzStr("java.lang.String"); c2.setClazz(String.class);
+        java.util.LinkedHashMap<String, com.dafei1288.jimsql.common.JqColumnResultSetMetadata> map = new java.util.LinkedHashMap<>(); map.put("Table", c1); map.put("Create Table", c2);
+        com.dafei1288.jimsql.common.JqResultSetMetaData meta = new com.dafei1288.jimsql.common.JqResultSetMetaData(map);
+        ctx.writeAndFlush(meta);
+        String ddl = buildCreateTableDDL(t, cols);
+        com.dafei1288.jimsql.common.RowData rd = new com.dafei1288.jimsql.common.RowData(); rd.setNext(true); java.util.LinkedHashMap<String,Object> row = new java.util.LinkedHashMap<>(); row.put("Table", t); row.put("Create Table", ddl); rd.setDatas(row); ctx.writeAndFlush(rd);
+        return;
+      }
+      ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
+    } catch (Exception e) { e.printStackTrace(); }
+  }private String sqlTypeToName(int t) {
+    switch (t) {
+      case java.sql.Types.INTEGER: return "INT";
+      case java.sql.Types.BIGINT: return "BIGINT";
+      case java.sql.Types.SMALLINT: return "SMALLINT";
+      case java.sql.Types.TINYINT: return "TINYINT";
+      case java.sql.Types.DOUBLE: return "DOUBLE";
+      case java.sql.Types.FLOAT: return "FLOAT";
+      case java.sql.Types.DECIMAL:
+      case java.sql.Types.NUMERIC: return "DECIMAL";
+      default: return "VARCHAR(50)";
+    }
   }
-  @Override
-  public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-    ctx.writeAndFlush(JimSQueryStatus.FINISH);
-    ctx.flush();
+
+  private String buildCreateTableDDL(String table, java.util.LinkedHashMap<String, com.dafei1288.jimsql.common.meta.JqColumn> cols) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("CREATE TABLE `").append(table).append("` (\n");
+    int i = 0;
+    for (java.util.Map.Entry<String, com.dafei1288.jimsql.common.meta.JqColumn> e : cols.entrySet()) {
+      if (i++ > 0) sb.append(",\n");
+      sb.append("  `").append(e.getKey()).append("` ").append(sqlTypeToName(e.getValue().getColumnType()));
+    }
+    sb.append("\n);");
+    return sb.toString();
   }
-
-
-
-  @Override
-  public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-    cause.getCause();
-    ctx.channel().close();
-  }
-
 }
-
-
-
-
-
-
-
-
 
