@@ -33,18 +33,18 @@
       <artifactId>lz4</artifactId>
       <version>1.3.0</version>
     </dependency>
-    <dependency xmlns="">
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <version>5.10.2</version>
       <scope>test</scope>
     </dependency>
-    <dependency xmlns="">
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
       <version>5.10.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
-  <build xmlns="" />
+  <build />
   <build>\n    <plugins>\n      <plugin>\n        <groupId>org.apache.maven.plugins</groupId>\n        <artifactId>maven-surefire-plugin</artifactId>\n        <version>3.2.5</version>\n        <configuration>\n          <useModulePath>false</useModulePath>\n        </configuration>\n      </plugin>\n    </plugins>\n  </build>\n</project>
