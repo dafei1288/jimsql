@@ -14,10 +14,10 @@
 - Run server (local JAR): `java -jar server/target/*-jar-with-dependencies.jar 8821 0.0.0.0 server/src/main/resources/datadir`
 - Run with Docker: `docker compose -f server/docker-compose.yml up -d`
 - Run tests: `mvn test` (per module: `mvn -pl jdbc test`)
-- CI builds on JDK 17 with `mvn -B package -DskipTests=true` and publishes artifacts and Docker images.
+- CI builds on JDK 21 with `mvn -B package -DskipTests=true` and publishes artifacts and Docker images.
 
 - DML supported: UPDATE/DELETE (CSV backend)\n  - legacy protocol: returns OK for non-query\n  - jspv1 protocol: returns UPDATE_COUNT with affected rows\n\n## Coding Style & Naming Conventions
-- DCL/SHOW supported: SHOW DATABASES, SHOW TABLES, DESCRIBE/DESC, SHOW CREATE TABLE (same columns across legacy/jspv1)\n  - SHOW DATABASES: `database`\n  - SHOW TABLES: `table`\n  - DESCRIBE/DESC t: `Field`, `Type`\n  - SHOW CREATE TABLE t: `Table`, `Create Table`\n- Java 17+ (CI uses 17). Ensure `JAVA_HOME` points to a 17-compatible JDK.
+- DCL/SHOW supported: SHOW DATABASES, SHOW TABLES, DESCRIBE/DESC, SHOW CREATE TABLE (same columns across legacy/jspv1)\n  - SHOW DATABASES: `database`\n  - SHOW TABLES: `table`\n  - DESCRIBE/DESC t: `Field`, `Type`\n  - SHOW CREATE TABLE t: `Table`, `Create Table`\n- Java 21+ (CI uses 21). Ensure `JAVA_HOME` points to a 17-compatible JDK.
 - Indentation: 2 spaces; K&R braces; keep diffs small and focused.
 - Packages lower-case under `com.dafei1288.jimsql.*`; classes `PascalCase`; constants `UPPER_SNAKE_CASE`.
 - No formatter configured in Maven; align with surrounding code.
