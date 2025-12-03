@@ -32,14 +32,14 @@ public class Jimserver {
     PORT = port;
     HOST = host;
 
-    //循环组接收连接，不进行处理,转交给下面的线程组
+    //循环组接收连接，不进行处�?转交给下面的线程�?
     bossGroup = new NioEventLoopGroup();
-    //循环组处理连接，获取参数，进行工作处理
+    //循环组处理连接，获取参数，进行工作处�?
     workerGroup = new NioEventLoopGroup();
     try {
       //服务端进行启动类
       ServerBootstrap serverBootstrap = new ServerBootstrap();
-      //使用NIO模式，初始化器等等
+      //使用NIO模式，初始化器等�?
       serverBootstrap.group(bossGroup, workerGroup)
           .channel(NioServerSocketChannel.class)
           .childHandler(useJspV1() ? new JimServerV1Initializer() : new JimServerInitializer());
@@ -81,6 +81,9 @@ public class Jimserver {
       port = Integer.parseInt(args[0]);
       host = args[1];
       datadir = args[2];
+      if (datadir != null && datadir.length() >= 2 && datadir.startsWith("\"") && datadir.endsWith("\"")) {
+        datadir = datadir.substring(1, datadir.length()-1);
+      }
       // Optional extra args: protocol or key=value pairs
       if (args.length >= 4) {
         for (int i = 3; i < args.length; i++) {
