@@ -87,11 +87,17 @@ public class SqlParser {
   public ScriptParseTreeProcessor parser(JqQueryReq jqQueryReq)
       throws ParsingException, IllegalWorkflowException, ParseTreeProcessorException {
     this.jqQueryReq = jqQueryReq;
+    try {
     gp.parse(jqQueryReq.getSql());
+    } catch (org.snt.inmemantlr.exceptions.ParsingException pe) {
+      String msg = pe.getMessage();
+      if (msg == null || msg.isEmpty()) msg = "syntax error";
+      msg = "SQL parse error: " + msg + "; sql=\"" + String.valueOf(jqQueryReq.getSql()) + "\"";
+      throw new org.snt.inmemantlr.exceptions.ParsingException(msg);
+    }
     pt = defaultTreeListener.getParseTree();
     ScriptParseTreeProcessor scriptParseTreeProcessor = new ScriptParseTreeProcessor(pt);
 //    scriptParseTreeProcessor.process();
     return scriptParseTreeProcessor;
   }
 }
-
