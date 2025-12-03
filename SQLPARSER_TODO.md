@@ -1,4 +1,4 @@
-﻿# SQLPARSER TODO (MySQL dialect)
+# SQLPARSER TODO (MySQL dialect)
 
 Scope
 - File: server/src/main/resources/jimsql.g4
@@ -58,17 +58,14 @@ Milestones & Tasks
 - [ ] ALTER TABLE t ADD/DROP PRIMARY KEY
 
 6) DCL / SHOW / EXPLAIN
-- [ ] SHOW DATABASES [LIKE pattern]?
-- [ ] SHOW TABLES [LIKE pattern]?
-- [ ] DESCRIBE | DESC tableName
-- [ ] SHOW CREATE TABLE tableName
+- [x] SHOW DATABASES [LIKE pattern]?
+- [x] SHOW TABLES [LIKE pattern]?
+- [x] DESCRIBE | DESC tableName
+- [x] SHOW CREATE TABLE tableName
 - [x] EXPLAIN select
 
 7) Compatibility & Error Handling
-- [ ] Preserve existing rule names (selectTable, columnList, tableName, identifier, etc.) and add subrules for new features
-- [ ] Resolve lexer priority/ambiguities; extract subrules where needed
-- [ ] Optional: add error listener for better diagnostics
-
+- [x] Preserve existing rule names (selectTable, columnList, tableName, identifier, etc.) and add subrules for new features\n- [ ] Resolve lexer priority/ambiguities; extract subrules where needed\n- [ ] Add parser error listener to improve diagnostics; map errors to friendly messages\n
 8) Tests
 - [ ] Add minimal success samples for each milestone
 - [ ] Regression: existing simple SELECT/INSERT/UPDATE/DELETE/SHOW must still parse
