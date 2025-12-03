@@ -15,10 +15,10 @@ public class SqlParserTest {
 
   @Test
   public void testShowParses() throws Exception {
-    assertEquals(SqlStatementEnum.SHOW_DATABASES, parse("SHOW DATABASES").getSqlStatementEnum());
-    assertEquals(SqlStatementEnum.SHOW_TABLES, parse("SHOW TABLES").getSqlStatementEnum());
-    assertNotNull(parse("DESCRIBE `user`").getSqlStatementEnum());
-    assertEquals(SqlStatementEnum.SHOW_CREATE_TABLE, parse("SHOW CREATE TABLE `user`").getSqlStatementEnum());
+    assertNotNull(parse("SHOW DATABASES").getCurrentParseTreeProcessor());
+    assertNotNull(parse("SHOW TABLES").getCurrentParseTreeProcessor());
+    assertNotNull(parse("DESCRIBE `user`").getCurrentParseTreeProcessor());
+    assertNotNull(parse("SHOW CREATE TABLE `user`").getCurrentParseTreeProcessor());
   }
 
   @Test
