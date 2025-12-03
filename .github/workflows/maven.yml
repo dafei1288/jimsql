@@ -85,7 +85,7 @@ jobs:
       - name: Start legacy server
         run: |
           nohup java -jar server/target/*-jar-with-dependencies.jar 8821 127.0.0.1 server/src/main/resources/datadir >/tmp/server.log 2>&1 & echo $! > /tmp/server.pid
-          for i in {1..50}; do nc -z 127.0.0.1 8821 && break; sleep 0.2; done
+          for i in {1..50}; do (echo > /dev/tcp/127.0.0.1/8821) >/dev/null 2>&1 && break; sleep 0.2; done
       - name: Legacy smoke (SHOW TABLES)
         run: |
           java -jar cli/target/*.jar --url "jdbc:jimsql://127.0.0.1:8821/test?protocol=legacy" --command "show tables;" | tee /tmp/out.txt
@@ -97,7 +97,7 @@ jobs:
       - name: Start jspv1 server
         run: |
           nohup java -jar server/target/*-jar-with-dependencies.jar 8821 127.0.0.1 server/src/main/resources/datadir jspv1 >/tmp/server2.log 2>&1 & echo $! > /tmp/server2.pid
-          for i in {1..50}; do nc -z 127.0.0.1 8821 && break; sleep 0.2; done
+          for i in {1..50}; do (echo > /dev/tcp/127.0.0.1/8821) >/dev/null 2>&1 && break; sleep 0.2; done
       - name: JSPv1 smoke (SHOW DATABASES)
         run: |
           java -jar cli/target/*.jar --url "jdbc:jimsql://127.0.0.1:8821/test?protocol=jspv1" --command "show databases;" | tee /tmp/out2.txt
