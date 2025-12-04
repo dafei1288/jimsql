@@ -1,98 +1,76 @@
 # JimSQL CLI
 
-JimSQL µÄÃüÁîĞĞ¿Í»§¶Ë£¨Java 21+£©£¬Ö§³Ö½»»¥Ê½ REPL¡¢µ¥´ÎÖ´ĞĞ¡¢CSV/JSON µ¼Èë/µ¼³öÓë²ÊÉ«Êä³ö¡£
+äº¤äº’å¼/å‘½ä»¤è¡Œå®¢æˆ·ç«¯ï¼ŒåŸºäº Java 21+ã€‚æ”¯æŒå•æ¡å‘½ä»¤æ‰§è¡Œä¸ REPLï¼Œé€‚é… legacy/jspv1 ä¸¤ç§åè®®ï¼Œé€‚ç”¨äº CSV æ•°æ®åç«¯ã€‚
 
-## °²×°Óë¹¹½¨
+## ç¯å¢ƒè¦æ±‚
+- Java 21+
+- Maven 3.8+
 
-- Ç°ÖÃ£ºJDK 21+£¬Maven 3.8+
-- ¹¹½¨£¨½ö CLI£©£º
-  - `mvn -pl cli -am -DskipTests package`
-  - ²úÎï£º`cli/target/cli-1.0.0-SNAPSHOT.jar`
+## ç¼–è¯‘
+```bash
+mvn -pl cli -am -DskipTests package
+```
+æ„å»ºäº§ç‰©ï¼š`cli/target/cli-1.0.0-SNAPSHOT.jar`
 
-> ×¢Òâ£ºÊ×´Î¹¹½¨»áÏÂÔØÒÀÀµ£¬ĞèÒªÍøÂç·ÃÎÊ¡£
+## å¯åŠ¨æœåŠ¡ç«¯ï¼ˆæœ¬åœ°ï¼‰
+- é»˜è®¤ï¼ˆlegacyï¼‰ï¼š
+```bash
+java -jar server/target/*-jar-with-dependencies.jar 8821 0.0.0.0 server/src/main/resources/datadir
+```
+- jspv1ï¼š
+```bash
+java -jar server/target/*-jar-with-dependencies.jar 8821 0.0.0.0 server/src/main/resources/datadir jspv1
+```
+- Windows æ³¨æ„ï¼š`server/bin/start-server.cmd` å·²æ­£ç¡®å¤„ç† DATADIR çš„å¼•å·ï¼›ä¼ å‚æ—¶æ— éœ€é¢å¤–è½¬ä¹‰ã€‚
 
-## ¿ìËÙ¿ªÊ¼ (Ò²¿ÉÊ¹ÓÃ°ü×°½Å±¾ cli/bin/jimsql(.bat))
+## è¿è¡Œ CLI
+- å•æ¡å‘½ä»¤ï¼š
+```bash
+java -jar cli/target/cli-1.0.0-SNAPSHOT.jar --url "jdbc:jimsql://127.0.0.1:8821/test" -c "show databases;"
+```
+- è¿›å…¥ REPLï¼š
+```bash
+java -jar cli/target/cli-1.0.0-SNAPSHOT.jar --url "jdbc:jimsql://127.0.0.1:8821/test"
+```
+- è„šæœ¬ï¼š
+  - Windows: `cli\\bin\\jimsql.bat`
+  - Bash/WSL/Linux/Mac: `cli/bin/jimsql`ï¼ˆéœ€è¦ `chmod +x`ï¼‰
 
-- Æô¶¯·şÎñ¶Ë£¨Ê¾Àı£©
-  - `java -jar server/target/server-1.0.0-SNAPSHOT-jar-with-dependencies.jar 8821 0.0.0.0 server/src/main/resources/datadir`
-- Ö´ĞĞÒ»´Î²éÑ¯
-  - `java -jar cli/target/cli-1.0.0-SNAPSHOT.jar --url jdbc:jimsql://127.0.0.1:8821/test -c "select * from user"`
-- ½øÈë REPL£¨½»»¥£©
-  - `java -jar cli/target/cli-1.0.0-SNAPSHOT.jar --url jdbc:jimsql://127.0.0.1:8821/test`
+## è¿æ¥å‚æ•°
+- ä½¿ç”¨ `--url`ï¼ˆæ¨èï¼‰æˆ– `-H/--host`ã€`-p/--port`ã€`-d/--db`ã€`-u/--user`ã€`-P/--password`
+- åè®®ï¼šåœ¨ JDBC URL ä¸Šè¿½åŠ  `?protocol=legacy|jspv1`
+  - ä¾‹å¦‚ï¼š`jdbc:jimsql://127.0.0.1:8821/test?protocol=jspv1`
 
-> REPL »á³¢ÊÔÊ¹ÓÃÌá¹©µÄ URL£¨»ò»·¾³±äÁ¿£¬¼ûÏÂÎÄ£©×Ô¶¯Á¬½Ó¡£
+## è¾“å‡ºæ ¼å¼ä¸é¢œè‰²
+- `--format table|csv|json`ï¼Œé»˜è®¤ `table`
+- é¢œè‰²ï¼š`--color always|auto|never`ï¼Œæ”¯æŒ `NO_COLOR` ç¯å¢ƒå˜é‡å±è”½é¢œè‰²
 
-## Á¬½ÓÅäÖÃ
+## REPL å‘½ä»¤
+- `\q` / `\quit` / `\exit` é€€å‡º
+- `\help` å¸®åŠ©
+- `\timing on|off` æ˜¾ç¤º/å…³é—­æ‰§è¡Œè€—æ—¶
+- `\set format table|csv|json` è°ƒæ•´è¾“å‡ºæ ¼å¼
+- `\connect <jdbc-url>` åˆ‡æ¢è¿æ¥
+- `\import csv|json <file> <table>` å¯¼å…¥æ•°æ®
+- `\export csv|json <table> <file>` å¯¼å‡ºæ•°æ®ï¼Œæ”¯æŒ `--query "SELECT ..."`
 
-- Ö§³Ö²ÎÊı£º
-  - `--url` »ò `-H/--host`¡¢`-p/--port`¡¢`-d/--db`¡¢`-u/--user`¡¢`-P/--password`
-  - Àı£º`-H 127.0.0.1 -p 8821 -d test`
-- Ö§³Ö»·¾³±äÁ¿£¨Óë MCP ±£³ÖÒ»ÖÂ£©£º
-  - Ê×Ñ¡ `JIMSQL_URL`£¬·ñÔòÊ¹ÓÃ `JIMSQL_HOST`/`JIMSQL_PORT`/`JIMSQL_DB`/`JIMSQL_USER`/`JIMSQL_PASSWORD`
-- Ğ­Òé£¨¿ÉÑ¡£©£º
-  - Í¨¹ı URL ²éÑ¯²ÎÊıÖ¸¶¨£º`jdbc:jimsql://host:port/db?protocol=legacy` »ò `?protocol=jspv1`
-  - »ò JVM ²ÎÊı£º`-Djimsql.protocol=legacy|jspv1`
+## DML/åè®®æç¤º
+- PreparedStatement/executeQuery/executeUpdate è¯­ä¹‰ä¸ JDBC ä¿æŒä¸€è‡´ï¼›
+- legacyï¼šDML è¿”å› OKï¼›jspv1ï¼šè¿”å› UPDATE_COUNTï¼ˆå½±å“è¡Œæ•°ï¼‰ã€‚
 
-## ÃüÁîÓÃ·¨
+## å¸¸è§é—®é¢˜
+- Windows ç»ˆç«¯é¢œè‰²å¼‚å¸¸ï¼šå¯ç”¨ `--color never` æˆ–é…ç½®æ”¯æŒ ANSI çš„ç»ˆç«¯ã€‚
+- åè®®ä¸åŒ¹é…ï¼ˆå¦‚ "Bad magic"ï¼‰ï¼šè¯·åœ¨ URL æŒ‡å®š `?protocol=legacy|jspv1`ã€‚
+- SLF4J StaticLoggerBinder æç¤ºï¼šserver/cli å·²å¼•å…¥ `slf4j-nop`ï¼Œä¸ä¼šå†è¾“å‡ºè¯¥è­¦å‘Šã€‚
 
-- ²é¿´°ïÖú£º
-  - `java -jar cli/target/cli-1.0.0-SNAPSHOT.jar --help`
-- ·Ç½»»¥Ö´ĞĞ£º
-  - `-c "SQL"`¡¢`-f file.sql`¡¢»òÍ¨¹ı stdin ¹ÜµÀ
-- Êä³ö¸ñÊ½£º
-  - `--format table|csv|json`£¨Ä¬ÈÏ table£©
-  - ²ÊÉ«Êä³ö£¨±í¸ñ£©£º`--color always|auto|never`£¨Ä¬ÈÏ always£©
-  - ÌáÊ¾£º`NO_COLOR` »·¾³±äÁ¿½«Ç¿ÖÆ¹Ø±ÕÑÕÉ«
+## ç¤ºä¾‹
+```bash
+# å•æ¡å‘½ä»¤
+java -jar cli/target/cli-1.0.0-SNAPSHOT.jar --url "jdbc:jimsql://127.0.0.1:8821/test" -c "select id,name,age from user order by id;"
 
-## REPL ÔªÃüÁî
-
-- `\q` / `\quit` / `\exit`£ºÍË³ö
-- `\help`£º°ïÖú
-- `\timing on|off`£ºÇĞ»»ºÄÊ±ÏÔÊ¾£¨Ä¬ÈÏ on£©
-- `\set format table|csv|json`£ºÇĞ»»Êä³ö¸ñÊ½
-- `\connect <jdbc-url>`£ºÇĞ»»Á¬½Ó
-- `\import csv|json <file> <table>`£ºµ¼Èë
-- `\export csv|json <table> <file>`£ºµ¼³ö
-
-## µ¼Èë/µ¼³ö
-
-- µ¼Èë CSV£º`--import csv --into <table> --in <file>`£¨CSV Ê×ĞĞ×÷ÎªÁĞÃû£©
-- µ¼Èë JSON£º`--import json --into <table> --in <file>`£¨`[{col:val,...},...]`£©
-- µ¼³ö CSV£º`--export csv --table <table> --out <file>`
-- µ¼³ö JSON£º`--export json --table <table> --out <file>` »ò `--query "SELECT ..."`
-
-> µ±Ç°²Ö¿â JDBC/Server ¶Ô DML Óë PreparedStatement µÄÖ§³ÖÈÔÔÚÑİ½øÖĞ£º
-> - `executeQuery` ÒÑ¶Ô½Ó£»`executeUpdate`/`prepareStatement` ¶àÊıÎ´ÊµÏÖ¡£
-> - µ¼Èë£¨INSERT ÅúÁ¿£©ÔÚÇı¶¯ÍêÉÆÇ°¿ÉÄÜ²»¿ÉÓÃ£»µ¼³öÒÀÀµ²éÑ¯ÄÜÁ¦¡£
-> ÈçÓö²»Ö§³Ö£¬ÇëÏÈÍ¨¹ı REPL/µ¥´Î²éÑ¯ÑéÖ¤ SELECT ÄÜÁ¦£¬ÔÙ³¢ÊÔµ¼³ö¡£
-
-## Ê¾Àı
-
-- ±í¸ñÊä³ö£¨²ÊÉ«£©£º
-  - `... -c "select id,name,age from user order by id"`
-- CSV£º
-  - `type query.sql | ... --format csv > out.csv`
-- JSON£º
-  - `... -c "select * from user" --format json > out.json`
-- µ¼³öÕû±í£º
-  - `... --export csv --table user --out user.csv`
-
-## ³£¼ûÎÊÌâ
-
-- `--help` ÎŞĞ§»òÓë `-h` ³åÍ»£ºÒÑ½«Ö÷»ú¶Ì²Î¸ÄÎª `-H`£»Ê¹ÓÃ `--help` »ò `-h` ²é¿´°ïÖú¡£
-- Windows ¿ØÖÆÌ¨ÑÕÉ«£ºÒÑ¼¯³É Jansi£»ÈçÊä³ö°üº¬ `\u001B[...]`£¬Çë¼Ó `--color never`¡£
-- Ğ­Òé²»Æ¥Åä£¨Bad magic µÈ£©£ºÇëÔÚ URL ¼Ó `?protocol=legacy` »ò `?protocol=jspv1` ÔÙÊÔ¡£
-- Á¬½Óµ«²éÑ¯ÎŞ½á¹û£ºµ±Ç°Çı¶¯ `Statement.execute` Î´·µ»Ø½á¹û¼¯£¬ÇëÊ¹ÓÃ±¾ CLI£¨ÒÑ×Ô¶¯ÅĞ¶Ï SELECT Ê¹ÓÃ `executeQuery`£©¡£
-
-## °æ±¾Óë·¢²¼
-
-- Jar£º`cli/target/cli-<ver>.jar`
-- ºóĞø¿ÉÑ¡£ºÌá¹© Windows `.bat`¡¢Unix shell °ü×°½Å±¾£»»òÊ¹ÓÃ jlink Éú³ÉĞ¡Ìå»ıÔËĞĞÊ±¡£
-
-## °ü×°½Å±¾
-- Windows: cli\bin\jimsql.bat
-- Bash/WSL/Linux/Mac: cli/bin/jimsql (Ê×´ÎĞè chmod +x)
-
-Ê¾Àı:
-- cli\bin\jimsql --help
-- cli\bin\jimsql --url jdbc:jimsql://127.0.0.1:8821/test -c "select 1"
+# REPL
+java -jar cli/target/cli-1.0.0-SNAPSHOT.jar --url "jdbc:jimsql://127.0.0.1:8821/test"
+# åœ¨ REPL å†…ï¼š
+-- show tables;
+-- select * from user where age >= 3 and name like 'j%';
+```
