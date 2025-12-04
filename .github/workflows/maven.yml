@@ -138,3 +138,20 @@ jobs:
       - name: Stop jspv1 server
         run: |
           kill $(cat /tmp/server2.pid) || true
+  eol-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enforce LF endings in sources
+        run: |
+          set -euo pipefail
+          files=$(git ls-files \
+            '*.java' '*.g4' '*.xml' '*.md' '*.yml' '*.yaml' '*.sh' '*.sql' '*.properties' || true)
+          if [ -n "$files" ]; then
+            bad=$(echo "$files" | xargs -r grep -n $'\r' -I || true)
+            if [ -n "$bad" ]; then
+              echo "Carriage returns found in source files:" >&2
+              echo "$bad" >&2
+              exit 1
+            fi
+          fi
