@@ -69,3 +69,15 @@ public class TestServer {
 ```
 
 See more examples in `docs/dml-examples.md`.
+
+## WHERE Filtering
+
+- AND/OR/NOT with parentheses; comparisons `= != > >= < <=`; `IS NULL`/`IS NOT NULL`; `LIKE`/`NOT LIKE`; `IN`/`NOT IN`.
+- Case-insensitive column names; numeric vs string comparison based on table metadata.
+- CSV NULL semantics: empty string is treated as NULL for `IS NULL` checks.
+
+Examples:
+```sql
+SELECT id,name,age FROM user WHERE age = 3 OR (age = 22 AND name LIKE 'ja%') ORDER BY id DESC;
+SELECT id,name FROM user WHERE name IN ('jacky','doudou') AND age IS NOT NULL;
+```

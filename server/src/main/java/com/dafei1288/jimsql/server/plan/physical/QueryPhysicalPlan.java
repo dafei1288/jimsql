@@ -77,8 +77,9 @@ public class QueryPhysicalPlan implements PhysicalPlan{
     // WHERE filter (enhanced: AND/OR, parentheses, IS NULL, LIKE, IN)
     String where = qlp.getWhereExpression();
     if (where != null && !where.trim().isEmpty()) {
-      List<Predicate> preds = parseWhere(where);
-      boolean canApply = preds.stream().allMatch(p -> headerContains(header, p.column));
+      WhereEvaluator.Node expr = WhereEvaluator.parse(where);
+      java.util.Set<String> colsRef = WhereEvaluator.referencedColumns(expr);
+      boolean canApply = colsRef.stream().allMatch(c -> headerContains(header, c));
       if (canApply) {
         fullRows = fullRows.stream().filter(r -> evalPredicates(r, jqTable, preds)).collect(java.util.stream.Collectors.toList());
       }
