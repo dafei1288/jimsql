@@ -5,6 +5,7 @@ import com.dafei1288.jimsql.server.parser.ScriptParseTreeProcessor;
 import com.dafei1288.jimsql.server.parser.SqlStatementEnum;
 import com.dafei1288.jimsql.server.plan.logical.DeleteLogicalPlan;
 import com.dafei1288.jimsql.server.plan.logical.UpdateLogicalPlan;
+import com.dafei1288.jimsql.server.plan.logical.InsertLogicalPlan;
 import java.util.LinkedHashMap;
 import org.snt.inmemantlr.exceptions.ParseTreeProcessorException;
 import org.snt.inmemantlr.tree.ParseTree;
@@ -15,11 +16,12 @@ public class DmlScriptParseTreeProcessor extends ScriptParseTreeProcessor {
 
   private UpdateLogicalPlan update;
   private DeleteLogicalPlan del;
+  private InsertLogicalPlan insert;
 
   public DmlScriptParseTreeProcessor(ParseTree parseTree) { super(parseTree); }
 
   @Override
-  public Object getResult() { return (update != null) ? update : del; }
+  public Object getResult() { return (update != null) ? update : (insert != null ? insert : del); }
 
   @Override
   protected void process(ParseTreeNode n) throws ParseTreeProcessorException {
@@ -125,6 +127,61 @@ public class DmlScriptParseTreeProcessor extends ScriptParseTreeProcessor {
   private String normalizeExprText(String v) {
     if (v == null) return null;
     String s = v.trim();
+    if (s.length() >= 2 && s.charAt(0)=='\'' && s.charAt(s.length()-1)=='\'') return s.substring(1, s.length()-1);
+    return s;
+  }
+  private void handleInsert(ParseTreeNode n) {
+    InsertLogicalPlan plan = new InsertLogicalPlan();
+    com.dafei1288.jimsql.common.meta.JqTable t = new com.dafei1288.jimsql.common.meta.JqTable();
+    // table name
+    for (ParseTreeNode ch : n.getChildren()) {
+      if ("tableName".equals(ch.getRule())) { t.setTableName(stripQuotes(ch.getLabel())); break; }
+    }
+    plan.setTable(t);
+    // optional fields list
+    for (ParseTreeNode ch : n.getChildren()) {
+      if ("fields".equals(ch.getRule())) {
+        java.util.List<String> cols = new java.util.ArrayList<>();
+        for (ParseTreeNode it : ch.getChildren()) {
+          if ("insertIdentifier".equals(it.getRule()) || "identifier".equals(it.getRule())) {
+            cols.add(stripQuotes(it.getLabel()));
+          }
+        }
+        plan.setColumns(cols);
+      }
+    }
+    // VALUES (...) , (...)
+    for (ParseTreeNode ch : n.getChildren()) {
+      if ("insertValues".equals(ch.getRule())) {
+        for (ParseTreeNode it : ch.getChildren()) {
+          if ("valueList".equals(it.getRule())) {
+            for (ParseTreeNode vgrp : it.getChildren()) {
+              if ("values".equals(vgrp.getRule())) {
+                java.util.List<String> row = new java.util.ArrayList<>();
+                for (ParseTreeNode expr : vgrp.getChildren()) {
+                  if ("expr".equals(expr.getRule())) {
+                    String val = normalizeInsertExpr(extractText(expr));
+                    row.add(val);
+                  }
+                }
+                plan.getRows().add(row);
+              }
+            }
+          }
+        }
+      }
+    }
+    this.insert = plan;
+    this.setSqlStatementEnum(SqlStatementEnum.INSERT_TABLE);
+    this.setCurrentParseTreeProcessor(this);
+  }
+
+  private String normalizeInsertExpr(String v) {
+    if (v == null) return "";
+    String s = v.trim();
+    // NULL literal => empty cell in CSV backend
+    if (s.equalsIgnoreCase("NULL")) return "";
+    // unquote single-quoted string; keep bare numbers/identifiers as-is
     if (s.length() >= 2 && s.charAt(0)=='\'' && s.charAt(s.length()-1)=='\'') return s.substring(1, s.length()-1);
     return s;
   }
