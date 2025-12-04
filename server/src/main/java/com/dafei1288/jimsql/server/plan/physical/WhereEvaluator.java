@@ -106,7 +106,7 @@ final class WhereEvaluator {
             if (isNumericType(t) && nums != null && !nums.isEmpty()) {
                 try {
                     BigDecimal left = new BigDecimal(v.trim());
-                    hit = { boolean h=false; for (java.math.BigDecimal _n : nums) { if (left.compareTo(_n)==0) { h=true; break; } } hit = h; }
+                    { boolean h=false; for (java.math.BigDecimal _n : nums) { if (left.compareTo(_n)==0) { h=true; break; } } hit = h; }
                 } catch (Exception ex) { hit = false; }
             } else {
                 { boolean h=false; if (lits!=null) { for (String _s : lits) { if (_s.equals(v)) { h=true; break; } } } hit = h; }
