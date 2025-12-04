@@ -1,0 +1,29 @@
+# Enforce LF for source files
+*.java        text eol=lf
+*.g4          text eol=lf
+*.xml         text eol=lf
+*.iml         text eol=lf
+*.md          text eol=lf
+*.yml         text eol=lf
+*.yaml        text eol=lf
+*.sh          text eol=lf
+*.sql         text eol=lf
+*.properties  text eol=lf
+*.gradle      text eol=lf
+*.kt          text eol=lf
+*.groovy      text eol=lf
+
+# Keep CRLF for Windows scripts
+*.cmd         text eol=crlf
+*.bat         text eol=crlf
+*.ps1         text eol=crlf
+
+# Images/binaries (no EOL conversions)
+*.jar         -text
+*.zip         -text
+*.png         -text
+*.jpg         -text
+*.jpeg        -text
+*.gif         -text
+*.ico         -text
+*.class       -text
