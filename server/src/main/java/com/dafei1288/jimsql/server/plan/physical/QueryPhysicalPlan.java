@@ -74,7 +74,19 @@ public class QueryPhysicalPlan implements PhysicalPlan{
       fullRows.add(full);
     }
 
-    // WHERE filter (enhanced: AND/OR, parentheses, IS NULL, LIKE, IN)\r\n    String where = qlp.getWhereExpression();\r\n    if (where != null && !where.trim().isEmpty()) {\r\n      WhereEvaluator.Node expr = WhereEvaluator.parse(where);\r\n      java.util.Set<String> colsRef = WhereEvaluator.referencedColumns(expr);\r\n      boolean canApply = colsRef.stream().allMatch(c -> headerContains(header, c));\r\n      if (canApply) {\r\n        final WhereEvaluator.Node ex = expr;\r\n        fullRows = fullRows.stream().filter(r -> ex.eval(r, jqTable)).collect(java.util.stream.Collectors.toList());\r\n      }\r\n    }\r\n\r\n    // ORDER BY
+    // WHERE filter (enhanced: AND/OR, parentheses, IS NULL, LIKE, IN)
+    String where = qlp.getWhereExpression();
+    if (where != null && !where.trim().isEmpty()) {
+      WhereEvaluator.Node expr = WhereEvaluator.parse(where);
+      java.util.Set<String> colsRef = WhereEvaluator.referencedColumns(expr);
+      boolean canApply = colsRef.stream().allMatch(c -> headerContains(header, c));
+      if (canApply) {
+        final WhereEvaluator.Node ex = expr;
+        fullRows = fullRows.stream().filter(r -> ex.eval(r, jqTable)).collect(java.util.stream.Collectors.toList());
+      }
+    }
+
+    // ORDER BY
     if (qlp.getOrderBy() != null && !qlp.getOrderBy().isEmpty()) {
       boolean canSort = qlp.getOrderBy().stream().allMatch(oi -> headerContains(header, oi.getColumn().getColumnName()));
       if (canSort) {
