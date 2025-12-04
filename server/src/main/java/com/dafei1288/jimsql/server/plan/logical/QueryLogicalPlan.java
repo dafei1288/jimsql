@@ -7,48 +7,33 @@ import com.dafei1288.jimsql.server.plan.physical.PhysicalPlan;
 import com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan;
 import java.util.List;
 import java.util.ArrayList;
-import com.dafei1288.jimsql.server.plan.logical.OrderItem;
-import com.dafei1288.jimsql.server.plan.logical.JoinSpec;
 
-public class QueryLogicalPlan implements LogicalPlan{
+public class QueryLogicalPlan implements LogicalPlan {
   private boolean star;
   private List<JqColumn> jqColumnList;
   private JqTable fromTable;
+
   // Optional SELECT clauses (not used by executor yet)
-  private java.util.List<OrderItem> orderBy = new ArrayList<>();
-  private Integer limit; // null means no limit
-  private Integer offset; // null means no offset
-  private java.util.List<JqColumn> groupByColumns = new ArrayList<>();
+  private List<OrderItem> orderBy = new ArrayList<>();
+  private Integer limit;   // null means no limit
+  private Integer offset;  // null means no offset
+  private List<JqColumn> groupByColumns = new ArrayList<>();
   private String havingExpression; // raw text
-  private String whereExpression; // raw text
-  private java.util.List<JoinSpec> joins = new ArrayList<>();  private boolean countStar;
+  private String whereExpression;  // raw text
+  private List<JoinSpec> joins = new ArrayList<>();
+  private boolean countStar;
+
   private OptimizeQueryLogicalPlan optimizeQueryLogicalPlan;
+  private List<AggregateSpec> aggregates = new ArrayList<>();
 
+  public boolean isStar() { return star; }
+  public void setStar(boolean star) { this.star = star; }
 
-  public boolean isStar() {
-    return star;
-  }
+  public List<JqColumn> getJqColumnList() { return jqColumnList; }
+  public void setJqColumnList(List<JqColumn> jqColumnList) { this.jqColumnList = jqColumnList; }
 
-  public void setStar(boolean star) {
-    this.star = star;
-  }
-
-  public List<JqColumn> getJqColumnList() {
-    return jqColumnList;
-  }
-
-  public void setJqColumnList(List<JqColumn> jqColumnList) {
-    this.jqColumnList = jqColumnList;
-  }
-
-  public JqTable getFromTable() {
-    return fromTable;
-  }
-
-  public void setFromTable(JqTable fromTable) {
-    this.fromTable = fromTable;
-  }
-
+  public JqTable getFromTable() { return fromTable; }
+  public void setFromTable(JqTable fromTable) { this.fromTable = fromTable; }
 
   @Override
   public String toString() {
@@ -68,12 +53,12 @@ public class QueryLogicalPlan implements LogicalPlan{
   }
 
   public OptimizeQueryLogicalPlan optimizeQueryLogicalPlan(){
-    return  optimizeQueryLogicalPlan(this.getFromTable().getJqDatabase());
+    return optimizeQueryLogicalPlan(this.getFromTable().getJqDatabase());
   }
 
-  public  PhysicalPlan transform(OptimizeQueryLogicalPlan queryLogicalPlan){
+  public PhysicalPlan transform(OptimizeQueryLogicalPlan queryLogicalPlan){
     PhysicalPlan physicalPlan = new QueryPhysicalPlan();
-    if(queryLogicalPlan == null){
+    if (queryLogicalPlan == null) {
       queryLogicalPlan = this.optimizeQueryLogicalPlan();
     }
     physicalPlan.setLogicalPlan(queryLogicalPlan);
@@ -81,23 +66,24 @@ public class QueryLogicalPlan implements LogicalPlan{
   }
 
   @Override
-  public PhysicalPlan transform() {
-    return this.transform(this.optimizeQueryLogicalPlan);
-  }
-  public java.util.List<OrderItem> getOrderBy() { return orderBy; }
-  public void setOrderBy(java.util.List<OrderItem> orderBy) { this.orderBy = orderBy; }
+  public PhysicalPlan transform() { return this.transform(this.optimizeQueryLogicalPlan); }
+
+  public List<OrderItem> getOrderBy() { return orderBy; }
+  public void setOrderBy(List<OrderItem> orderBy) { this.orderBy = orderBy; }
   public Integer getLimit() { return limit; }
   public void setLimit(Integer limit) { this.limit = limit; }
   public Integer getOffset() { return offset; }
   public void setOffset(Integer offset) { this.offset = offset; }
-  public java.util.List<JqColumn> getGroupByColumns() { return groupByColumns; }
-  public void setGroupByColumns(java.util.List<JqColumn> groupByColumns) { this.groupByColumns = groupByColumns; }
+  public List<JqColumn> getGroupByColumns() { return groupByColumns; }
+  public void setGroupByColumns(List<JqColumn> groupByColumns) { this.groupByColumns = groupByColumns; }
   public String getHavingExpression() { return havingExpression; }
   public void setHavingExpression(String havingExpression) { this.havingExpression = havingExpression; }
   public String getWhereExpression() { return whereExpression; }
   public void setWhereExpression(String whereExpression) { this.whereExpression = whereExpression; }
-  public java.util.List<JoinSpec> getJoins() { return joins; }
-  public void setJoins(java.util.List<JoinSpec> joins) { this.joins = joins; }
+  public List<JoinSpec> getJoins() { return joins; }
+  public void setJoins(List<JoinSpec> joins) { this.joins = joins; }
   public boolean isCountStar() { return countStar; }
   public void setCountStar(boolean countStar) { this.countStar = countStar; }
+  public List<AggregateSpec> getAggregates() { return aggregates; }
+  public void setAggregates(List<AggregateSpec> aggregates) { this.aggregates = aggregates; }
 }
