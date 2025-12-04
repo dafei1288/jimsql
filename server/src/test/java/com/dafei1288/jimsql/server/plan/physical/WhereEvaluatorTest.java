@@ -1,4 +1,4 @@
-package com.dafei1288.jimsql.server.plan;
+package com.dafei1288.jimsql.server.plan.physical;
 
 import com.dafei1288.jimsql.common.meta.JqColumn;
 import com.dafei1288.jimsql.common.meta.JqTable;
