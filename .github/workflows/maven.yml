@@ -105,3 +105,36 @@ jobs:
       - name: Stop jspv1 server
         run: |
           kill $(cat /tmp/server2.pid) || true
+  itests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+          cache: maven
+      - name: Build server and jdbc
+        run: |
+          mvn -q -pl server -am package -DskipTests
+          mvn -q -pl jdbc -am -DskipTests package
+      - name: Start legacy server
+        run: |
+          nohup java -jar server/target/*-jar-with-dependencies.jar 8821 127.0.0.1 server/src/main/resources/datadir >/tmp/server.log 2>&1 & echo $! > /tmp/server.pid
+          for i in {1..50}; do (echo > /dev/tcp/127.0.0.1/8821) >/dev/null 2>&1 && break; sleep 0.2; done
+      - name: Run legacy JDBC tests
+        run: mvn -q -pl jdbc -am -DskipTests=false -Dtest=LegacyDmlUpdateCountTest test
+      - name: Stop legacy server
+        run: |
+          kill $(cat /tmp/server.pid) || true
+          sleep 1
+      - name: Start jspv1 server
+        run: |
+          nohup java -jar server/target/*-jar-with-dependencies.jar 8821 127.0.0.1 server/src/main/resources/datadir jspv1 >/tmp/server2.log 2>&1 & echo $! > /tmp/server2.pid
+          for i in {1..50}; do (echo > /dev/tcp/127.0.0.1/8821) >/dev/null 2>&1 && break; sleep 0.2; done
+      - name: Run jspv1 JDBC tests
+        run: mvn -q -pl jdbc -am -DskipTests=false -Dtest=JspV1DmlUpdateCountTest,JspV1ErrorMappingTest test
+      - name: Stop jspv1 server
+        run: |
+          kill $(cat /tmp/server2.pid) || true
