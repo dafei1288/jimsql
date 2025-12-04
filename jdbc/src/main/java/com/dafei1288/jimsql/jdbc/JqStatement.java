@@ -96,7 +96,9 @@ public class JqStatement implements Statement {
 
   @Override
   public int executeUpdate(String sql) throws SQLException {
-    return 0;
+    boolean hasRs = execute(sql);
+    if (hasRs) throw new SQLException("Query returned a result set");
+    return (lastUpdateCount < 0) ? 0 : lastUpdateCount;
   }
 
   @Override
@@ -328,5 +330,3 @@ public class JqStatement implements Statement {
     return false;
   }
 }
-
-
