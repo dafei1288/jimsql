@@ -99,6 +99,16 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
       }
 
 
+    // detect COUNT function
+    if ("functionCall".equals(parseTreeNode.getRule())) {
+      String fname = null;
+      for (org.snt.inmemantlr.tree.ParseTreeNode ch : parseTreeNode.getChildren()) {
+        if ("identifier".equals(ch.getRule())) { fname = stripQuotes(ch.getLabel()); break; }
+      }
+      if (fname != null && fname.equalsIgnoreCase("count")) {
+        this.queryLogicalPlan.setCountStar(true);
+      }
+    }
       // FROM first table
     if ("tableName".equals(parseTreeNode.getRule())) {
       if (queryLogicalPlan.getFromTable() == null) {

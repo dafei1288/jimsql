@@ -79,18 +79,40 @@ public class OptimizeQueryLogicalPlan implements LogicalPlan {
     String currentTableName = this.queryLogicalPlan.getFromTable().getTableName();
     List<String> colNames = new ArrayList<>();
 
-    if(this.queryLogicalPlan.isStar()){
-      Set<String> cols = serverMetadata.fetchTableByName(currentDatabaseName,currentTableName).getJqTableLinkedHashMap().keySet();
-      colNames = cols.stream().toList();
-    }else{
-      colNames = (this.queryLogicalPlan.getJqColumnList()==null?java.util.Collections.<String>emptyList():this.queryLogicalPlan.getJqColumnList().stream().map(it->it.getColumnName()).collect(Collectors.toList()));
+    // If SELECT COUNT(*) (optionally with GROUP BY), synthesize metadata accordingly
+    if (this.queryLogicalPlan.isCountStar()) {
+      java.util.LinkedHashMap<String, JqColumnResultSetMetadata> out = new java.util.LinkedHashMap<>();
+      int idx = 1;
+      java.util.List<com.dafei1288.jimsql.common.meta.JqColumn> gcols = this.queryLogicalPlan.getGroupByColumns();
+      if (gcols != null && !gcols.isEmpty()) {
+        for (com.dafei1288.jimsql.common.meta.JqColumn gc : gcols) {
+          JqColumnResultSetMetadata m = new JqColumnResultSetMetadata();
+          m.setIndex(idx++);
+          m.setLabelName(gc.getColumnName());
+          m.setClazz(String.class);
+          m.setClazzStr("java.lang.String");
+          m.setTableName(this.queryLogicalPlan.getFromTable().getTableName());
+          m.setColumnType(java.sql.Types.VARCHAR);
+          out.put(m.getLabelName(), m);
+        }
+      }
+      JqColumnResultSetMetadata cnt = new JqColumnResultSetMetadata();
+      cnt.setIndex(idx);
+      cnt.setLabelName("count");
+      cnt.setClazz(Long.class);
+      cnt.setClazzStr("java.lang.Long");
+      cnt.setTableName("");
+      cnt.setColumnType(java.sql.Types.BIGINT);
+      out.put("count", cnt);
+      this.jqColumnResultSetMetadataList.clear();
+      this.jqColumnResultSetMetadataList.putAll(out);
+      this.jqResultSetMetaData.setColumnMeta(this.jqColumnResultSetMetadataList);
+      return;
     }
 
-    if (colNames==null || colNames.isEmpty()) {
-      java.util.Set<String> cols = serverMetadata.fetchTableByName(currentDatabaseName,currentTableName).getJqTableLinkedHashMap().keySet();
-      colNames = new java.util.ArrayList<>(cols);
-    }
-    List<JqColumn> jqColumnList = serverMetadata.fetchColumnsByName(currentDatabaseName,currentTableName,colNames);
+    Set<String> cols = serverMetadata.fetchTableByName(currentDatabaseName,currentTableName).getJqTableLinkedHashMap().keySet();
+    colNames = cols.stream().toList();
+    java.util.List<JqColumn> jqColumnList = serverMetadata.fetchColumnsByName(currentDatabaseName,currentTableName,colNames);
     for(int i = 0; i < jqColumnList.size(); i++ ){
       JqColumn jqColumn = jqColumnList.get(i);
 
