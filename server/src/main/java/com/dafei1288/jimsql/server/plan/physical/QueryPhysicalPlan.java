@@ -74,13 +74,13 @@ public class QueryPhysicalPlan implements PhysicalPlan{
       fullRows.add(full);
     }
 
-    // WHERE filter (simple: AND of col op literal). Only apply if all referenced columns exist.
+    // WHERE filter (enhanced: AND/OR, parentheses, IS NULL, LIKE, IN)
     String where = qlp.getWhereExpression();
     if (where != null && !where.trim().isEmpty()) {
       List<Predicate> preds = parseWhere(where);
       boolean canApply = preds.stream().allMatch(p -> headerContains(header, p.column));
       if (canApply) {
-        fullRows = fullRows.stream().filter(r -> evalPredicates(r, jqTable, preds)).collect(Collectors.toList());
+        fullRows = fullRows.stream().filter(r -> evalPredicates(r, jqTable, preds)).collect(java.util.stream.Collectors.toList());
       }
     }
 
