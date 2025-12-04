@@ -37,7 +37,14 @@ public class ServerMetadata {
 
   private LinkedHashMap<String,JqDatabase> jqDatabaseLinkedHashMap;
   private ServerMetadata(){
-    datadir =Jimserver.getDataDir();
+    String dd = Jimserver.getDataDir();
+if (dd != null && dd.length() >= 2) {
+  char f = dd.charAt(0), l = dd.charAt(dd.length()-1);
+  if ((f=='\"' && l=='\"') || (f=='\'' && l=='\'')) {
+    dd = dd.substring(1, dd.length()-1);
+  }
+}
+datadir = dd;
     try {
        jqDatabaseLinkedHashMap = Files.list(new File(datadir).toPath())
                           .filter(it->it.toFile().isDirectory())
