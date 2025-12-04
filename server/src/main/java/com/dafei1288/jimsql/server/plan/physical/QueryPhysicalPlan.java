@@ -81,7 +81,8 @@ public class QueryPhysicalPlan implements PhysicalPlan{
       java.util.Set<String> colsRef = WhereEvaluator.referencedColumns(expr);
       boolean canApply = colsRef.stream().allMatch(c -> headerContains(header, c));
       if (canApply) {
-        fullRows = fullRows.stream().filter(r -> evalPredicates(r, jqTable, preds)).collect(java.util.stream.Collectors.toList());
+        final WhereEvaluator.Node ex = expr;
+        fullRows = fullRows.stream().filter(r -> ex.eval(r, jqTable)).collect(java.util.stream.Collectors.toList());
       }
     }
 
