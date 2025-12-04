@@ -52,6 +52,7 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
       case SELECT_TABLE:this.processQuery(ctx, processor,reNew) ;break;
       case UPDATE_TABLE: this.processUpdate(ctx, processor, reNew); break;
       case DELETE_TABLE: this.processDelete(ctx, processor, reNew); break;
+      case INSERT_TABLE: this.processInsert(ctx, processor, reNew); break;
       case SHOW_DATABASES: case SHOW_TABLES: case SHOW_TABLEDESC: case SHOW_CREATE_TABLE: this.processShow(ctx, processor, reNew); break;
       default: ctx.writeAndFlush(JimSQueryStatus.OK); break;
     }
@@ -134,6 +135,21 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
     }
   }
 
+  private void processInsert(io.netty.channel.ChannelHandlerContext ctx, org.snt.inmemantlr.tree.ParseTreeProcessor processor, com.dafei1288.jimsql.common.JqQueryReq jqQueryReq) {
+    try {
+      org.snt.inmemantlr.tree.ParseTreeProcessor cur = ((com.dafei1288.jimsql.server.parser.ScriptParseTreeProcessor)processor).getCurrentParseTreeProcessor();
+      com.dafei1288.jimsql.server.plan.logical.InsertLogicalPlan plan = null;
+      if (cur instanceof com.dafei1288.jimsql.server.parser.dml.DmlScriptParseTreeProcessor) {
+        Object r = ((com.dafei1288.jimsql.server.parser.dml.DmlScriptParseTreeProcessor) cur).getResult();
+        if (r instanceof com.dafei1288.jimsql.server.plan.logical.InsertLogicalPlan) { plan = (com.dafei1288.jimsql.server.plan.logical.InsertLogicalPlan) r; }
+      }
+      if (plan == null) throw new IllegalStateException("no plan for INSERT");
+      String db = jqQueryReq.getDb(); if (db == null || db.isEmpty()) db = "test";
+      int cnt = com.dafei1288.jimsql.server.plan.physical.DmlCsvExecutor.executeInsert(db, plan);
+      ctx.writeAndFlush(Integer.valueOf(cnt));
+      ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
+    } catch (Exception e) { e.printStackTrace(); }
+  }
   private void processDelete(io.netty.channel.ChannelHandlerContext ctx, org.snt.inmemantlr.tree.ParseTreeProcessor processor, com.dafei1288.jimsql.common.JqQueryReq jqQueryReq) {
     try {
       org.snt.inmemantlr.tree.ParseTreeProcessor cur = ((com.dafei1288.jimsql.server.parser.ScriptParseTreeProcessor)processor).getCurrentParseTreeProcessor();

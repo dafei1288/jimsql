@@ -21,7 +21,7 @@ public class QueryLogicalPlan implements LogicalPlan{
   private java.util.List<JqColumn> groupByColumns = new ArrayList<>();
   private String havingExpression; // raw text
   private String whereExpression; // raw text
-  private java.util.List<JoinSpec> joins = new ArrayList<>();
+  private java.util.List<JoinSpec> joins = new ArrayList<>();  private boolean countStar;
   private OptimizeQueryLogicalPlan optimizeQueryLogicalPlan;
 
 
@@ -98,5 +98,6 @@ public class QueryLogicalPlan implements LogicalPlan{
   public void setWhereExpression(String whereExpression) { this.whereExpression = whereExpression; }
   public java.util.List<JoinSpec> getJoins() { return joins; }
   public void setJoins(java.util.List<JoinSpec> joins) { this.joins = joins; }
+  public boolean isCountStar() { return countStar; }
+  public void setCountStar(boolean countStar) { this.countStar = countStar; }
 }
-

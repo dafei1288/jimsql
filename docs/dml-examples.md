@@ -41,3 +41,18 @@ Default demo data is under `server/src/main/resources/datadir/test` (e.g. `user.
 - CSV is not escaped; string values are written as-is.
 - `NULL/TRUE/FALSE` are written as plain text.
 - For multi-table queries and advanced predicates: not supported in DML executor.
+
+## INSERT Semantics (CSV backend)
+
+- INSERT INTO [db.]table [(col,...)] VALUES (...)[,(...)...]
+- Legacy: returns OK + optional update count for JDBC; JSPv1: returns UPDATE_COUNT with affected rows
+- Columns default to table header order when omitted; missing columns filled with empty string; unknown columns cause error
+
+Examples:
+```sql
+-- explicit columns
+INSERT INTO test.user (id,name,age) VALUES (999998,'tmp',1);
+
+-- positional by header order
+INSERT INTO test.user VALUES (999999,'tmp2',2);
+```

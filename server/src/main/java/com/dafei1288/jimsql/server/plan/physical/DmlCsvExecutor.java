@@ -20,7 +20,47 @@ import java.util.List;
 import java.util.Map;
 
 // Minimal CSV executor for UPDATE / DELETE. Mirrors QueryPhysicalPlan filter semantics.
-public final class DmlCsvExecutor {
+public final class DmlCsvExecutor {  public static int executeInsert(String dbName, com.dafei1288.jimsql.server.plan.logical.InsertLogicalPlan plan) throws IOException {
+    if (plan == null || plan.getTable() == null) return 0;
+    String table = plan.getTable().getTableName();
+    ServerMetadata sm = ServerMetadata.getInstance();
+    JqTable jt = sm.fetchTableByName(dbName, table);
+    if (jt == null) return 0;
+
+    List<String> headerLines = Files.readAllLines(jt.getBasepath().toPath(), Charset.defaultCharset());
+    if (headerLines.isEmpty()) return 0;
+    String headerLine = headerLines.get(0);
+    String[] header = headerLine.split(Utils.COLUMN_SPILTOR, -1);
+    java.util.Map<String,Integer> hmap = new java.util.HashMap<>();
+    for (int i=0;i<header.length;i++) hmap.put(header[i].toLowerCase(java.util.Locale.ROOT), i);
+
+    List<String> toAppend = new ArrayList<>();
+    List<String> cols = plan.getColumns();
+    boolean hasCols = (cols != null && !cols.isEmpty());
+    for (List<String> row : plan.getRows()) {
+      String[] cells = new String[header.length];
+      for (int k=0;k<cells.length;k++) cells[k] = "";
+      if (hasCols) {
+        for (int c=0;c<cols.size();c++) {
+          String col = cols.get(c);
+          Integer idx = hmap.get(col.toLowerCase(java.util.Locale.ROOT));
+          if (idx == null) throw new IOException("unknown column: "+col);
+          String v = (c < row.size()) ? row.get(c) : "";
+          if (v != null && v.contains(Utils.COLUMN_SPILTOR)) throw new IOException("value contains column delimiter");
+          cells[idx] = (v==null?"":v);
+        }
+      } else {
+        for (int c=0;c<Math.min(row.size(), header.length); c++) {
+          String v = row.get(c);
+          if (v != null && v.contains(Utils.COLUMN_SPILTOR)) throw new IOException("value contains column delimiter");
+          cells[c] = (v==null?"":v);
+        }
+      }
+      toAppend.add(String.join(Utils.COLUMN_SPILTOR, cells));
+    }
+    Files.write(jt.getBasepath().toPath(), toAppend, Charset.defaultCharset(), java.nio.file.StandardOpenOption.APPEND);
+    return toAppend.size();
+  }
   private DmlCsvExecutor() {}
 
   public static int executeUpdate(String dbName, UpdateLogicalPlan plan) throws IOException {

@@ -86,7 +86,40 @@ public class QueryPhysicalPlan implements PhysicalPlan{
       }
     }
 
-    // ORDER BY
+    // Aggregation: COUNT(*) with optional GROUP BY
+    if (qlp.isCountStar()) {
+      java.util.List<com.dafei1288.jimsql.common.meta.JqColumn> gcols = qlp.getGroupByColumns();
+      java.util.List<java.util.Map<String,String>> aggRows = new java.util.ArrayList<>();
+      if (gcols != null && !gcols.isEmpty()) {
+        java.util.Map<String, java.util.concurrent.atomic.AtomicInteger> counter = new java.util.LinkedHashMap<>();
+        java.util.Map<String, java.util.Map<String,String>> firstByKey = new java.util.LinkedHashMap<>();
+        for (java.util.Map<String,String> r : fullRows) {
+          StringBuilder kb = new StringBuilder();
+          for (com.dafei1288.jimsql.common.meta.JqColumn c : gcols) {
+            String k = getCaseInsensitive(r, normalizeColumn(c.getColumnName()));
+            kb.append('\u0001').append(k==null?"":k);
+          }
+          String key = kb.toString();
+          counter.computeIfAbsent(key, k -> new java.util.concurrent.atomic.AtomicInteger()).incrementAndGet();
+          firstByKey.putIfAbsent(key, r);
+        }
+        for (java.util.Map.Entry<String, java.util.concurrent.atomic.AtomicInteger> e : counter.entrySet()) {
+          java.util.Map<String,String> base = firstByKey.get(e.getKey());
+          java.util.LinkedHashMap<String,String> out = new java.util.LinkedHashMap<>();
+          for (com.dafei1288.jimsql.common.meta.JqColumn c : gcols) {
+            String k = normalizeColumn(c.getColumnName());
+            out.put(c.getColumnName(), getCaseInsensitive(base, k));
+          }
+          out.put("count", String.valueOf(e.getValue().get()));
+          aggRows.add(out);
+        }
+      } else {
+        java.util.LinkedHashMap<String,String> out = new java.util.LinkedHashMap<>();
+        out.put("count", String.valueOf(fullRows.size()));
+        aggRows.add(out);
+      }
+      fullRows = aggRows;
+    }    // ORDER BY
     if (qlp.getOrderBy() != null && !qlp.getOrderBy().isEmpty()) {
       boolean canSort = qlp.getOrderBy().stream().allMatch(oi -> headerContains(header, oi.getColumn().getColumnName()));
       if (canSort) {
