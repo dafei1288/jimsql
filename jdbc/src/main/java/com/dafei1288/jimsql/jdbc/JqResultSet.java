@@ -121,6 +121,15 @@ public class JqResultSet implements ResultSet {
       }
       try { Thread.sleep(10); } catch (InterruptedException e) { throw new SQLException(e); }
     }
+  }
+    }
+    if(this.readData==true || (this.readData==false && this.rowDataList.size()>this.currentIndex)){
+      tag = true;
+    }
+
+    //tag = this.rowDataList.size() > this.currentIndex++ || this.readData;
+    return tag;
+  }
 
   //  public JqResultSet(String filepath,List<String> cols, String tableName) {
 //    this.filepath = filepath;
@@ -263,6 +272,10 @@ public class JqResultSet implements ResultSet {
       for (String k : map.keySet()) { if (k.equalsIgnoreCase(columnLabel)) { v = map.get(k); break; } }
     }
     return v == null ? null : String.valueOf(v);
+  }
+    }
+    return this.rowDataList.get(this.currentIndex).getDatas().get(columnLabel).toString();
+  }
 
   @Override
   public boolean getBoolean(String columnLabel) throws SQLException {
