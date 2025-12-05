@@ -52,15 +52,15 @@ public class QueryPhysicalPlan implements PhysicalPlan{
     JqDatabase jqDatabase = sm.fetchDatabaseByName(currentDatabase);
     JqTable jqTable = sm.fetchTableByName(currentDatabase,currentTable);
 
-    // Read file lines
+        // Read left file lines
     List<String> datas = Files.readLines(jqTable.getBasepath(), Charset.defaultCharset());
     if (datas.isEmpty()) return;
 
-    // Header -> column order
+    // Header -> left column order
     List<String> header = new ArrayList<>(jqTable.getJqTableLinkedHashMap().keySet());
 
-    // Load all rows into fullRow list (col->string value)
-    List<Map<String,String>> fullRows = new ArrayList<>();
+    // Load left rows
+    List<Map<String,String>> leftRows = new ArrayList<>();
     for (int i = 1; i < datas.size(); i++) {
       String data = datas.get(i);
       String[] rowdataStr = data.split(Utils.COLUMN_SPILTOR, -1);
@@ -71,8 +71,66 @@ public class QueryPhysicalPlan implements PhysicalPlan{
         full.put(key, v);
         j++;
       }
-      fullRows.add(full);
+      leftRows.add(full);
     }
+
+    // Apply JOINs (INNER/LEFT/CROSS) before WHERE if any
+    List<Map<String,String>> fullRows = leftRows;
+    if (qlp.getJoins() != null && !qlp.getJoins().isEmpty()) {
+      for (com.dafei1288.jimsql.server.plan.logical.JoinSpec js : qlp.getJoins()) {
+        // load right table
+        com.dafei1288.jimsql.common.meta.JqTable rt = sm.fetchTableByName(currentDatabase, js.getRightTable().getTableName());
+        List<String> rdata = Files.readLines(rt.getBasepath(), Charset.defaultCharset());
+        if (rdata.size() <= 1) { if (js.getType()==com.dafei1288.jimsql.server.plan.logical.JoinType.INNER) { fullRows = new ArrayList<>(); } continue; }
+        List<String> rheader = new ArrayList<>(rt.getJqTableLinkedHashMap().keySet());
+        List<Map<String,String>> rightRows = new ArrayList<>();
+        for (int i = 1; i < rdata.size(); i++) {
+          String line = rdata.get(i);
+          String[] parts = line.split(Utils.COLUMN_SPILTOR, -1);
+          LinkedHashMap<String,String> row = new LinkedHashMap<>();
+          int k = 0; for (String key : rheader) { row.put(key, (k < parts.length) ? parts[k] : ""); k++; }
+          rightRows.add(row);
+        }
+        // parse ON: support simple AND of equality: <id> = <id>
+        java.util.List<String[]> eqs = parseJoinOnEquals(js.getOnExpression());
+        // build RHS hash by key tuple
+        java.util.Map<String, java.util.List<Map<String,String>>> rhs = new java.util.HashMap<>();
+        for (Map<String,String> rr : rightRows) {
+          String rk = buildKey(rr, rheader, eqs, false /* isLeft */);
+          rhs.computeIfAbsent(rk, t -> new java.util.ArrayList<>()).add(rr);
+        }
+        // combine
+        List<Map<String,String>> newRows = new ArrayList<>();
+        for (Map<String,String> lr : fullRows) {
+          String lk = buildKey(lr, header, eqs, true /* isLeft */);
+          List<Map<String,String>> matches = rhs.get(lk);
+          if (matches != null && !matches.isEmpty()) {
+            for (Map<String,String> rr : matches) {
+              LinkedHashMap<String,String> out = new LinkedHashMap<>();
+              // left columns as-is
+              for (String k : header) { out.put(k, lr.get(k)); }
+              // right columns with prefix alias/table
+              String rPrefix = (js.getAlias()!=null && !js.getAlias().isEmpty()) ? js.getAlias() : rt.getTableName();
+              for (String rk2 : rheader) { out.put(rPrefix+"."+rk2, rr.get(rk2)); }
+              newRows.add(out);
+            }
+          } else if (js.getType() == com.dafei1288.jimsql.server.plan.logical.JoinType.LEFT) {
+            LinkedHashMap<String,String> out = new LinkedHashMap<>();
+            for (String k : header) { out.put(k, lr.get(k)); }
+            String rPrefix = (js.getAlias()!=null && !js.getAlias().isEmpty()) ? js.getAlias() : rt.getTableName();
+            for (String rk2 : rheader) { out.put(rPrefix+"."+rk2, null); }
+            newRows.add(out);
+          }
+        }
+        // update header to include right side qualified labels
+        String rPrefix = (js.getAlias()!=null && !js.getAlias().isEmpty()) ? js.getAlias() : rt.getTableName();
+        List<String> newHeader = new ArrayList<>(header);
+        for (String rk2 : rheader) { newHeader.add(rPrefix+"."+rk2); }
+        header = newHeader;
+        fullRows = newRows;
+        if (fullRows.isEmpty() && js.getType()==com.dafei1288.jimsql.server.plan.logical.JoinType.INNER) break;
+      }
+    }// JOIN pipeline ready
 
     // WHERE filter (enhanced: AND/OR, parentheses, IS NULL, LIKE, IN)
     String where = qlp.getWhereExpression();
@@ -480,5 +538,36 @@ public class QueryPhysicalPlan implements PhysicalPlan{
           if (k.equalsIgnoreCase(col)) return row.get(k);
       }
       return null;
+  }
+  // -------------- JOIN helpers --------------
+  private static java.util.List<String[]> parseJoinOnEquals(String onExpr) {
+    java.util.List<String[]> res = new java.util.ArrayList<>();
+    if (onExpr == null) return res;
+    String s = onExpr.trim();
+    // split by AND (case-insensitive), ignoring quotes
+    java.util.List<String> parts = new java.util.ArrayList<>();
+    StringBuilder buf = new StringBuilder(); boolean inS=false; char q=0;
+    for (int i=0;i<s.length();i++){
+      char c=s.charAt(i);
+      if (inS){ if (c==q) inS=false; buf.append(c); continue; }
+      if (c=='\''||c=='"'){ inS=true; q=c; buf.append(c); continue; }
+      if (i+3<=s.length() && s.regionMatches(true,i,"AND",0,3)) { parts.add(buf.toString()); buf.setLength(0); i+=2; continue; }
+      buf.append(c);
+    }
+    if (buf.length()>0) parts.add(buf.toString());
+    for (String p : parts) {
+      String[] lr = p.split("=");
+      if (lr.length==2) {
+        String l = lr[0].trim(); String r = lr[1].trim();
+        res.add(new String[]{stripQual(l), stripQual(r)});
+      }
+    }
+    return res;
+  }
+  private static String stripQual(String id){ id=id.replace("`","").replace("\"",""); int d=id.lastIndexOf('.'); if (d>=0) return id.substring(d+1).trim(); return id.trim(); }
+  private static String buildKey(java.util.Map<String,String> row, java.util.List<String> header, java.util.List<String[]> eqs, boolean isLeft){
+    StringBuilder sb=new StringBuilder();
+    for (String[] lr : eqs){ String col = isLeft? lr[0]: lr[1]; String v = getCaseInsensitive(row, stripQual(col)); sb.append('\u0001').append(v==null?"":v); }
+    return sb.toString();
   }
 }
