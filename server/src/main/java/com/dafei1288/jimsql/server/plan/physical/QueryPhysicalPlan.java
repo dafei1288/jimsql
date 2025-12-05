@@ -94,6 +94,26 @@ public class QueryPhysicalPlan implements PhysicalPlan{
         // parse ON: support simple AND of equality: <id> = <id>
         java.util.List<String[]> eqs = parseJoinOnEquals(js.getOnExpression());
         String rAlias = (js.getAlias()!=null && !js.getAlias().isEmpty()) ? js.getAlias() : rt.getTableName();
+        if (eqs == null || eqs.isEmpty()) {
+          // No valid ON equality parsed: avoid accidental Cartesian product
+          if (js.getType()==com.dafei1288.jimsql.server.plan.logical.JoinType.INNER) {
+            fullRows = new java.util.ArrayList<>();
+            break;
+          } else if (js.getType()==com.dafei1288.jimsql.server.plan.logical.JoinType.LEFT) {
+            java.util.List<java.util.Map<String,String>> newRows = new java.util.ArrayList<>();
+            for (java.util.Map<String,String> lr : fullRows) {
+              java.util.LinkedHashMap<String,String> out = new java.util.LinkedHashMap<>();
+              for (String k : header) out.put(k, lr.get(k));
+              for (String rk2 : rheader) out.put(rAlias+"."+rk2, null);
+              newRows.add(out);
+            }
+            java.util.List<String> newHeader = new java.util.ArrayList<>(header);
+            for (String rk2 : rheader) newHeader.add(rAlias+"."+rk2);
+            header = newHeader;
+            fullRows = newRows;
+            continue;
+          }
+        }
         // build RHS hash by key tuple
         java.util.Map<String, java.util.List<Map<String,String>>> rhs = new java.util.HashMap<>();
         for (Map<String,String> rr : rightRows) {
