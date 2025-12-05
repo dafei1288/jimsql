@@ -541,7 +541,8 @@ public class QueryPhysicalPlan implements PhysicalPlan{
       return null;
   }
   // -------------- JOIN helpers --------------
-  private static java.util.List<String[]> parseJoinOnEquals(String onExpr) {
+  private static String stripParens(String s){ if (s==null) return null; s=s.trim(); while (s.startsWith("(") && s.endsWith(")")) { s = s.substring(1, s.length()-1).trim(); } return s; }
+  private static String stripTailSemi(String s){ if (s==null) return null; int i=s.length()-1; while (i>=0){ char c=s.charAt(i); if (c==';'||c==' '||c=='\t'||c=='\r'||c=='\n'){ i--; } else break; } return s.substring(0, i+1); }  private static java.util.List<String[]> parseJoinOnEquals(String onExpr) {
     java.util.List<String[]> res = new java.util.ArrayList<>();
     if (onExpr == null) return res;
     String s = onExpr.trim();
@@ -560,7 +561,7 @@ public class QueryPhysicalPlan implements PhysicalPlan{
       String[] lr = p.split("=");
       if (lr.length==2) {
         String l = lr[0].trim(); String r = lr[1].trim();
-        res.add(new String[]{stripQuotes(l), stripQuotes(r)});
+        res.add(new String[]{stripTailSemi(stripQuotes(stripParens(l))), stripTailSemi(stripQuotes(stripParens(r)))});
       }
     }
     return res;
