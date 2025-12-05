@@ -109,6 +109,74 @@ public class OptimizeQueryLogicalPlan implements LogicalPlan {
       this.jqResultSetMetaData.setColumnMeta(this.jqColumnResultSetMetadataList);
       return;
     }
+    // Aggregates (SUM/AVG/MIN/MAX) with optional GROUP BY: build result metadata
+    if (this.queryLogicalPlan.getAggregates() != null && !this.queryLogicalPlan.getAggregates().isEmpty()) {
+      java.util.LinkedHashMap<String, JqColumnResultSetMetadata> out = new java.util.LinkedHashMap<>();
+      com.dafei1288.jimsql.common.meta.JqTable jt = serverMetadata.fetchTableByName(currentDatabaseName, currentTableName);
+      int idx = 1;
+      java.util.List<com.dafei1288.jimsql.common.meta.JqColumn> gcols = this.queryLogicalPlan.getGroupByColumns();
+      if (gcols != null && !gcols.isEmpty()) {
+        for (com.dafei1288.jimsql.common.meta.JqColumn gc : gcols) {
+          com.dafei1288.jimsql.common.meta.JqColumn src = findColumnIgnoreCase(jt, gc.getColumnName());
+          JqColumnResultSetMetadata m = new JqColumnResultSetMetadata();
+          m.setIndex(idx++);
+          m.setLabelName(gc.getColumnName());
+          if (src != null) {
+            m.setClazz(src.getColumnClazzType());
+            m.setClazzStr(src.getColumnClazzType().getName());
+            m.setColumnType(src.getColumnType());
+          } else {
+            m.setClazz(String.class);
+            m.setClazzStr("java.lang.String");
+            m.setColumnType(java.sql.Types.VARCHAR);
+          }
+          m.setTableName(currentTableName);
+          out.put(m.getLabelName(), m);
+        }
+      }
+      for (AggregateSpec spec : this.queryLogicalPlan.getAggregates()) {
+        String srcCol = spec.getColumn();
+        String label;
+        if (spec.getAlias() != null && !spec.getAlias().isEmpty()) label = spec.getAlias();
+        else {
+          switch (spec.getType()) {
+            case COUNT: label = (srcCol == null || srcCol.equals("*")) ? "count" : ("count_" + normalizeCol(srcCol)); break;
+            case SUM:   label = "sum_" + normalizeCol(srcCol); break;
+            case AVG:   label = "avg_" + normalizeCol(srcCol); break;
+            case MIN:   label = "min_" + normalizeCol(srcCol); break;
+            case MAX:   label = "max_" + normalizeCol(srcCol); break;
+            default:    label = "agg"; break;
+          }
+        }
+        JqColumnResultSetMetadata m = new JqColumnResultSetMetadata();
+        m.setIndex(idx++);
+        m.setLabelName(label);
+        switch (spec.getType()) {
+          case COUNT:
+            m.setClazz(Long.class); m.setClazzStr("java.lang.Long"); m.setColumnType(java.sql.Types.BIGINT); m.setTableName("");
+            break;
+          case SUM:
+          case AVG:
+            m.setClazz(java.math.BigDecimal.class); m.setClazzStr("java.math.BigDecimal"); m.setColumnType(java.sql.Types.DECIMAL); m.setTableName("");
+            break;
+          case MIN:
+          case MAX:
+            com.dafei1288.jimsql.common.meta.JqColumn src = srcCol == null ? null : findColumnIgnoreCase(jt, srcCol);
+            if (src != null) {
+              m.setClazz(src.getColumnClazzType()); m.setClazzStr(src.getColumnClazzType().getName()); m.setColumnType(src.getColumnType());
+            } else {
+              m.setClazz(String.class); m.setClazzStr("java.lang.String"); m.setColumnType(java.sql.Types.VARCHAR);
+            }
+            m.setTableName("");
+            break;
+        }
+        out.put(m.getLabelName(), m);
+      }
+      this.jqColumnResultSetMetadataList.clear();
+      this.jqColumnResultSetMetadataList.putAll(out);
+      this.jqResultSetMetaData.setColumnMeta(this.jqColumnResultSetMetadataList);
+      return;
+    }
 
     Set<String> cols = serverMetadata.fetchTableByName(currentDatabaseName,currentTableName).getJqTableLinkedHashMap().keySet();
     colNames = cols.stream().toList();
@@ -147,5 +215,6 @@ public class OptimizeQueryLogicalPlan implements LogicalPlan {
     }
     this.jqResultSetMetaData.setColumnMeta(this.jqColumnResultSetMetadataList);
   }
-
-}
+  
+  private static String normalizeCol(String c){ if (c==null) return ""; int d=c.lastIndexOf('.'); if (d>=0) c=c.substring(d+1); if (c.startsWith("`")&&c.endsWith("`")) c=c.substring(1,c.length()-1); if (c.startsWith("\"")&&c.endsWith("\"")) c=c.substring(1,c.length()-1); return c; }
+  private static com.dafei1288.jimsql.common.meta.JqColumn findColumnIgnoreCase(com.dafei1288.jimsql.common.meta.JqTable jt, String name){ if (jt==null||name==null) return null; String n = normalizeCol(name); for (String k : jt.getJqTableLinkedHashMap().keySet()){ if (k.equalsIgnoreCase(n)) return jt.getJqTableLinkedHashMap().get(k); } return null; }}

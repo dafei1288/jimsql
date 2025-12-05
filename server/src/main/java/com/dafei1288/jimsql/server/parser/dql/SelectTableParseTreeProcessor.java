@@ -107,7 +107,31 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
         this.queryLogicalPlan.setCountStar(true);
       }
     }
-      // FROM first table
+      // detect aggregate functions in select list
+    if ("functionCall".equals(parseTreeNode.getRule())) {
+      String fname = null;
+      String argCol = null; // null => COUNT(*) or COUNT(1)
+      for (org.snt.inmemantlr.tree.ParseTreeNode ch : parseTreeNode.getChildren()) {
+        String r = ch.getRule();
+        if ("identifier".equals(r)) { fname = stripQuotes(ch.getLabel()); continue; }
+        if ("qualifiedName".equals(r) || "columnName".equals(r) || "identifier".equals(r)) {
+          argCol = stripQuotes(ch.getLabel());
+        }
+      }
+      if (fname != null) {
+        com.dafei1288.jimsql.server.plan.logical.AggregateSpec.Type t = null;
+        if (fname.equalsIgnoreCase("count")) t = com.dafei1288.jimsql.server.plan.logical.AggregateSpec.Type.COUNT;
+        else if (fname.equalsIgnoreCase("sum")) t = com.dafei1288.jimsql.server.plan.logical.AggregateSpec.Type.SUM;
+        else if (fname.equalsIgnoreCase("avg")) t = com.dafei1288.jimsql.server.plan.logical.AggregateSpec.Type.AVG;
+        else if (fname.equalsIgnoreCase("min")) t = com.dafei1288.jimsql.server.plan.logical.AggregateSpec.Type.MIN;
+        else if (fname.equalsIgnoreCase("max")) t = com.dafei1288.jimsql.server.plan.logical.AggregateSpec.Type.MAX;
+        if (t != null) {
+          java.util.List<com.dafei1288.jimsql.server.plan.logical.AggregateSpec> aggs = this.queryLogicalPlan.getAggregates();
+          aggs.add(new com.dafei1288.jimsql.server.plan.logical.AggregateSpec(t, argCol, null));
+          this.queryLogicalPlan.setAggregates(aggs);
+        }
+      }
+    }    // FROM first table
     if ("tableName".equals(parseTreeNode.getRule())) {
       if (queryLogicalPlan.getFromTable() == null) {
         JqTable jqTable = new JqTable();
