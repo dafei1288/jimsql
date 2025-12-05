@@ -78,50 +78,169 @@ public class QueryPhysicalPlan implements PhysicalPlan{
     String where = qlp.getWhereExpression();
     if (where != null && !where.trim().isEmpty()) {
       WhereEvaluator.Node expr = WhereEvaluator.parse(where);
-      java.util.Set<String> colsRef = WhereEvaluator.referencedColumns(expr);
-      boolean canApply = colsRef.stream().allMatch(c -> headerContains(header, c));
+      java.util.Set<String> colsRef = WhereEvaluator.referencedColumns(expr); java.util.List<String> header0 = new java.util.ArrayList<>(header); boolean canApply = colsRef.stream().allMatch(c -> headerContains(header0, c));
       if (canApply) {
         final WhereEvaluator.Node ex = expr;
-        fullRows = fullRows.stream().filter(r -> ex.eval(r, jqTable)).collect(java.util.stream.Collectors.toList());
+        final JqTable _jt = jqTable; fullRows = fullRows.stream().filter(r -> ex.eval(r, _jt)).collect(java.util.stream.Collectors.toList());
       }
     }
 
-    // Aggregation: COUNT(*) with optional GROUP BY
-    if (qlp.isCountStar()) {
+        // Aggregation: general aggregates (SUM/AVG/MIN/MAX/COUNT) with optional GROUP BY
+    if (qlp.getAggregates() != null && !qlp.getAggregates().isEmpty()) {
+      java.util.List<com.dafei1288.jimsql.server.plan.logical.AggregateSpec> specs = qlp.getAggregates();
       java.util.List<com.dafei1288.jimsql.common.meta.JqColumn> gcols = qlp.getGroupByColumns();
-      java.util.List<java.util.Map<String,String>> aggRows = new java.util.ArrayList<>();
-      if (gcols != null && !gcols.isEmpty()) {
-        java.util.Map<String, java.util.concurrent.atomic.AtomicInteger> counter = new java.util.LinkedHashMap<>();
-        java.util.Map<String, java.util.Map<String,String>> firstByKey = new java.util.LinkedHashMap<>();
-        for (java.util.Map<String,String> r : fullRows) {
+      boolean hasGroup = (gcols != null && !gcols.isEmpty());
+      // state per group
+      class AggState {
+        java.util.Map<String,String> groupVals = new java.util.LinkedHashMap<>();
+        long[] count = new long[specs.size()];
+        java.math.BigDecimal[] sum = new java.math.BigDecimal[specs.size()];
+        java.math.BigDecimal[] avgSum = new java.math.BigDecimal[specs.size()];
+        long[] avgCnt = new long[specs.size()];
+        String[] minStr = new String[specs.size()];
+        String[] maxStr = new String[specs.size()];
+        java.math.BigDecimal[] minNum = new java.math.BigDecimal[specs.size()];
+        java.math.BigDecimal[] maxNum = new java.math.BigDecimal[specs.size()];
+      }
+      java.util.Map<String,AggState> groups = new java.util.LinkedHashMap<>();
+      for (java.util.Map<String,String> r : fullRows) {
+        String key;
+        AggState st;
+        if (hasGroup) {
           StringBuilder kb = new StringBuilder();
+          java.util.Map<String,String> gmap = new java.util.LinkedHashMap<>();
           for (com.dafei1288.jimsql.common.meta.JqColumn c : gcols) {
-            String k = getCaseInsensitive(r, normalizeColumn(c.getColumnName()));
-            kb.append('\u0001').append(k==null?"":k);
+            String col = normalizeColumn(c.getColumnName());
+            String v = getCaseInsensitive(r, col);
+            gmap.put(c.getColumnName(), v);
+            kb.append('\u0001').append(v==null?"":v);
           }
-          String key = kb.toString();
-          counter.computeIfAbsent(key, k -> new java.util.concurrent.atomic.AtomicInteger()).incrementAndGet();
-          firstByKey.putIfAbsent(key, r);
-        }
-        for (java.util.Map.Entry<String, java.util.concurrent.atomic.AtomicInteger> e : counter.entrySet()) {
-          java.util.Map<String,String> base = firstByKey.get(e.getKey());
-          java.util.LinkedHashMap<String,String> out = new java.util.LinkedHashMap<>();
-          for (com.dafei1288.jimsql.common.meta.JqColumn c : gcols) {
-            String k = normalizeColumn(c.getColumnName());
-            out.put(c.getColumnName(), getCaseInsensitive(base, k));
+          key = kb.toString();
+          st = groups.get(key);
+          if (st == null) { st = new AggState(); st.groupVals.putAll(gmap); groups.put(key, st); }
+        } else {
+          key = "__ALL__"; st = groups.get(key); if (st == null) { st = new AggState(); groups.put(key, st);} }
+        // apply specs
+        for (int i = 0; i < specs.size(); i++) {
+          com.dafei1288.jimsql.server.plan.logical.AggregateSpec sp = specs.get(i);
+          String col = sp.getColumn();
+          String label;
+          if (sp.getAlias() != null && !sp.getAlias().isEmpty()) label = sp.getAlias();
+          else {
+            switch (sp.getType()) {
+              case COUNT: label = (col == null || "*".equals(col)) ? "count" : ("count_" + normalizeColumn(col)); break;
+              case SUM:   label = "sum_" + normalizeColumn(col); break;
+              case AVG:   label = "avg_" + normalizeColumn(col); break;
+              case MIN:   label = "min_" + normalizeColumn(col); break;
+              case MAX:   label = "max_" + normalizeColumn(col); break;
+              default:    label = "agg"; break;
+            }
           }
-          out.put("count", String.valueOf(e.getValue().get()));
-          aggRows.add(out);
+          switch (sp.getType()) {
+            case COUNT: {
+              if (col == null || "*".equals(col)) { st.count[i]++; }
+              else {
+                String v = getCaseInsensitive(r, normalizeColumn(col));
+                if (v != null && !v.isEmpty()) st.count[i]++;
+              }
+              break; }
+            case SUM: {
+              String v = getCaseInsensitive(r, normalizeColumn(col));
+              if (v != null && !v.trim().isEmpty()) {
+                try { java.math.BigDecimal b = new java.math.BigDecimal(v.trim()); st.sum[i] = (st.sum[i]==null? b : st.sum[i].add(b)); } catch (Exception ignore) {}
+              }
+              break; }
+            case AVG: {
+              String v = getCaseInsensitive(r, normalizeColumn(col));
+              if (v != null && !v.trim().isEmpty()) {
+                try { java.math.BigDecimal b = new java.math.BigDecimal(v.trim()); st.avgSum[i] = (st.avgSum[i]==null? b : st.avgSum[i].add(b)); st.avgCnt[i]++; } catch (Exception ignore) {}
+              }
+              break; }
+            case MIN: {
+              String v = getCaseInsensitive(r, normalizeColumn(col));
+              int t = columnSqlType(jqTable, normalizeColumn(col));
+              if (v != null && !v.isEmpty()) {
+                if (isNumericType(t)) {
+                  try { java.math.BigDecimal b = new java.math.BigDecimal(v.trim()); if (st.minNum[i]==null || b.compareTo(st.minNum[i])<0) st.minNum[i]=b; } catch (Exception ignore) {}
+                } else {
+                  if (st.minStr[i]==null || v.compareTo(st.minStr[i])<0) st.minStr[i]=v;
+                }
+              }
+              break; }
+            case MAX: {
+              String v = getCaseInsensitive(r, normalizeColumn(col));
+              int t = columnSqlType(jqTable, normalizeColumn(col));
+              if (v != null && !v.isEmpty()) {
+                if (isNumericType(t)) {
+                  try { java.math.BigDecimal b = new java.math.BigDecimal(v.trim()); if (st.maxNum[i]==null || b.compareTo(st.maxNum[i])>0) st.maxNum[i]=b; } catch (Exception ignore) {}
+                } else {
+                  if (st.maxStr[i]==null || v.compareTo(st.maxStr[i])>0) st.maxStr[i]=v;
+                }
+              }
+              break; }
+          }
         }
-      } else {
+      }
+      // build aggregated rows
+      java.util.List<java.util.Map<String,String>> aggRows = new java.util.ArrayList<>();
+      for (java.util.Map.Entry<String,AggState> e : groups.entrySet()) {
+        AggState st = e.getValue();
         java.util.LinkedHashMap<String,String> out = new java.util.LinkedHashMap<>();
-        out.put("count", String.valueOf(fullRows.size()));
+        // group-by columns first
+        if (hasGroup) { out.putAll(st.groupVals); }
+        for (int i = 0; i < specs.size(); i++) {
+          com.dafei1288.jimsql.server.plan.logical.AggregateSpec sp = specs.get(i);
+          String col = sp.getColumn();
+          String label;
+          if (sp.getAlias() != null && !sp.getAlias().isEmpty()) label = sp.getAlias();
+          else {
+            switch (sp.getType()) {
+              case COUNT: label = (col == null || "*".equals(col)) ? "count" : ("count_" + normalizeColumn(col)); break;
+              case SUM:   label = "sum_" + normalizeColumn(col); break;
+              case AVG:   label = "avg_" + normalizeColumn(col); break;
+              case MIN:   label = "min_" + normalizeColumn(col); break;
+              case MAX:   label = "max_" + normalizeColumn(col); break;
+              default:    label = "agg"; break;
+            }
+          }
+          switch (sp.getType()) {
+            case COUNT: out.put(label, String.valueOf(st.count[i])); break;
+            case SUM:   out.put(label, st.sum[i]==null? null : st.sum[i].toPlainString()); break;
+            case AVG:   out.put(label, (st.avgCnt[i]==0||st.avgSum[i]==null)? null : st.avgSum[i].divide(new java.math.BigDecimal(st.avgCnt[i]), java.math.MathContext.DECIMAL64).toPlainString()); break;
+            case MIN: {
+              int t = columnSqlType(jqTable, normalizeColumn(col));
+              if (isNumericType(t)) out.put(label, st.minNum[i]==null? null : st.minNum[i].toPlainString()); else out.put(label, st.minStr[i]);
+              break; }
+            case MAX: {
+              int t = columnSqlType(jqTable, normalizeColumn(col));
+              if (isNumericType(t)) out.put(label, st.maxNum[i]==null? null : st.maxNum[i].toPlainString()); else out.put(label, st.maxStr[i]);
+              break; }
+          }
+        }
         aggRows.add(out);
       }
       fullRows = aggRows;
-    }    // ORDER BY
+      // After aggregation, header becomes selected result labels
+      java.util.LinkedHashMap<String,JqColumnResultSetMetadata> meta = optimizeQueryLogicalPlan.getJqColumnResultSetMetadataList();
+      header = new java.util.ArrayList<>(meta.keySet());
+      // HAVING: if present, evaluate on aggregated rows using a temporary JqTable metadata
+      String having = qlp.getHavingExpression();
+      if (having != null && !having.trim().isEmpty()) {
+        // build temp JqTable for type info from metadata
+        com.dafei1288.jimsql.common.meta.JqTable temp = new com.dafei1288.jimsql.common.meta.JqTable();
+        java.util.LinkedHashMap<String, com.dafei1288.jimsql.common.meta.JqColumn> cmap = new java.util.LinkedHashMap<>();
+        for (JqColumnResultSetMetadata m : meta.values()) {
+          com.dafei1288.jimsql.common.meta.JqColumn jc = new com.dafei1288.jimsql.common.meta.JqColumn();
+          jc.setColumnName(m.getLabelName()); jc.setColumnType(m.getColumnType()); jc.setColumnClazzType(m.getClazz()); jc.setTable(temp);
+          cmap.put(m.getLabelName(), jc);
+        }
+        temp.setJqTableLinkedHashMap(cmap);
+        final com.dafei1288.jimsql.server.plan.physical.WhereEvaluator.Node ex = com.dafei1288.jimsql.server.plan.physical.WhereEvaluator.parse(having);
+        final com.dafei1288.jimsql.common.meta.JqTable _tmp = temp; fullRows = fullRows.stream().filter(r -> ex.eval(r, _tmp)).collect(java.util.stream.Collectors.toList());
+      }
+    }// ORDER BY
     if (qlp.getOrderBy() != null && !qlp.getOrderBy().isEmpty()) {
-      boolean canSort = qlp.getOrderBy().stream().allMatch(oi -> headerContains(header, oi.getColumn().getColumnName()));
+      java.util.List<String> header1 = new java.util.ArrayList<>(header); boolean canSort = qlp.getOrderBy().stream().allMatch(oi -> headerContains(header1, oi.getColumn().getColumnName()));
       if (canSort) {
         Comparator<Map<String,String>> cmp = buildComparator(qlp.getOrderBy(), jqTable);
         fullRows.sort(cmp);
