@@ -94,6 +94,11 @@ public class QueryPhysicalPlan implements PhysicalPlan{
         // parse ON: support simple AND of equality: <id> = <id>
         java.util.List<String[]> eqs = parseJoinOnEquals(js.getOnExpression());
         String rAlias = (js.getAlias()!=null && !js.getAlias().isEmpty()) ? js.getAlias() : rt.getTableName();
+        // DEBUG: print JOIN ON and headers
+        try {
+          String eqsDbg = (eqs==null?"": eqs.stream().map(a -> a[0]+"="+a[1]).collect(java.util.stream.Collectors.joining(" AND ")));
+          System.out.println("JOIN DEBUG on=[" + js.getOnExpression() + "] rAlias=" + rAlias + " eqs=" + eqsDbg + " leftHeader=" + header + " rightHeader=" + rheader);
+        } catch (Throwable ignore) {}
         if (eqs == null || eqs.isEmpty()) {
           // No valid ON equality parsed: avoid accidental Cartesian product
           if (js.getType()==com.dafei1288.jimsql.server.plan.logical.JoinType.INNER) {
@@ -119,12 +124,17 @@ public class QueryPhysicalPlan implements PhysicalPlan{
         for (Map<String,String> rr : rightRows) {
           String rk = buildJoinKey(rr, header, rheader, rAlias, false /* isLeft */, eqs);
           rhs.computeIfAbsent(rk, t -> new java.util.ArrayList<>()).add(rr);
+          // DEBUG: sample a few right keys
+          if (rhs.size() <= 3) {
+            try { System.out.println("JOIN DEBUG RKEY=" + rk + " row=" + rr); } catch (Throwable ignore) {}
+          }
         }
         // combine
         List<Map<String,String>> newRows = new ArrayList<>();
         for (Map<String,String> lr : fullRows) {
           String lk = buildJoinKey(lr, header, rheader, rAlias, true /* isLeft */, eqs);
           List<Map<String,String>> matches = rhs.get(lk);
+          try { System.out.println("JOIN DEBUG LKEY=" + lk + " matches=" + (matches==null?0:matches.size()) + " row=" + lr); } catch (Throwable ignore) {}
           if (matches != null && !matches.isEmpty()) {
             for (Map<String,String> rr : matches) {
               LinkedHashMap<String,String> out = new LinkedHashMap<>();
