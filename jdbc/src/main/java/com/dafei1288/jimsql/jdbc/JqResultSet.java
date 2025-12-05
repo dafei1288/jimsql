@@ -1,4 +1,4 @@
-package com.dafei1288.jimsql.jdbc;
+﻿package com.dafei1288.jimsql.jdbc;
 
 import com.dafei1288.jimsql.common.JimSQueryStatus;
 import com.dafei1288.jimsql.common.JqResultSetMetaData;
@@ -121,17 +121,6 @@ public class JqResultSet implements ResultSet {
       }
       try { Thread.sleep(10); } catch (InterruptedException e) { throw new SQLException(e); }
     }
-  } catch (InterruptedException e) {
-        throw new RuntimeException(e);
-      }
-    }
-    if(this.readData==true || (this.readData==false && this.rowDataList.size()>this.currentIndex)){
-      tag = true;
-    }
-
-    //tag = this.rowDataList.size() > this.currentIndex++ || this.readData;
-    return tag;
-  }
 
   //  public JqResultSet(String filepath,List<String> cols, String tableName) {
 //    this.filepath = filepath;
@@ -274,12 +263,6 @@ public class JqResultSet implements ResultSet {
       for (String k : map.keySet()) { if (k.equalsIgnoreCase(columnLabel)) { v = map.get(k); break; } }
     }
     return v == null ? null : String.valueOf(v);
-  } catch (InterruptedException e) {
-        throw new RuntimeException(e);
-      }
-    }
-    return this.rowDataList.get(this.currentIndex).getDatas().get(columnLabel).toString();
-  }
 
   @Override
   public boolean getBoolean(String columnLabel) throws SQLException {
