@@ -93,16 +93,17 @@ public class QueryPhysicalPlan implements PhysicalPlan{
         }
         // parse ON: support simple AND of equality: <id> = <id>
         java.util.List<String[]> eqs = parseJoinOnEquals(js.getOnExpression());
+        String rAlias = (js.getAlias()!=null && !js.getAlias().isEmpty()) ? js.getAlias() : rt.getTableName();
         // build RHS hash by key tuple
         java.util.Map<String, java.util.List<Map<String,String>>> rhs = new java.util.HashMap<>();
         for (Map<String,String> rr : rightRows) {
-          String rk = buildKey2(rr, rheader, eqs, false /* isLeft */);
+          String rk = buildJoinKey(rr, header, rheader, rAlias, false /* isLeft */, eqs);
           rhs.computeIfAbsent(rk, t -> new java.util.ArrayList<>()).add(rr);
         }
         // combine
         List<Map<String,String>> newRows = new ArrayList<>();
         for (Map<String,String> lr : fullRows) {
-          String lk = buildKey2(lr, header, eqs, true /* isLeft */);
+          String lk = buildJoinKey(lr, header, rheader, rAlias, true /* isLeft */, eqs);
           List<Map<String,String>> matches = rhs.get(lk);
           if (matches != null && !matches.isEmpty()) {
             for (Map<String,String> rr : matches) {
@@ -559,7 +560,7 @@ public class QueryPhysicalPlan implements PhysicalPlan{
       String[] lr = p.split("=");
       if (lr.length==2) {
         String l = lr[0].trim(); String r = lr[1].trim();
-        res.add(new String[]{stripQual(l), stripQual(r)});
+        res.add(new String[]{stripQuotes(l), stripQuotes(r)});
       }
     }
     return res;
@@ -570,7 +571,42 @@ public class QueryPhysicalPlan implements PhysicalPlan{
     for (String[] lr : eqs){ String col = isLeft? lr[0]: lr[1]; String v = getCaseInsensitive(row, stripQual(col)); sb.append('\u0001').append(v==null?"":v); }
     return sb.toString();
   }
-  private static String buildKey2(java.util.Map<String,String> row, java.util.List<String> header, java.util.List<String[]> eqs, boolean isLeft){
+  private static String qualifier(String id){ if (id==null) return ""; String s=stripQuotes(id).trim(); int d=s.lastIndexOf('.'); return d>=0? s.substring(0,d):""; }
+  private static String simple(String id){ if (id==null) return null; String s=stripQuotes(id).trim(); int d=s.lastIndexOf('.'); return d>=0? s.substring(d+1):s; }
+  private static boolean headerHasSimple(java.util.List<String> header, String simple){ if (simple==null) return false; for(String h: header){ String hs=h; int d=hs.lastIndexOf('.'); if(d>=0) hs=hs.substring(d+1); if (hs.equalsIgnoreCase(simple)) return true; } return false; }
+  private static String buildJoinKey(java.util.Map<String,String> row, java.util.List<String> leftHeader, java.util.List<String> rightHeader, String rightAlias, boolean forLeft, java.util.List<String[]> eqs){
+    StringBuilder sb=new StringBuilder();
+    String rAlias = (rightAlias==null? "": rightAlias);
+    for (String[] lr : eqs){
+      String L=lr[0], R=lr[1];
+      String qL=qualifier(L), qR=qualifier(R);
+      String sL=simple(L), sR=simple(R);
+      String pick=null;
+      if (forLeft){
+        if (qL.equalsIgnoreCase(rAlias)) pick=sR;
+        else if (qR.equalsIgnoreCase(rAlias)) pick=sL;
+        else if (headerHasSimple(leftHeader,sL) && !headerHasSimple(rightHeader,sL)) pick=sL;
+        else if (headerHasSimple(leftHeader,sR) && !headerHasSimple(rightHeader,sR)) pick=sR;
+        else if (headerHasSimple(leftHeader,sL) && !headerHasSimple(leftHeader,sR)) pick=sL;
+        else if (headerHasSimple(leftHeader,sR) && !headerHasSimple(leftHeader,sL)) pick=sR;
+      } else {
+        if (qL.equalsIgnoreCase(rAlias)) pick=sL;
+        else if (qR.equalsIgnoreCase(rAlias)) pick=sR;
+        else if (headerHasSimple(rightHeader,sL) && !headerHasSimple(leftHeader,sL)) pick=sL;
+        else if (headerHasSimple(rightHeader,sR) && !headerHasSimple(leftHeader,sR)) pick=sR;
+        else if (headerHasSimple(rightHeader,sL) && !headerHasSimple(rightHeader,sR)) pick=sL;
+        else if (headerHasSimple(rightHeader,sR) && !headerHasSimple(rightHeader,sL)) pick=sR;
+      }
+      if (pick==null){
+        String vL=getCaseInsensitive(row,sL);
+        String vR=getCaseInsensitive(row,sR);
+        pick=(vL!=null && !vL.isEmpty())? sL : ((vR!=null && !vR.isEmpty())? sR : sL);
+      }
+      String v=getCaseInsensitive(row,pick);
+      sb.append('\u0001').append(v==null? "": v);
+    }
+    return sb.toString();
+  }  private static String buildKey2(java.util.Map<String,String> row, java.util.List<String> header, java.util.List<String[]> eqs, boolean isLeft){
     StringBuilder sb=new StringBuilder();
     for (String[] lr : eqs){
       String a = stripQual(lr[0]);
