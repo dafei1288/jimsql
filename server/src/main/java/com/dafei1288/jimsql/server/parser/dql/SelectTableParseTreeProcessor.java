@@ -342,7 +342,7 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
             }
           }
         } else if ("expression".equals(r)) {
-          js.setOnExpression(extractText(ch));
+          js.setOnExpression(extractExprText(ch));
         }
       }
       queryLogicalPlan.getJoins().add(js);
@@ -364,6 +364,12 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
     StringBuilder sb = new StringBuilder();
     dfs(node, sb);
     return sb.toString().trim().replaceAll("\\s+", " ");
+  }
+
+  private String extractExprText(ParseTreeNode node) {
+    java.util.List<String> toks = new java.util.ArrayList<>();
+    flattenTokens(node, toks);
+    return String.join(" ", toks);
   }
 
   private void dfs(ParseTreeNode n, StringBuilder sb) {
@@ -434,7 +440,7 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
     if (this.queryLogicalPlan.getOffset() == null) {
       for (int i = 0; i < toks.size(); i++) {
         if ("OFFSET".equalsIgnoreCase(toks.get(i)) && i+1 < toks.size()) {
-          try { this.queryLogicalPlan.setOffset(Integer.parseInt(toks.get(i+1).replaceAll("[^0-9]", ""))); } catch (Exception ignore) {}
+          try { this.queryLogicalPlan.setOffset(Integer.parseInt(toks.get(                                                                        i+1).replaceAll("[^0-9]", ""))); } catch (Exception ignore) {}
           break;
         }
       }
