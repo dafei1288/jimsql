@@ -116,9 +116,9 @@ Notes:
 - Functions: COUNT(*|col), SUM(col), AVG(col), MIN(col), MAX(col)
 - Grouping: `GROUP BY` columns first, then aggregate outputs
 - Labels: use alias if provided; otherwise `count`/`sum_<col>`/`avg_<col>`/`min_<col>`/`max_<col>`
-- Types: COUNT 鈫?BIGINT; SUM/AVG 鈫?DECIMAL; MIN/MAX 鈫?source column type
-- CSV NULL semantics: empty string is treated as NULL; COUNT(col) 涓嶈绌轰覆锛汼UM/AVG 璺宠繃绌轰覆锛汳IN/MAX 蹇界暐绌轰覆
-- HAVING锛氬湪鑱氬悎鍚庣粨鏋滈泦涓婅繘琛岃繃婊わ紙渚濇嵁鑱氬悎杈撳嚭鍒楀悕锛?
+- Types: COUNT -> BIGINT; SUM/AVG -> DECIMAL; MIN/MAX -> source column type
+- CSV NULL semantics: empty string is treated as NULL; COUNT(col) does not count empties; SUM/AVG skip empties; MIN/MAX ignore empties
+- HAVING: filter on aggregated result using output column labels (no function calls in HAVING)
 Examples:
 ```sql
 -- overall aggregates
