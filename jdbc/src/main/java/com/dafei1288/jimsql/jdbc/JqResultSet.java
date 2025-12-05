@@ -110,26 +110,12 @@ public class JqResultSet implements ResultSet {
 
   @Override
   public boolean next() throws SQLException {
-    boolean tag = false;
     ++this.currentIndex;
-
-//    System.out.println("this.rowDataList.size() ==> "+this.rowDataList.size());
-//    System.out.println("this.currentIndex ==> "+this.currentIndex);
-//    System.out.println("this.readData ==> "+this.readData);
-
-    while(needHold == true){
-      try {
-        Thread.sleep(10);
-      } catch (InterruptedException e) {
-        throw new RuntimeException(e);
-      }
+    while (true) {
+      if (this.rowDataList != null && this.rowDataList.size() > this.currentIndex) return true;
+      if (!this.readData) return false;
+      try { Thread.sleep(10); } catch (InterruptedException e) { throw new RuntimeException(e); }
     }
-    if(this.readData==true || (this.readData==false && this.rowDataList.size()>this.currentIndex)){
-      tag = true;
-    }
-
-    //tag = this.rowDataList.size() > this.currentIndex++ || this.readData;
-    return tag;
   }
 
   //  public JqResultSet(String filepath,List<String> cols, String tableName) {
@@ -151,12 +137,7 @@ public class JqResultSet implements ResultSet {
 //  }
 //
 //  @Override
-//  public boolean next() throws SQLException {
-//    boolean hasNext = datas.hasNext();
-//    if(hasNext == true) {
-//      currentData = datas.next();
-//      currentArray = currentData.split(",");
-//    }
+//  public boolean next() throws SQLException {\n    ++this.currentIndex;\n    while (true) {\n      // If we already have the row buffered, return\n      if (this.rowDataList != null && this.rowDataList.size() > this.currentIndex) return true;\n      // If producer finished and no more rows, stop\n      if (!this.readData) return false;\n      try { Thread.sleep(10); } catch (InterruptedException e) { throw new RuntimeException(e); }\n    }\n  }
 //    return hasNext;
 //  }
 
@@ -270,7 +251,7 @@ public class JqResultSet implements ResultSet {
         throw new RuntimeException(e);
       }
     }
-    return this.rowDataList.get(this.currentIndex).getDatas().get(columnLabel).toString();
+    Object v = this.rowDataList.get(this.currentIndex).getDatas().get(columnLabel); return v == null ? null : v.toString();
   }
 
   @Override
