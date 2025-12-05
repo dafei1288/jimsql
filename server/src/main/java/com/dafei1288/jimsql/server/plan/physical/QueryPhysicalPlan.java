@@ -592,8 +592,8 @@ public class QueryPhysicalPlan implements PhysicalPlan{
     for (String[] lr : eqs){ String col = isLeft? lr[0]: lr[1]; String v = getCaseInsensitive(row, stripQual(col)); sb.append('\u0001').append(v==null?"":v); }
     return sb.toString();
   }
-  private static String qualifier(String id){ if (id==null) return ""; String s=stripQuotes(id).trim(); int d=s.lastIndexOf('.'); return d>=0? s.substring(0,d):""; }
-  private static String simple(String id){ if (id==null) return null; String s=stripQuotes(id).trim(); int d=s.lastIndexOf('.'); return d>=0? s.substring(d+1):s; }
+  private static String qualifier(String id){ if (id==null) return ""; String s=stripQuotes(id).trim(); int d=s.lastIndexOf('.'); return d>=0? s.substring(0,d).trim():""; }
+  private static String simple(String id){ if (id==null) return null; String s=stripQuotes(id).trim(); int d=s.lastIndexOf('.'); return d>=0? s.substring(d+1).trim():s; }
   private static boolean headerHasSimple(java.util.List<String> header, String simple){ if (simple==null) return false; for(String h: header){ String hs=h; int d=hs.lastIndexOf('.'); if(d>=0) hs=hs.substring(d+1); if (hs.equalsIgnoreCase(simple)) return true; } return false; }
   private static String buildJoinKey(java.util.Map<String,String> row, java.util.List<String> leftHeader, java.util.List<String> rightHeader, String rightAlias, boolean forLeft, java.util.List<String[]> eqs){
     StringBuilder sb=new StringBuilder();
