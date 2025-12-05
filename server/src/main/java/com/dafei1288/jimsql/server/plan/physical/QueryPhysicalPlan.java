@@ -96,13 +96,13 @@ public class QueryPhysicalPlan implements PhysicalPlan{
         // build RHS hash by key tuple
         java.util.Map<String, java.util.List<Map<String,String>>> rhs = new java.util.HashMap<>();
         for (Map<String,String> rr : rightRows) {
-          String rk = buildKey(rr, rheader, eqs, false /* isLeft */);
+          String rk = buildKey2(rr, rheader, eqs, false /* isLeft */);
           rhs.computeIfAbsent(rk, t -> new java.util.ArrayList<>()).add(rr);
         }
         // combine
         List<Map<String,String>> newRows = new ArrayList<>();
         for (Map<String,String> lr : fullRows) {
-          String lk = buildKey(lr, header, eqs, true /* isLeft */);
+          String lk = buildKey2(lr, header, eqs, true /* isLeft */);
           List<Map<String,String>> matches = rhs.get(lk);
           if (matches != null && !matches.isEmpty()) {
             for (Map<String,String> rr : matches) {
@@ -570,4 +570,20 @@ public class QueryPhysicalPlan implements PhysicalPlan{
     for (String[] lr : eqs){ String col = isLeft? lr[0]: lr[1]; String v = getCaseInsensitive(row, stripQual(col)); sb.append('\u0001').append(v==null?"":v); }
     return sb.toString();
   }
-}
+  private static String buildKey2(java.util.Map<String,String> row, java.util.List<String> header, java.util.List<String[]> eqs, boolean isLeft){
+    StringBuilder sb=new StringBuilder();
+    for (String[] lr : eqs){
+      String a = stripQual(lr[0]);
+      String b = stripQual(lr[1]);
+      String pick;
+      if (isLeft) {
+        pick = headerContains(header, a) ? a : (headerContains(header, b) ? b : a);
+      } else {
+        pick = headerContains(header, b) ? b : (headerContains(header, a) ? a : b);
+      }
+      String v = getCaseInsensitive(row, pick);
+      sb.append('\u0001').append(v==null?"":v);
+    }
+    return sb.toString();
+  }}
+
