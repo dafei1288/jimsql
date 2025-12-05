@@ -112,3 +112,22 @@ Example MCP client config (env + args):
 Notes:
 - Connection details are read from env only; `-D` flags are used only for `mcp.stdio`. If desired, we can extend the code to also read `-Djimsql.*`.
 
+## Aggregation (SELECT)
+- Functions: COUNT(*|col), SUM(col), AVG(col), MIN(col), MAX(col)
+- Grouping: `GROUP BY` columns first, then aggregate outputs
+- Labels: use alias if provided; otherwise `count`/`sum_<col>`/`avg_<col>`/`min_<col>`/`max_<col>`
+- Types: COUNT → BIGINT; SUM/AVG → DECIMAL; MIN/MAX → source column type
+- CSV NULL semantics: empty string is treated as NULL; COUNT(col) 不计空串；SUM/AVG 跳过空串；MIN/MAX 忽略空串
+- HAVING：在聚合后结果集上进行过滤（依据聚合输出列名）
+
+Examples:
+```sql
+-- overall aggregates
+SELECT SUM(age), AVG(age), MIN(age), MAX(age) FROM user;
+
+-- group by + having
+SELECT age, COUNT(*) FROM user GROUP BY age HAVING count > 0;
+
+-- group by with multiple aggregates
+SELECT age, SUM(age), AVG(age), MIN(age), MAX(age) FROM user GROUP BY age;
+```

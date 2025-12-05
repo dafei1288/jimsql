@@ -81,3 +81,17 @@ Examples:
 SELECT id,name,age FROM user WHERE age = 3 OR (age = 22 AND name LIKE 'ja%') ORDER BY id DESC;
 SELECT id,name FROM user WHERE name IN ('jacky','doudou') AND age IS NOT NULL;
 ```
+## Aggregation
+
+- COUNT(*|col), SUM(col), AVG(col), MIN(col), MAX(col)
+- `GROUP BY` + `HAVING` supported; ORDER BY/LIMIT 在聚合结果上生效
+- 列名：未指定 alias 时回退为 `count`/`sum_<col>`/`avg_<col>`/`min_<col>`/`max_<col>`
+- 类型：COUNT=BIGINT；SUM/AVG=DECIMAL；MIN/MAX=源列类型
+- CSV 空串即 NULL：COUNT(col) 不计空串；SUM/AVG 跳过空串；MIN/MAX 忽略空串
+
+Examples:
+```sql
+SELECT SUM(age), AVG(age), MIN(age), MAX(age) FROM user;
+SELECT age, COUNT(*) FROM user GROUP BY age HAVING count > 0;
+SELECT age, SUM(age), AVG(age), MIN(age), MAX(age) FROM user GROUP BY age;
+```
