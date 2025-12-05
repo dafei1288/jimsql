@@ -1,4 +1,4 @@
-package com.dafei1288.jimsql.jdbc;
+﻿package com.dafei1288.jimsql.jdbc;
 
 import com.dafei1288.jimsql.common.JimSQueryStatus;
 import com.dafei1288.jimsql.common.JqResultSetMetaData;
@@ -122,14 +122,7 @@ public class JqResultSet implements ResultSet {
       try { Thread.sleep(10); } catch (InterruptedException e) { throw new SQLException(e); }
     }
   }
-    }
-    if(this.readData==true || (this.readData==false && this.rowDataList.size()>this.currentIndex)){
-      tag = true;
-    }
 
-    //tag = this.rowDataList.size() > this.currentIndex++ || this.readData;
-    return tag;
-  }
 
   //  public JqResultSet(String filepath,List<String> cols, String tableName) {
 //    this.filepath = filepath;
@@ -176,9 +169,15 @@ public class JqResultSet implements ResultSet {
 
     @Override
   public String getString(int columnIndex) throws SQLException {
-    return currentArray[columnIndex];
+    String label;
+    try { label = this.jqResultSetMetaData != null ? this.jqResultSetMetaData.getColumnLabel(columnIndex) : null; }
+    catch (Exception e) { label = null; }
+    if (label == null) {
+      // Fallback to 1-based index name
+      label = "c" + columnIndex;
+    }
+    return getString(label);
   }
-
   @Override
   public boolean getBoolean(int columnIndex) throws SQLException {
     return false;
@@ -272,9 +271,6 @@ public class JqResultSet implements ResultSet {
       for (String k : map.keySet()) { if (k.equalsIgnoreCase(columnLabel)) { v = map.get(k); break; } }
     }
     return v == null ? null : String.valueOf(v);
-  }
-    }
-    return this.rowDataList.get(this.currentIndex).getDatas().get(columnLabel).toString();
   }
 
   @Override
