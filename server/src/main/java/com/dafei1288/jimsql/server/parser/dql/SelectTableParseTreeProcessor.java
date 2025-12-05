@@ -366,10 +366,44 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
     return sb.toString().trim().replaceAll("\\s+", " ");
   }
 
-  private String extractExprText(ParseTreeNode node) {
+    private String extractExprText(ParseTreeNode node) {
     java.util.List<String> toks = new java.util.ArrayList<>();
     flattenTokens(node, toks);
-    return String.join(" ", toks);
+    java.util.List<String> norm = new java.util.ArrayList<>();
+    for (String t : toks) { if (t != null) { String tt = t.trim(); if (!tt.isEmpty()) norm.add(tt); } }
+    // if tokens already contain '=', return as-is (joined with spaces)
+    for (String t : norm) { if ("=".equals(t)) { return String.join(" ", norm); } }
+    // reconstruct two dotted identifiers like a.b and c.d
+    java.util.LinkedHashSet<String> dotted = new java.util.LinkedHashSet<>();
+    for (int i = 0; i + 2 < norm.size(); i++) {
+      String a = norm.get(i), b = norm.get(i+1), c = norm.get(i+2);
+      if (isIdentToken(a) && ".".equals(b) && isIdentToken(c)) {
+        dotted.add(a + "." + c);
+      }
+    }
+    for (String t : norm) { if (t.indexOf('.') >= 0) dotted.add(t.replace(" ", "")); }
+    if (dotted.size() >= 2) {
+      java.util.Iterator<String> it = dotted.iterator();
+      String l = it.next(); String r = it.next();
+      return l + " = " + r;
+    }
+    // fallback: pick first two identifier-like tokens
+    java.util.List<String> ids = new java.util.ArrayList<>();
+    for (String t : norm) {
+      String u = t.toUpperCase(java.util.Locale.ROOT);
+      if ("AND".equals(u) || "OR".equals(u) || ")".equals(t) || "(".equals(t) || ",".equals(t)) continue;
+      ids.add(t);
+    }
+    if (ids.size() >= 2) return ids.get(0) + " = " + ids.get(1);
+    return String.join(" ", norm);
+  }
+  private static boolean isIdentToken(String t) {
+    if (t == null || t.isEmpty()) return false;
+    for (int i = 0; i < t.length(); i++) {
+      char ch = t.charAt(i);
+      if (!(Character.isLetterOrDigit(ch) || ch == '_' || ch == '`' || ch == '"')) return false;
+    }
+    return true;
   }
 
   private void dfs(ParseTreeNode n, StringBuilder sb) {
