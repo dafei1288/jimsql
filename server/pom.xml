@@ -90,7 +90,7 @@
         <version>3.4.1</version>
         <configuration>
           <from>
-            <image>eclipse-temurin:17-jre</image>
+            <image>eclipse-temurin:21-jre</image>
           </from>
           <to>
             <image>dafei1288/jimsql_server:latest</image>
