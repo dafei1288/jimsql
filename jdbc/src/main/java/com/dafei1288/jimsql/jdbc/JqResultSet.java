@@ -1,4 +1,4 @@
-﻿package com.dafei1288.jimsql.jdbc;
+package com.dafei1288.jimsql.jdbc;
 
 import com.dafei1288.jimsql.common.JimSQueryStatus;
 import com.dafei1288.jimsql.common.JqResultSetMetaData;
