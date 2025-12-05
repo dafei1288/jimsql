@@ -178,6 +178,40 @@ public class OptimizeQueryLogicalPlan implements LogicalPlan {
       return;
     }
 
+    // JOIN + SELECT *: build metadata from left table plus each right table with alias prefix
+    if (this.queryLogicalPlan.isStar() && this.queryLogicalPlan.getJoins() != null && !this.queryLogicalPlan.getJoins().isEmpty()) {
+      java.util.LinkedHashMap<String, JqColumnResultSetMetadata> out = new java.util.LinkedHashMap<>();
+      int idx = 1;
+      com.dafei1288.jimsql.common.meta.JqTable lt = serverMetadata.fetchTableByName(currentDatabaseName, currentTableName);
+      for (com.dafei1288.jimsql.common.meta.JqColumn c : lt.getJqTableLinkedHashMap().values()) {
+        JqColumnResultSetMetadata m = new JqColumnResultSetMetadata();
+        m.setIndex(idx++);
+        m.setLabelName(c.getColumnName());
+        m.setClazz(c.getColumnClazzType());
+        m.setClazzStr(c.getColumnClazzType().getName());
+        m.setTableName(lt.getTableName());
+        m.setColumnType(c.getColumnType());
+        out.put(m.getLabelName(), m);
+      }
+      for (com.dafei1288.jimsql.server.plan.logical.JoinSpec js : this.queryLogicalPlan.getJoins()) {
+        com.dafei1288.jimsql.common.meta.JqTable rt = serverMetadata.fetchTableByName(currentDatabaseName, js.getRightTable().getTableName());
+        String rPrefix = (js.getAlias()!=null && !js.getAlias().isEmpty()) ? js.getAlias() : rt.getTableName();
+        for (com.dafei1288.jimsql.common.meta.JqColumn c : rt.getJqTableLinkedHashMap().values()) {
+          JqColumnResultSetMetadata m = new JqColumnResultSetMetadata();
+          m.setIndex(idx++);
+          m.setLabelName(rPrefix + "." + c.getColumnName());
+          m.setClazz(c.getColumnClazzType());
+          m.setClazzStr(c.getColumnClazzType().getName());
+          m.setTableName(rt.getTableName());
+          m.setColumnType(c.getColumnType());
+          out.put(m.getLabelName(), m);
+        }
+      }
+      this.jqColumnResultSetMetadataList.clear();
+      this.jqColumnResultSetMetadataList.putAll(out);
+      this.jqResultSetMetaData.setColumnMeta(this.jqColumnResultSetMetadataList);
+      return;
+    }
     Set<String> cols = serverMetadata.fetchTableByName(currentDatabaseName,currentTableName).getJqTableLinkedHashMap().keySet();
     colNames = cols.stream().toList();
     java.util.List<JqColumn> jqColumnList = serverMetadata.fetchColumnsByName(currentDatabaseName,currentTableName,colNames);
