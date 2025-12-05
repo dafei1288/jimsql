@@ -116,10 +116,9 @@ Notes:
 - Functions: COUNT(*|col), SUM(col), AVG(col), MIN(col), MAX(col)
 - Grouping: `GROUP BY` columns first, then aggregate outputs
 - Labels: use alias if provided; otherwise `count`/`sum_<col>`/`avg_<col>`/`min_<col>`/`max_<col>`
-- Types: COUNT → BIGINT; SUM/AVG → DECIMAL; MIN/MAX → source column type
-- CSV NULL semantics: empty string is treated as NULL; COUNT(col) 不计空串；SUM/AVG 跳过空串；MIN/MAX 忽略空串
-- HAVING：在聚合后结果集上进行过滤（依据聚合输出列名）
-
+- Types: COUNT 鈫?BIGINT; SUM/AVG 鈫?DECIMAL; MIN/MAX 鈫?source column type
+- CSV NULL semantics: empty string is treated as NULL; COUNT(col) 涓嶈绌轰覆锛汼UM/AVG 璺宠繃绌轰覆锛汳IN/MAX 蹇界暐绌轰覆
+- HAVING锛氬湪鑱氬悎鍚庣粨鏋滈泦涓婅繘琛岃繃婊わ紙渚濇嵁鑱氬悎杈撳嚭鍒楀悕锛?
 Examples:
 ```sql
 -- overall aggregates
@@ -131,3 +130,13 @@ SELECT age, COUNT(*) FROM user GROUP BY age HAVING count > 0;
 -- group by with multiple aggregates
 SELECT age, SUM(age), AVG(age), MIN(age), MAX(age) FROM user GROUP BY age;
 ```
+
+## JOIN (CSV)
+- Supported types: `INNER`, `LEFT`, `CROSS` (RIGHT/FULL planned)
+- ON: supports equi-join with `AND` (e.g., `u.dept_id = d.id AND u.org = d.org`)
+- Column labels:
+  - Left table: original column names
+  - Right table: `alias.col` or `table.col` (to avoid name collisions)
+- Execution order: JOIN -> WHERE -> GROUP BY/HAVING -> ORDER BY/LIMIT
+- Notes:
+  - WHERE on right-side columns works when using their labels; ORDER BY on right-side columns may be limited in this step
