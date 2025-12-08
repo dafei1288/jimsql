@@ -170,8 +170,8 @@ public class QueryPhysicalPlan implements PhysicalPlan{
       String where = qlp.getWhereExpression();
       if (where != null && !where.trim().isEmpty()) {
           int beforeCount = fullRows.size();
-          WhereEvaluator.Node expr = WhereEvaluator.parse(where);
-          final WhereEvaluator.Node ex = expr;
+          WhereEvaluator.Node expr; try { expr = WhereEvaluator.parse(where); } catch (Throwable pe) { LOG.warn("WHERE parse error: {}", where, pe); expr = null; }
+          final WhereEvaluator.Node ex = expr; if (ex == null) { LOG.warn("Skip WHERE due to parse error: {}", where); }
           final JqTable _jt = jqTable;
           // Always evaluate; missing columns will read as "" and evaluate accordingly
           fullRows = fullRows.stream()
