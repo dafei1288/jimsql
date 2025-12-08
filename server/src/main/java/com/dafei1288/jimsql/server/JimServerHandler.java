@@ -76,6 +76,7 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
         queryLogicalPlan = ((SelectTableParseTreeProcessor) cur).getResult();
       }
       if (queryLogicalPlan == null) { throw new IllegalStateException("no plan for SELECT"); }
+      LOG.debug("plan where={}, having={}", queryLogicalPlan.getWhereExpression(), queryLogicalPlan.getHavingExpression());
       // logical plan is ready; prepare to optimize
       
       // optimize logical plan using current database context
