@@ -4,6 +4,7 @@ import com.dafei1288.jimsql.common.meta.JqColumn;
 import com.dafei1288.jimsql.common.meta.JqTable;
 import com.dafei1288.jimsql.server.parser.ScriptParseTreeProcessor;
 import com.dafei1288.jimsql.server.plan.logical.QueryLogicalPlan;
+import com.dafei1288.jimsql.server.plan.logical.LlmFunctionSpec;
 import com.dafei1288.jimsql.server.plan.logical.OrderItem;
 import com.dafei1288.jimsql.server.plan.logical.JoinSpec;
 import com.dafei1288.jimsql.server.plan.logical.JoinType;
@@ -101,17 +102,17 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
     if ("functionCall".equals(parseTreeNode.getRule())) {
       String fname = null;
       for (org.snt.inmemantlr.tree.ParseTreeNode ch : parseTreeNode.getChildren()) {
-        if ("identifier".equals(ch.getRule())) { fname = stripQuotes(ch.getLabel()); break; }
+        if ("identifier".equals(ch.getRule())) { fn = stripQuotes(ch.getLabel()); break; }
       }
     // detect ask_llm built-in
     if ("functionCall".equals(parseTreeNode.getRule())) {
-      String fname = null;
+      String fn = null;
       java.util.List<String> toks = new java.util.ArrayList<>();
       flattenTokens(parseTreeNode, toks);
       for (org.snt.inmemantlr.tree.ParseTreeNode ch : parseTreeNode.getChildren()) {
-        if ("identifier".equals(ch.getRule())) { fname = stripQuotes(ch.getLabel()); break; }
+        if ("identifier".equals(ch.getRule())) { fn = stripQuotes(ch.getLabel()); break; }
       }
-      if (fname != null && fname.equalsIgnoreCase("ask_llm")) {
+      if (fn != null && fn.equalsIgnoreCase("ask_llm")) {
         LlmFunctionSpec spec = new LlmFunctionSpec();
         // prompt: first quoted string token
         String prompt = null;
@@ -144,7 +145,7 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
       String argCol = null; // null => COUNT(*) or COUNT(1)
       for (org.snt.inmemantlr.tree.ParseTreeNode ch : parseTreeNode.getChildren()) {
         String r = ch.getRule();
-        if ("identifier".equals(r)) { fname = stripQuotes(ch.getLabel()); continue; }
+        if ("identifier".equals(r)) { fn = stripQuotes(ch.getLabel()); continue; }
         if ("qualifiedName".equals(r) || "columnName".equals(r) || "identifier".equals(r)) {
           argCol = stripQuotes(ch.getLabel());
         }

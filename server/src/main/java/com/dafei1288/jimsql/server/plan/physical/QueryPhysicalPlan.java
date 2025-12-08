@@ -12,9 +12,10 @@ import com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan;
 import com.dafei1288.jimsql.server.plan.logical.OrderItem;
 import com.dafei1288.jimsql.server.plan.logical.QueryLogicalPlan;
 import com.google.common.io.Files;
- dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
+import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.File;
@@ -384,7 +385,7 @@ public class QueryPhysicalPlan implements PhysicalPlan{
           if (baseUrl == null || baseUrl.isEmpty()) baseUrl = "http://localhost:11434";
           lm = OllamaChatModel.builder().baseUrl(baseUrl).modelName(model).temperature(temperature).build();
         } else { // openai / openai_compatible / openai_response
-          OpenAiChatModel.Builder b = OpenAiChatModel.builder().apiKey(apiKey).modelName(model).temperature(temperature);
+          OpenAiChatModel.OpenAiChatModelBuilder b = OpenAiChatModel.builder().apiKey(apiKey).modelName(model).temperature(temperature);
           if (baseUrl != null && !baseUrl.isEmpty()) b = b.baseUrl(baseUrl);
           lm = b.build();
         }
@@ -397,6 +398,8 @@ public class QueryPhysicalPlan implements PhysicalPlan{
     }
 
     // Project selected columns only, then write
+    LinkedHashMap<String,JqColumnResultSetMetadata> rsMeta = optimizeQueryLogicalPlan.getJqColumnResultSetMetadataList();
+    Set<String> selectedCols = rsMeta.keySet();
     for (Map<String,String> full : finalRows) {
       LinkedHashMap<String,Object> datatrans = new LinkedHashMap<>();
       for (String key : selectedCols) {
@@ -704,3 +707,5 @@ public class QueryPhysicalPlan implements PhysicalPlan{
     return sb.toString();
   }}
 
+
+  private static String pick(String a, String b){ return (a!=null && !a.isEmpty()) ? a : b; }
