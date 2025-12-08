@@ -77,6 +77,23 @@ import java.util.stream.Collectors;
   }
 
   private void prepareMetadata(){
+    // LLM function: single STRING column metadata
+    if (this.queryLogicalPlan.getLlmFunctionSpec() != null) {
+      java.util.LinkedHashMap<String, JqColumnResultSetMetadata> out = new java.util.LinkedHashMap<>();
+      JqColumnResultSetMetadata m = new JqColumnResultSetMetadata();
+      m.setIndex(1);
+      String label = this.queryLogicalPlan.getLlmFunctionSpec().getLabel();
+      if (label == null || label.isEmpty()) label = "ask_llm";
+      m.setLabelName(label);
+      m.setClazz(String.class);
+      m.setClazzStr("java.lang.String");
+      m.setTableName("");
+      m.setColumnType(java.sql.Types.VARCHAR);
+      out.put(label, m);
+      this.jqColumnResultSetMetadataList = out;
+      this.jqResultSetMetaData = new JqResultSetMetaData(out);
+      return;
+    }
     this.jqColumnResultSetMetadataList = new LinkedHashMap<>();
     this.jqResultSetMetaData = new JqResultSetMetaData(this.jqColumnResultSetMetadataList);
     // ask_llm: single column result

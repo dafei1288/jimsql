@@ -12,6 +12,9 @@ import com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan;
 import com.dafei1288.jimsql.server.plan.logical.OrderItem;
 import com.dafei1288.jimsql.server.plan.logical.QueryLogicalPlan;
 import com.google.common.io.Files;
+import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.openai.OpenAiChatModel;
+import dev.langchain4j.model.ollama.OllamaChatModel;
 import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -429,11 +432,52 @@ public class QueryPhysicalPlan implements PhysicalPlan{
     int from = Math.min(offset, fullRows.size());
     int to = (limit == null) ? fullRows.size() : Math.min(fullRows.size(), from + Math.max(0, limit));
     List<Map<String,String>> finalRows = (from <= to) ? fullRows.subList(from, to) : new ArrayList<>();
+    // LLM built-in: if present, generate answer per row (expect unique row)
+    if (qlp.getLlmFunctionSpec() != null) {
+      com.dafei1288.jimsql.server.plan.logical.LlmFunctionSpec spec = qlp.getLlmFunctionSpec();
+      String label = (spec.getLabel()==null||spec.getLabel().isEmpty())? "ask_llm" : spec.getLabel();
+      java.util.List<java.util.Map<String,String>> rows = finalRows;
+      if (rows == null || rows.isEmpty()) throw new IllegalStateException("ask_llm: no matching config row");
+      if (rows.size() != 1) throw new IllegalStateException("ask_llm: multiple config rows; please filter by name");
+      java.util.Map<String,String> cfg = rows.get(0);
+      String prompt = spec.getPrompt();
+      if (prompt == null) throw new IllegalStateException("ask_llm: prompt is null");
+      java.util.Map<String,String> ovr = spec.getOverrides(); if (ovr == null) ovr = new java.util.LinkedHashMap<>();
+      String model = pick(ovr.get("model"), cfg.get("model"));
+      String baseUrl = pick(ovr.get("base_url"), cfg.get("base_url"));
+      String apiKey = pick(ovr.get("api_key"), cfg.get("api_key"));
+      String apiType = pick(ovr.get("api_type"), cfg.get("api_type")); if (apiType==null||apiType.isEmpty()) apiType = "openai";
+      String temperatureS = pick(ovr.get("temperature"), cfg.get("temperature"));
+      double temperature = 0.2;
+      try { if (temperatureS != null && !temperatureS.isEmpty()) temperature = Double.parseDouble(temperatureS); } catch (Exception ignore) {}
+      String streamS = pick(ovr.get("stream"), cfg.get("stream")); boolean stream = (streamS!=null && streamS.equalsIgnoreCase("true"));
+      String thinkingS = pick(ovr.get("thinking"), cfg.get("thinking")); boolean thinking = (thinkingS!=null && thinkingS.equalsIgnoreCase("true"));
+      String dry = System.getenv("JIMSQL_LLM_DRYRUN");
+      String answer;
+      if (dry != null && dry.equalsIgnoreCase("true")) {
+        answer = "DRYRUN: " + prompt;
+      } else {
+        String t = apiType.toLowerCase(java.util.Locale.ROOT);
+        ChatLanguageModel lm;
+        if ("ollama".equals(t)) {
+          if (baseUrl == null || baseUrl.isEmpty()) baseUrl = "http://localhost:11434";
+          lm = OllamaChatModel.builder().baseUrl(baseUrl).modelName(model).temperature(temperature).build();
+        } else { // openai / openai_compatible / openai_response
+          OpenAiChatModel.OpenAiChatModelBuilder b = OpenAiChatModel.builder().apiKey(apiKey).modelName(model).temperature(temperature);
+          if (baseUrl != null && !baseUrl.isEmpty()) b = b.baseUrl(baseUrl);
+          lm = b.build();
+        }
+        try { answer = lm.generate(prompt); } catch (Throwable e) { answer = "ERROR: " + e.getMessage(); }
+      }
+      java.util.LinkedHashMap<String,Object> datatrans = new java.util.LinkedHashMap<>();
+      datatrans.put(label, answer);
+      RowData rowData = new RowData(); rowData.setNext(true); rowData.setDatas(datatrans); ctx.writeAndFlush(rowData);
+      return;
+    }
 
     // Project selected columns only, then write
     LinkedHashMap<String,JqColumnResultSetMetadata> rsMeta = optimizeQueryLogicalPlan.getJqColumnResultSetMetadataList();
     Set<String> selectedCols = rsMeta.keySet();
-
     for (Map<String,String> full : finalRows) {
       LinkedHashMap<String,Object> datatrans = new LinkedHashMap<>();
       for (String key : selectedCols) {
