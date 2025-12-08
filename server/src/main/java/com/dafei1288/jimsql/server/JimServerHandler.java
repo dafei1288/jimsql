@@ -13,15 +13,15 @@ import com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan;
 import com.dafei1288.jimsql.server.plan.logical.QueryLogicalPlan;
 import com.dafei1288.jimsql.server.plan.physical.PhysicalPlan;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;\nimport org.slf4j.Logger;\nimport org.slf4j.LoggerFactory;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import java.util.LinkedHashMap;
 import org.snt.inmemantlr.tree.ParseTreeProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-
-public class JimServerHandler extends ChannelInboundHandlerAdapter {\n  private static final Logger LOG = LoggerFactory.getLogger(JimServerHandler.class);\n\n   extends ChannelInboundHandlerAdapter {
-
-  @Override
-  public void channelReadComplete(io.netty.channel.ChannelHandlerContext ctx) throws Exception {
+public class JimServerHandler extends ChannelInboundHandlerAdapter {
+  private static final Logger LOG = LoggerFactory.getLogger(JimServerHandler.class);
+public void channelReadComplete(io.netty.channel.ChannelHandlerContext ctx) throws Exception {
     ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.FINISH);
     ctx.flush();
   }
@@ -244,15 +244,16 @@ private String sqlTypeToName(int t) {
     }
   }
 
-  private String buildCreateTableDDL(String table, java.util.LinkedHashMap<String, com.dafei1288.jimsql.common.meta.JqColumn> cols) {
+    private String buildCreateTableDDL(String table, java.util.LinkedHashMap<String, com.dafei1288.jimsql.common.meta.JqColumn> cols) {
+    String nl = "\n";
     StringBuilder sb = new StringBuilder();
-    sb.append("CREATE TABLE `").append(table).append("` (\n");
+    sb.append("CREATE TABLE `").append(table).append("` (").append(nl);
     int i = 0;
     for (java.util.Map.Entry<String, com.dafei1288.jimsql.common.meta.JqColumn> e : cols.entrySet()) {
-      if (i++ > 0) sb.append(",\n");
+      if (i++ > 0) sb.append(",").append(nl);
       sb.append("  `").append(e.getKey()).append("` ").append(sqlTypeToName(e.getValue().getColumnType()));
     }
-    sb.append("\n);");
+    sb.append(nl).append(");");
     return sb.toString();
   }
 }
