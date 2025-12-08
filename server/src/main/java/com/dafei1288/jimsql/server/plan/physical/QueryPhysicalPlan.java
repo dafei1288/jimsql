@@ -13,6 +13,8 @@ import com.dafei1288.jimsql.server.plan.logical.OrderItem;
 import com.dafei1288.jimsql.server.plan.logical.QueryLogicalPlan;
 import com.google.common.io.Files;
 import io.netty.channel.ChannelHandlerContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -29,6 +31,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class QueryPhysicalPlan implements PhysicalPlan{
+  private static final Logger LOG = LoggerFactory.getLogger(QueryPhysicalPlan.class);
   private LogicalPlan logicalPlan;
 
   @Override
@@ -97,7 +100,7 @@ public class QueryPhysicalPlan implements PhysicalPlan{
         // DEBUG: print JOIN ON and headers
         try {
           String eqsDbg = (eqs==null?"": eqs.stream().map(a -> a[0]+"="+a[1]).collect(java.util.stream.Collectors.joining(" AND ")));
-          System.out.println("JOIN DEBUG on=[" + js.getOnExpression() + "] rAlias=" + rAlias + " eqs=" + eqsDbg + " leftHeader=" + header + " rightHeader=" + rheader);
+          LOG.debug("JOIN on=[{}] rAlias={} eqs={} leftHeader={} rightHeader={}", js.getOnExpression(), rAlias, eqsDbg, header, rheader);
         } catch (Throwable ignore) {}
         if (eqs == null || eqs.isEmpty()) {
           // No valid ON equality parsed: avoid accidental Cartesian product
@@ -126,7 +129,7 @@ public class QueryPhysicalPlan implements PhysicalPlan{
           rhs.computeIfAbsent(rk, t -> new java.util.ArrayList<>()).add(rr);
           // DEBUG: sample a few right keys
           if (rhs.size() <= 3) {
-            try { System.out.println("JOIN DEBUG RKEY=" + rk + " row=" + rr); } catch (Throwable ignore) {}
+            try { LOG.debug("JOIN RKEY={} row={}", rk, rr); } catch (Throwable ignore) {}
           }
         }
         // combine
@@ -134,7 +137,7 @@ public class QueryPhysicalPlan implements PhysicalPlan{
         for (Map<String,String> lr : fullRows) {
           String lk = buildJoinKey(lr, header, rheader, rAlias, true /* isLeft */, eqs);
           List<Map<String,String>> matches = rhs.get(lk);
-          try { System.out.println("JOIN DEBUG LKEY=" + lk + " matches=" + (matches==null?0:matches.size()) + " row=" + lr); } catch (Throwable ignore) {}
+          try { LOG.debug("JOIN LKEY={} matches={} row={}", lk, (matches==null?0:matches.size()), lr); } catch (Throwable ignore) {}
           if (matches != null && !matches.isEmpty()) {
             for (Map<String,String> rr : matches) {
               LinkedHashMap<String,String> out = new LinkedHashMap<>();
@@ -166,6 +169,7 @@ public class QueryPhysicalPlan implements PhysicalPlan{
       // WHERE filter (enhanced: AND/OR, parentheses, IS NULL, LIKE, IN)
       String where = qlp.getWhereExpression();
       if (where != null && !where.trim().isEmpty()) {
+          int beforeCount = fullRows.size();
           WhereEvaluator.Node expr = WhereEvaluator.parse(where);
           final WhereEvaluator.Node ex = expr;
           final JqTable _jt = jqTable;
@@ -175,6 +179,7 @@ public class QueryPhysicalPlan implements PhysicalPlan{
                       try { return ex.eval(r, _jt); } catch (Throwable t) { return true; }
                   })
                   .collect(java.util.stream.Collectors.toList());
+          LOG.debug("WHERE raw='{}' before={} after={}", where, beforeCount, fullRows.size());
       }
 
 

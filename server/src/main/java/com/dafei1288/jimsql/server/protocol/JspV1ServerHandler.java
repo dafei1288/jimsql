@@ -618,7 +618,7 @@ public class JspV1ServerHandler extends SimpleChannelInboundHandler<ProtocolFram
   }
 
     private static String buildCreateTableDDL(String table, java.util.LinkedHashMap<String, com.dafei1288.jimsql.common.meta.JqColumn> cols) {
-    String nl = "\n";
+    String nl = System.lineSeparator();
     StringBuilder sb = new StringBuilder();
     sb.append("CREATE TABLE `").append(table).append("` (").append(nl);
     int i = 0;

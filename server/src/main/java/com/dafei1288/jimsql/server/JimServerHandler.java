@@ -21,7 +21,8 @@ import org.slf4j.LoggerFactory;
 
 public class JimServerHandler extends ChannelInboundHandlerAdapter {
   private static final Logger LOG = LoggerFactory.getLogger(JimServerHandler.class);
-public void channelReadComplete(io.netty.channel.ChannelHandlerContext ctx) throws Exception {
+@Override
+  public void channelReadComplete(io.netty.channel.ChannelHandlerContext ctx) throws Exception {
     ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.FINISH);
     ctx.flush();
   }
@@ -43,7 +44,7 @@ public void channelReadComplete(io.netty.channel.ChannelHandlerContext ctx) thro
     reNew.setSql(jqQueryReq.getSql());
 
     String sql = reNew.getSql();
-    LOG.info("SQL: {} (ctx={})", sql, ctx.hashCode())
+    LOG.info("SQL: {} (ctx={})", sql, ctx.hashCode());
 
     ScriptParseTreeProcessor scriptParseTreeProcessor = SqlParser.getInstance().parser(reNew);
     ParseTreeProcessor processor = (ParseTreeProcessor) scriptParseTreeProcessor.process();
@@ -64,8 +65,7 @@ public void channelReadComplete(io.netty.channel.ChannelHandlerContext ctx) thro
       JqQueryReq jqQueryReq){
     try{
 //      System.out.println(processor);
-      LOG.debug("processQuery")
-      // ????????
+      LOG.debug("processQuery");
             // parse and get query plan (support both DQL wrapper and direct selectTable)
       org.snt.inmemantlr.tree.ParseTreeProcessor cur = ((ScriptParseTreeProcessor)processor).getCurrentParseTreeProcessor();
       QueryLogicalPlan queryLogicalPlan = null;
@@ -76,25 +76,25 @@ public void channelReadComplete(io.netty.channel.ChannelHandlerContext ctx) thro
         queryLogicalPlan = ((SelectTableParseTreeProcessor) cur).getResult();
       }
       if (queryLogicalPlan == null) { throw new IllegalStateException("no plan for SELECT"); }
-      //????????????
+      // logical plan is ready; prepare to optimize
       
-      //???????????????
+      // optimize logical plan using current database context
       JqDatabase jqDatabase = new JqDatabase();
       jqDatabase.setDatabaseName(jqQueryReq.getDb());
       OptimizeQueryLogicalPlan optimizeQueryLogicalPlan = queryLogicalPlan.optimizeQueryLogicalPlan(jqDatabase);
 
-      //????????????
+      // transform to physical plan
       PhysicalPlan queryPysicalPlan = queryLogicalPlan.transform(optimizeQueryLogicalPlan);
-      LOG.debug("get jqResultSetMetaData")
+      LOG.debug("get jqResultSetMetaData");
       JqResultSetMetaData jqResultSetMetaData = ((OptimizeQueryLogicalPlan)queryPysicalPlan.getLogicalPlan()).getJqResultSetMetaData();
 
-      System.out.println("write metadata .... ");
+      LOG.debug("write metadata ...");
 
-      //???metadata
+      // send result-set metadata to client
       ctx.writeAndFlush(jqResultSetMetaData);
 
 
-      System.out.println("write adata .... ");
+      LOG.debug("write data ...");
 
       queryPysicalPlan.proxyWrite(ctx);
 //      List<RowData> datas = new ArrayList<>();
@@ -112,7 +112,7 @@ public void channelReadComplete(io.netty.channel.ChannelHandlerContext ctx) thro
 //        ctx.writeAndFlush(rowData);
 //      }
     }catch (Exception e){
-      LOG.error("processQuery error", e)
+      LOG.error("processQuery error", e);
     }
 
 
@@ -131,7 +131,7 @@ public void channelReadComplete(io.netty.channel.ChannelHandlerContext ctx) thro
       ctx.writeAndFlush(Integer.valueOf(cnt));
       ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
     } catch (Exception e) {
-      LOG.error("processQuery error", e)
+      LOG.error("processQuery error", e);
     }
   }
 
@@ -148,7 +148,7 @@ public void channelReadComplete(io.netty.channel.ChannelHandlerContext ctx) thro
       int cnt = com.dafei1288.jimsql.server.plan.physical.DmlCsvExecutor.executeInsert(db, plan);
       ctx.writeAndFlush(Integer.valueOf(cnt));
       ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
-    } catch (Exception e) { LOG.error("processQuery error", e) }
+    } catch (Exception e) { LOG.error("processQuery error", e); }
   }
   private void processDelete(io.netty.channel.ChannelHandlerContext ctx, org.snt.inmemantlr.tree.ParseTreeProcessor processor, com.dafei1288.jimsql.common.JqQueryReq jqQueryReq) {
     try {
@@ -164,7 +164,7 @@ public void channelReadComplete(io.netty.channel.ChannelHandlerContext ctx) thro
       ctx.writeAndFlush(Integer.valueOf(cnt));
       ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
     } catch (Exception e) {
-      LOG.error("processQuery error", e)
+      LOG.error("processQuery error", e);
     }
   }
 private void processShow(io.netty.channel.ChannelHandlerContext ctx, org.snt.inmemantlr.tree.ParseTreeProcessor processor, com.dafei1288.jimsql.common.JqQueryReq req) {
@@ -228,7 +228,7 @@ private void processShow(io.netty.channel.ChannelHandlerContext ctx, org.snt.inm
         return;
       }
       ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
-    } catch (Exception e) { LOG.error("processQuery error", e) }
+    } catch (Exception e) { LOG.error("processQuery error", e); }
   }
 private String sqlTypeToName(int t) {
     switch (t) {
@@ -245,7 +245,7 @@ private String sqlTypeToName(int t) {
   }
 
     private String buildCreateTableDDL(String table, java.util.LinkedHashMap<String, com.dafei1288.jimsql.common.meta.JqColumn> cols) {
-    String nl = "\n";
+    String nl = System.lineSeparator();
     StringBuilder sb = new StringBuilder();
     sb.append("CREATE TABLE `").append(table).append("` (").append(nl);
     int i = 0;
