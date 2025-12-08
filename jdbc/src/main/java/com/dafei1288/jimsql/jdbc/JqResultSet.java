@@ -110,6 +110,7 @@ public class JqResultSet implements ResultSet {
 
   @Override
   public boolean next() throws SQLException {
+
     int target = this.currentIndex + 1;
     while (true) {
       if (this.rowDataList.size() > target) {
@@ -120,6 +121,7 @@ public class JqResultSet implements ResultSet {
         return false;
       }
       try { Thread.sleep(10); } catch (InterruptedException e) { throw new SQLException(e); }
+
     }
   }
 
@@ -143,12 +145,7 @@ public class JqResultSet implements ResultSet {
 //  }
 //
 //  @Override
-//  public boolean next() throws SQLException {
-//    boolean hasNext = datas.hasNext();
-//    if(hasNext == true) {
-//      currentData = datas.next();
-//      currentArray = currentData.split(",");
-//    }
+//  public boolean next() throws SQLException {\n    ++this.currentIndex;\n    while (true) {\n      // If we already have the row buffered, return\n      if (this.rowDataList != null && this.rowDataList.size() > this.currentIndex) return true;\n      // If producer finished and no more rows, stop\n      if (!this.readData) return false;\n      try { Thread.sleep(10); } catch (InterruptedException e) { throw new RuntimeException(e); }\n    }\n  }
 //    return hasNext;
 //  }
 
@@ -271,6 +268,7 @@ public class JqResultSet implements ResultSet {
       for (String k : map.keySet()) { if (k.equalsIgnoreCase(columnLabel)) { v = map.get(k); break; } }
     }
     return v == null ? null : String.valueOf(v);
+
   }
 
   @Override
