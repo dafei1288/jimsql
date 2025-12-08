@@ -7,7 +7,7 @@ import com.dafei1288.jimsql.server.plan.physical.PhysicalPlan;
 import com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan;
 import java.util.List;
 import java.util.ArrayList;
-
+import com.dafei1288.jimsql.server.plan.logical.LlmFunctionSpec;`r`n
 public class QueryLogicalPlan implements LogicalPlan {
   private boolean star;
   private List<JqColumn> jqColumnList;
@@ -24,7 +24,7 @@ public class QueryLogicalPlan implements LogicalPlan {
   private boolean countStar;
 
   private OptimizeQueryLogicalPlan optimizeQueryLogicalPlan;
-  private List<AggregateSpec> aggregates = new ArrayList<>();
+  private List<AggregateSpec> aggregates = new ArrayList<>();`r`n  private LlmFunctionSpec llmFunctionSpec;
 
   public boolean isStar() { return star; }
   public void setStar(boolean star) { this.star = star; }
@@ -86,4 +86,7 @@ public class QueryLogicalPlan implements LogicalPlan {
   public void setCountStar(boolean countStar) { this.countStar = countStar; }
   public List<AggregateSpec> getAggregates() { return aggregates; }
   public void setAggregates(List<AggregateSpec> aggregates) { this.aggregates = aggregates; }
+
+  public LlmFunctionSpec getLlmFunctionSpec() { return llmFunctionSpec; }
+  public void setLlmFunctionSpec(LlmFunctionSpec s) { this.llmFunctionSpec = s; }
 }
