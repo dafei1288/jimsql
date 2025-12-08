@@ -1,5 +1,6 @@
 package com.dafei1288.jimsql.server;
 
+import com.dafei1288.jimsql.server.plan.logical.LlmFunctionSpec;
 import com.dafei1288.jimsql.common.JimSQueryStatus;
 import com.dafei1288.jimsql.common.JqColumnResultSetMetadata;
 import com.dafei1288.jimsql.common.JqQueryReq;
@@ -77,6 +78,10 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
       }
       if (queryLogicalPlan == null) { throw new IllegalStateException("no plan for SELECT"); }
       LOG.debug("plan where={}, having={}", queryLogicalPlan.getWhereExpression(), queryLogicalPlan.getHavingExpression());
+      if (queryLogicalPlan.getLlmFunctionSpec() != null) {
+        LlmFunctionSpec s = queryLogicalPlan.getLlmFunctionSpec();
+        LOG.debug("plan llmSpec: label={}, apiType={}, model={}, baseUrl={}", s.getLabel(), s.getApiType(), s.getModel(), s.getBaseUrl());
+      }
       if (queryLogicalPlan.getWhereExpression() == null || queryLogicalPlan.getWhereExpression().trim().isEmpty()) {
         String _raw = jqQueryReq.getSql();
         String _wh = extractWhereFromSql(_raw);

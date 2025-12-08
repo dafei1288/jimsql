@@ -21,9 +21,9 @@ public class QueryLogicalPlan implements LogicalPlan {
   private String havingExpression; // raw text
   private String whereExpression;  // raw text
   private List<JoinSpec> joins = new ArrayList<>();
-  private boolean countStar;
-
-  private OptimizeQueryLogicalPlan optimizeQueryLogicalPlan;
+private boolean countStar;
+private LlmFunctionSpec llmFunctionSpec;
+private OptimizeQueryLogicalPlan optimizeQueryLogicalPlan;
   private List<AggregateSpec> aggregates = new ArrayList<>();
 
   public boolean isStar() { return star; }
@@ -86,4 +86,6 @@ public class QueryLogicalPlan implements LogicalPlan {
   public void setCountStar(boolean countStar) { this.countStar = countStar; }
   public List<AggregateSpec> getAggregates() { return aggregates; }
   public void setAggregates(List<AggregateSpec> aggregates) { this.aggregates = aggregates; }
+  public LlmFunctionSpec getLlmFunctionSpec() { return llmFunctionSpec; }
+  public void setLlmFunctionSpec(LlmFunctionSpec llmFunctionSpec) { this.llmFunctionSpec = llmFunctionSpec; }
 }

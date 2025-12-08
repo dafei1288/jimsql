@@ -1,5 +1,8 @@
 package com.dafei1288.jimsql.server.plan.logical;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.dafei1288.jimsql.common.JqColumnResultSetMetadata;
 import com.dafei1288.jimsql.common.JqResultSetMetaData;
 import com.dafei1288.jimsql.common.meta.JqColumn;
@@ -13,7 +16,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class OptimizeQueryLogicalPlan implements LogicalPlan {
+
+  public class OptimizeQueryLogicalPlan implements LogicalPlan {
+
+  private static final Logger log = LoggerFactory.getLogger(OptimizeQueryLogicalPlan.class);
 
   private JqDatabase currentDatabase;
 
@@ -73,6 +79,25 @@ public class OptimizeQueryLogicalPlan implements LogicalPlan {
   private void prepareMetadata(){
     this.jqColumnResultSetMetadataList = new LinkedHashMap<>();
     this.jqResultSetMetaData = new JqResultSetMetaData(this.jqColumnResultSetMetadataList);
+    // ask_llm: single column result
+    if (this.queryLogicalPlan.getLlmFunctionSpec() != null) {
+      String label = this.queryLogicalPlan.getLlmFunctionSpec().getLabel();
+      if (label == null || label.isEmpty()) label = "ask_llm";
+      JqColumnResultSetMetadata m = new JqColumnResultSetMetadata();
+      m.setIndex(1);
+      m.setLabelName(label);
+      m.setClazz(String.class);
+      m.setClazzStr("java.lang.String");
+      m.setTableName("");
+      m.setColumnType(java.sql.Types.VARCHAR);
+      this.jqColumnResultSetMetadataList.clear();
+      this.jqColumnResultSetMetadataList.put(label, m);
+      this.jqResultSetMetaData.setColumnMeta(this.jqColumnResultSetMetadataList);
+      if (log.isDebugEnabled()) {
+        log.debug("ASK_LLM metadata: single column label='{}'", label);
+      }
+      return;
+    }
 
     ServerMetadata serverMetadata = ServerMetadata.getInstance();
     String currentDatabaseName = this.getCurrentDatabase().getDatabaseName();
