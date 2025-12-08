@@ -239,6 +239,38 @@ private void processShow(io.netty.channel.ChannelHandlerContext ctx, org.snt.inm
       ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
     } catch (Exception e) { LOG.error("processQuery error", e); }
   }
+  private static String extractWhereFromSql(String sql) {
+    if (sql == null) return null;
+    String s = sql;
+    int n = s.length();
+    boolean inS = false; char q = 0;
+    int wherePos = -1;
+    for (int i = 0; i < n; i++) {
+      char c = s.charAt(i);
+      if (inS) { if (c == q) inS = false; continue; }
+      if (c == '\'' || c == '"') { inS = true; q = c; continue; }
+      if (i + 5 <= n) {
+        String sub = s.substring(i, i + 5);
+        if (sub.equalsIgnoreCase("where")) { wherePos = i; break; }
+      }
+    }
+    if (wherePos < 0) return null;
+    int start = wherePos + 5;
+    int end = n;
+    for (int i = start; i < n; i++) {
+      char c = s.charAt(i);
+      if (inS) { if (c == q) inS = false; continue; }
+      if (c == '\'' || c == '"') { inS = true; q = c; continue; }
+      if (i + 5 <= n && s.substring(i, Math.min(n, i+5)).equalsIgnoreCase("GROUP")) { end = i; break; }
+      if (i + 6 <= n && s.substring(i, Math.min(n, i+6)).equalsIgnoreCase("HAVING")) { end = i; break; }
+      if (i + 5 <= n && s.substring(i, Math.min(n, i+5)).equalsIgnoreCase("ORDER")) { end = i; break; }
+      if (i + 5 <= n && s.substring(i, Math.min(n, i+5)).equalsIgnoreCase("LIMIT")) { end = i; break; }
+    }
+    String out = s.substring(start, end).trim();
+    if (out.endsWith(";")) out = out.substring(0, out.length()-1).trim();
+    if (out.startsWith("=")) out = out.substring(1).trim();
+    return out;
+  }
 private String sqlTypeToName(int t) {
     switch (t) {
       case java.sql.Types.INTEGER: return "INT";
