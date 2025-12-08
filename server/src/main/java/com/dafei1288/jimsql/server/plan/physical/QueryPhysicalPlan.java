@@ -163,16 +163,20 @@ public class QueryPhysicalPlan implements PhysicalPlan{
       }
     }// JOIN pipeline ready
 
-    // WHERE filter (enhanced: AND/OR, parentheses, IS NULL, LIKE, IN)
-    String where = qlp.getWhereExpression();
-    if (where != null && !where.trim().isEmpty()) {
-      WhereEvaluator.Node expr = WhereEvaluator.parse(where);
-      java.util.Set<String> colsRef = WhereEvaluator.referencedColumns(expr); java.util.List<String> header0 = new java.util.ArrayList<>(header); boolean canApply = colsRef.stream().allMatch(c -> headerContains(header0, c));
-      if (canApply) {
-        final WhereEvaluator.Node ex = expr;
-        final JqTable _jt = jqTable; fullRows = fullRows.stream().filter(r -> ex.eval(r, _jt)).collect(java.util.stream.Collectors.toList());
+      // WHERE filter (enhanced: AND/OR, parentheses, IS NULL, LIKE, IN)
+      String where = qlp.getWhereExpression();
+      if (where != null && !where.trim().isEmpty()) {
+          WhereEvaluator.Node expr = WhereEvaluator.parse(where);
+          final WhereEvaluator.Node ex = expr;
+          final JqTable _jt = jqTable;
+          // Always evaluate; missing columns will read as "" and evaluate accordingly
+          fullRows = fullRows.stream()
+                  .filter(r -> {
+                      try { return ex.eval(r, _jt); } catch (Throwable t) { return true; }
+                  })
+                  .collect(java.util.stream.Collectors.toList());
       }
-    }
+
 
         // Aggregation: general aggregates (SUM/AVG/MIN/MAX/COUNT) with optional GROUP BY
     if (qlp.getAggregates() != null && !qlp.getAggregates().isEmpty()) {

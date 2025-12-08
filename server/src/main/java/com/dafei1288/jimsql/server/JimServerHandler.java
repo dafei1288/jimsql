@@ -13,12 +13,12 @@ import com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan;
 import com.dafei1288.jimsql.server.plan.logical.QueryLogicalPlan;
 import com.dafei1288.jimsql.server.plan.physical.PhysicalPlan;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.ChannelInboundHandlerAdapter;\nimport org.slf4j.Logger;\nimport org.slf4j.LoggerFactory;
 import java.util.LinkedHashMap;
 import org.snt.inmemantlr.tree.ParseTreeProcessor;
 
 
-public class JimServerHandler extends ChannelInboundHandlerAdapter {
+public class JimServerHandler extends ChannelInboundHandlerAdapter {\n  private static final Logger LOG = LoggerFactory.getLogger(JimServerHandler.class);\n\n   extends ChannelInboundHandlerAdapter {
 
   @Override
   public void channelReadComplete(io.netty.channel.ChannelHandlerContext ctx) throws Exception {
@@ -43,7 +43,7 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
     reNew.setSql(jqQueryReq.getSql());
 
     String sql = reNew.getSql();
-    System.out.println("sql will run : " + sql +" , on "+ctx.hashCode());
+    LOG.info("SQL: {} (ctx={})", sql, ctx.hashCode())
 
     ScriptParseTreeProcessor scriptParseTreeProcessor = SqlParser.getInstance().parser(reNew);
     ParseTreeProcessor processor = (ParseTreeProcessor) scriptParseTreeProcessor.process();
@@ -64,7 +64,7 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
       JqQueryReq jqQueryReq){
     try{
 //      System.out.println(processor);
-      System.out.println("processQuery");
+      LOG.debug("processQuery")
       // ????????
             // parse and get query plan (support both DQL wrapper and direct selectTable)
       org.snt.inmemantlr.tree.ParseTreeProcessor cur = ((ScriptParseTreeProcessor)processor).getCurrentParseTreeProcessor();
@@ -85,7 +85,7 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
 
       //????????????
       PhysicalPlan queryPysicalPlan = queryLogicalPlan.transform(optimizeQueryLogicalPlan);
-      System.out.println("get jqResultSetMetaData");
+      LOG.debug("get jqResultSetMetaData")
       JqResultSetMetaData jqResultSetMetaData = ((OptimizeQueryLogicalPlan)queryPysicalPlan.getLogicalPlan()).getJqResultSetMetaData();
 
       System.out.println("write metadata .... ");
@@ -112,7 +112,7 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
 //        ctx.writeAndFlush(rowData);
 //      }
     }catch (Exception e){
-      e.printStackTrace();
+      LOG.error("processQuery error", e)
     }
 
 
@@ -131,7 +131,7 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
       ctx.writeAndFlush(Integer.valueOf(cnt));
       ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
     } catch (Exception e) {
-      e.printStackTrace();
+      LOG.error("processQuery error", e)
     }
   }
 
@@ -148,7 +148,7 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
       int cnt = com.dafei1288.jimsql.server.plan.physical.DmlCsvExecutor.executeInsert(db, plan);
       ctx.writeAndFlush(Integer.valueOf(cnt));
       ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
-    } catch (Exception e) { e.printStackTrace(); }
+    } catch (Exception e) { LOG.error("processQuery error", e) }
   }
   private void processDelete(io.netty.channel.ChannelHandlerContext ctx, org.snt.inmemantlr.tree.ParseTreeProcessor processor, com.dafei1288.jimsql.common.JqQueryReq jqQueryReq) {
     try {
@@ -164,7 +164,7 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
       ctx.writeAndFlush(Integer.valueOf(cnt));
       ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
     } catch (Exception e) {
-      e.printStackTrace();
+      LOG.error("processQuery error", e)
     }
   }
 private void processShow(io.netty.channel.ChannelHandlerContext ctx, org.snt.inmemantlr.tree.ParseTreeProcessor processor, com.dafei1288.jimsql.common.JqQueryReq req) {
@@ -228,7 +228,7 @@ private void processShow(io.netty.channel.ChannelHandlerContext ctx, org.snt.inm
         return;
       }
       ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
-    } catch (Exception e) { e.printStackTrace(); }
+    } catch (Exception e) { LOG.error("processQuery error", e) }
   }
 private String sqlTypeToName(int t) {
     switch (t) {
