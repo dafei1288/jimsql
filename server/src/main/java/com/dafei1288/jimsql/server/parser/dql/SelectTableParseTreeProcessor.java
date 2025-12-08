@@ -309,11 +309,11 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
     // Capture expression for WHERE/HAVING (raw text)\n
     if ("expression".equals(parseTreeNode.getRule())) {
         if (whereNext && queryLogicalPlan.getWhereExpression() == null) {
-            queryLogicalPlan.setWhereExpression(extractText(parseTreeNode));
+            queryLogicalPlan.setWhereExpression(extractExprText(parseTreeNode));
             whereNext = false;
         } else if (
                 havingNext && queryLogicalPlan.getHavingExpression() == null) {
-                    queryLogicalPlan.setHavingExpression(extractText(parseTreeNode));
+                    queryLogicalPlan.setHavingExpression(extractExprText(parseTreeNode));
                     havingNext = false;
         }
     }    // JOINs
@@ -525,8 +525,7 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
           if (k >= 0 && k < endn) endn = k;
         }
         if (endn > wn + 5) {
-          String we = norm.substring(wn + 5, endn);
-          if (!we.isEmpty()) this.queryLogicalPlan.setWhereExpression(we);
+          /* disabled uppercase WHERE fallback */
         }
       }
     }
