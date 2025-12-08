@@ -77,6 +77,14 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
       }
       if (queryLogicalPlan == null) { throw new IllegalStateException("no plan for SELECT"); }
       LOG.debug("plan where={}, having={}", queryLogicalPlan.getWhereExpression(), queryLogicalPlan.getHavingExpression());
+      if (queryLogicalPlan.getWhereExpression() == null || queryLogicalPlan.getWhereExpression().trim().isEmpty()) {
+        String _raw = jqQueryReq.getSql();
+        String _wh = extractWhereFromSql(_raw);
+        if (_wh != null && !_wh.isEmpty()) {
+          queryLogicalPlan.setWhereExpression(_wh);
+          LOG.debug("fallback WHERE from raw SQL: {}", _wh);
+        }
+      }
       // logical plan is ready; prepare to optimize
       
       // optimize logical plan using current database context
