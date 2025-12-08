@@ -617,14 +617,16 @@ public class JspV1ServerHandler extends SimpleChannelInboundHandler<ProtocolFram
     }
   }
 
-  private static String buildCreateTableDDL(String table, java.util.LinkedHashMap<String, com.dafei1288.jimsql.common.meta.JqColumn> cols) {
+    private static String buildCreateTableDDL(String table, java.util.LinkedHashMap<String, com.dafei1288.jimsql.common.meta.JqColumn> cols) {
+    String nl = System.lineSeparator();
     StringBuilder sb = new StringBuilder();
-    sb.append("CREATE TABLE `").append(table).append("` (\n");
-    int i=0; for (java.util.Map.Entry<String, com.dafei1288.jimsql.common.meta.JqColumn> e : cols.entrySet()) {
-      if (i++>0) sb.append(",\n");
+    sb.append("CREATE TABLE `").append(table).append("` (").append(nl);
+    int i = 0;
+    for (java.util.Map.Entry<String, com.dafei1288.jimsql.common.meta.JqColumn> e : cols.entrySet()) {
+      if (i++ > 0) sb.append(",").append(nl);
       sb.append("  `").append(e.getKey()).append("` ").append(sqlTypeToName(e.getValue().getColumnType()));
     }
-    sb.append("\n);");
+    sb.append(nl).append(");");
     return sb.toString();
   }}
 

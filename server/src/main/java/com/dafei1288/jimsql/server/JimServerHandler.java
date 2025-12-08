@@ -16,11 +16,12 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import java.util.LinkedHashMap;
 import org.snt.inmemantlr.tree.ParseTreeProcessor;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JimServerHandler extends ChannelInboundHandlerAdapter {
-
-  @Override
+  private static final Logger LOG = LoggerFactory.getLogger(JimServerHandler.class);
+@Override
   public void channelReadComplete(io.netty.channel.ChannelHandlerContext ctx) throws Exception {
     ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.FINISH);
     ctx.flush();
@@ -43,7 +44,7 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
     reNew.setSql(jqQueryReq.getSql());
 
     String sql = reNew.getSql();
-    System.out.println("sql will run : " + sql +" , on "+ctx.hashCode());
+    LOG.info("SQL: {} (ctx={})", sql, ctx.hashCode());
 
     ScriptParseTreeProcessor scriptParseTreeProcessor = SqlParser.getInstance().parser(reNew);
     ParseTreeProcessor processor = (ParseTreeProcessor) scriptParseTreeProcessor.process();
@@ -64,8 +65,7 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
       JqQueryReq jqQueryReq){
     try{
 //      System.out.println(processor);
-      System.out.println("processQuery");
-      // ????????
+      LOG.debug("processQuery");
             // parse and get query plan (support both DQL wrapper and direct selectTable)
       org.snt.inmemantlr.tree.ParseTreeProcessor cur = ((ScriptParseTreeProcessor)processor).getCurrentParseTreeProcessor();
       QueryLogicalPlan queryLogicalPlan = null;
@@ -76,25 +76,34 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
         queryLogicalPlan = ((SelectTableParseTreeProcessor) cur).getResult();
       }
       if (queryLogicalPlan == null) { throw new IllegalStateException("no plan for SELECT"); }
-      //????????????
+      LOG.debug("plan where={}, having={}", queryLogicalPlan.getWhereExpression(), queryLogicalPlan.getHavingExpression());
+      if (queryLogicalPlan.getWhereExpression() == null || queryLogicalPlan.getWhereExpression().trim().isEmpty()) {
+        String _raw = jqQueryReq.getSql();
+        String _wh = extractWhereFromSql(_raw);
+        if (_wh != null && !_wh.isEmpty()) {
+          queryLogicalPlan.setWhereExpression(_wh);
+          LOG.debug("fallback WHERE from raw SQL: {}", _wh);
+        }
+      }
+      // logical plan is ready; prepare to optimize
       
-      //???????????????
+      // optimize logical plan using current database context
       JqDatabase jqDatabase = new JqDatabase();
       jqDatabase.setDatabaseName(jqQueryReq.getDb());
       OptimizeQueryLogicalPlan optimizeQueryLogicalPlan = queryLogicalPlan.optimizeQueryLogicalPlan(jqDatabase);
 
-      //????????????
+      // transform to physical plan
       PhysicalPlan queryPysicalPlan = queryLogicalPlan.transform(optimizeQueryLogicalPlan);
-      System.out.println("get jqResultSetMetaData");
+      LOG.debug("get jqResultSetMetaData");
       JqResultSetMetaData jqResultSetMetaData = ((OptimizeQueryLogicalPlan)queryPysicalPlan.getLogicalPlan()).getJqResultSetMetaData();
 
-      System.out.println("write metadata .... ");
+      LOG.debug("write metadata ...");
 
-      //???metadata
+      // send result-set metadata to client
       ctx.writeAndFlush(jqResultSetMetaData);
 
 
-      System.out.println("write adata .... ");
+      LOG.debug("write data ...");
 
       queryPysicalPlan.proxyWrite(ctx);
 //      List<RowData> datas = new ArrayList<>();
@@ -112,7 +121,7 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
 //        ctx.writeAndFlush(rowData);
 //      }
     }catch (Exception e){
-      e.printStackTrace();
+      LOG.error("processQuery error", e);
     }
 
 
@@ -131,7 +140,7 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
       ctx.writeAndFlush(Integer.valueOf(cnt));
       ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
     } catch (Exception e) {
-      e.printStackTrace();
+      LOG.error("processQuery error", e);
     }
   }
 
@@ -148,7 +157,7 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
       int cnt = com.dafei1288.jimsql.server.plan.physical.DmlCsvExecutor.executeInsert(db, plan);
       ctx.writeAndFlush(Integer.valueOf(cnt));
       ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
-    } catch (Exception e) { e.printStackTrace(); }
+    } catch (Exception e) { LOG.error("processQuery error", e); }
   }
   private void processDelete(io.netty.channel.ChannelHandlerContext ctx, org.snt.inmemantlr.tree.ParseTreeProcessor processor, com.dafei1288.jimsql.common.JqQueryReq jqQueryReq) {
     try {
@@ -164,7 +173,7 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
       ctx.writeAndFlush(Integer.valueOf(cnt));
       ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
     } catch (Exception e) {
-      e.printStackTrace();
+      LOG.error("processQuery error", e);
     }
   }
 private void processShow(io.netty.channel.ChannelHandlerContext ctx, org.snt.inmemantlr.tree.ParseTreeProcessor processor, com.dafei1288.jimsql.common.JqQueryReq req) {
@@ -228,7 +237,39 @@ private void processShow(io.netty.channel.ChannelHandlerContext ctx, org.snt.inm
         return;
       }
       ctx.writeAndFlush(com.dafei1288.jimsql.common.JimSQueryStatus.OK);
-    } catch (Exception e) { e.printStackTrace(); }
+    } catch (Exception e) { LOG.error("processQuery error", e); }
+  }
+  private static String extractWhereFromSql(String sql) {
+    if (sql == null) return null;
+    String s = sql;
+    int n = s.length();
+    boolean inS = false; char q = 0;
+    int wherePos = -1;
+    for (int i = 0; i < n; i++) {
+      char c = s.charAt(i);
+      if (inS) { if (c == q) inS = false; continue; }
+      if (c == '\'' || c == '"') { inS = true; q = c; continue; }
+      if (i + 5 <= n) {
+        String sub = s.substring(i, i + 5);
+        if (sub.equalsIgnoreCase("where")) { wherePos = i; break; }
+      }
+    }
+    if (wherePos < 0) return null;
+    int start = wherePos + 5;
+    int end = n;
+    for (int i = start; i < n; i++) {
+      char c = s.charAt(i);
+      if (inS) { if (c == q) inS = false; continue; }
+      if (c == '\'' || c == '"') { inS = true; q = c; continue; }
+      if (i + 5 <= n && s.substring(i, Math.min(n, i+5)).equalsIgnoreCase("GROUP")) { end = i; break; }
+      if (i + 6 <= n && s.substring(i, Math.min(n, i+6)).equalsIgnoreCase("HAVING")) { end = i; break; }
+      if (i + 5 <= n && s.substring(i, Math.min(n, i+5)).equalsIgnoreCase("ORDER")) { end = i; break; }
+      if (i + 5 <= n && s.substring(i, Math.min(n, i+5)).equalsIgnoreCase("LIMIT")) { end = i; break; }
+    }
+    String out = s.substring(start, end).trim();
+    if (out.endsWith(";")) out = out.substring(0, out.length()-1).trim();
+    if (out.startsWith("=")) out = out.substring(1).trim();
+    return out;
   }
 private String sqlTypeToName(int t) {
     switch (t) {
@@ -244,15 +285,16 @@ private String sqlTypeToName(int t) {
     }
   }
 
-  private String buildCreateTableDDL(String table, java.util.LinkedHashMap<String, com.dafei1288.jimsql.common.meta.JqColumn> cols) {
+    private String buildCreateTableDDL(String table, java.util.LinkedHashMap<String, com.dafei1288.jimsql.common.meta.JqColumn> cols) {
+    String nl = System.lineSeparator();
     StringBuilder sb = new StringBuilder();
-    sb.append("CREATE TABLE `").append(table).append("` (\n");
+    sb.append("CREATE TABLE `").append(table).append("` (").append(nl);
     int i = 0;
     for (java.util.Map.Entry<String, com.dafei1288.jimsql.common.meta.JqColumn> e : cols.entrySet()) {
-      if (i++ > 0) sb.append(",\n");
+      if (i++ > 0) sb.append(",").append(nl);
       sb.append("  `").append(e.getKey()).append("` ").append(sqlTypeToName(e.getValue().getColumnType()));
     }
-    sb.append("\n);");
+    sb.append(nl).append(");");
     return sb.toString();
   }
 }

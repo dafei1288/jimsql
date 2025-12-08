@@ -110,13 +110,21 @@ public class JqResultSet implements ResultSet {
 
   @Override
   public boolean next() throws SQLException {
-    ++this.currentIndex;
+
+    int target = this.currentIndex + 1;
     while (true) {
-      if (this.rowDataList != null && this.rowDataList.size() > this.currentIndex) return true;
-      if (!this.readData) return false;
-      try { Thread.sleep(10); } catch (InterruptedException e) { throw new RuntimeException(e); }
+      if (this.rowDataList.size() > target) {
+        this.currentIndex = target;
+        return true;
+      }
+      if (!this.readData) {
+        return false;
+      }
+      try { Thread.sleep(10); } catch (InterruptedException e) { throw new SQLException(e); }
+
     }
   }
+
 
   //  public JqResultSet(String filepath,List<String> cols, String tableName) {
 //    this.filepath = filepath;
@@ -158,9 +166,15 @@ public class JqResultSet implements ResultSet {
 
     @Override
   public String getString(int columnIndex) throws SQLException {
-    return currentArray[columnIndex];
+    String label;
+    try { label = this.jqResultSetMetaData != null ? this.jqResultSetMetaData.getColumnLabel(columnIndex) : null; }
+    catch (Exception e) { label = null; }
+    if (label == null) {
+      // Fallback to 1-based index name
+      label = "c" + columnIndex;
+    }
+    return getString(label);
   }
-
   @Override
   public boolean getBoolean(int columnIndex) throws SQLException {
     return false;
@@ -244,14 +258,17 @@ public class JqResultSet implements ResultSet {
 
   @Override
   public String getString(String columnLabel) throws SQLException {
-    while(this.readData == true && this.rowDataList.size()<=this.currentIndex){
-      try {
-        Thread.sleep(10);
-      } catch (InterruptedException e) {
-        throw new RuntimeException(e);
-      }
+    while (this.readData && this.rowDataList.size() <= this.currentIndex) {
+      try { Thread.sleep(10); } catch (InterruptedException e) { throw new SQLException(e); }
     }
-    Object v = this.rowDataList.get(this.currentIndex).getDatas().get(columnLabel); return v == null ? null : v.toString();
+    if (this.rowDataList.size() <= this.currentIndex) return null;
+    java.util.Map<String,Object> map = this.rowDataList.get(this.currentIndex).getDatas();
+    Object v = map.get(columnLabel);
+    if (v == null) {
+      for (String k : map.keySet()) { if (k.equalsIgnoreCase(columnLabel)) { v = map.get(k); break; } }
+    }
+    return v == null ? null : String.valueOf(v);
+
   }
 
   @Override

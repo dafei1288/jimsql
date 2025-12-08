@@ -309,11 +309,11 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
     // Capture expression for WHERE/HAVING (raw text)\n
     if ("expression".equals(parseTreeNode.getRule())) {
         if (whereNext && queryLogicalPlan.getWhereExpression() == null) {
-            queryLogicalPlan.setWhereExpression(extractText(parseTreeNode));
+            queryLogicalPlan.setWhereExpression(extractExprText(parseTreeNode));
             whereNext = false;
         } else if (
                 havingNext && queryLogicalPlan.getHavingExpression() == null) {
-                    queryLogicalPlan.setHavingExpression(extractText(parseTreeNode));
+                    queryLogicalPlan.setHavingExpression(extractExprText(parseTreeNode));
                     havingNext = false;
         }
     }    // JOINs
@@ -342,7 +342,7 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
             }
           }
         } else if ("expression".equals(r)) {
-          js.setOnExpression(extractText(ch));
+          js.setOnExpression(extractExprText(ch));
         }
       }
       queryLogicalPlan.getJoins().add(js);
@@ -364,6 +364,46 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
     StringBuilder sb = new StringBuilder();
     dfs(node, sb);
     return sb.toString().trim().replaceAll("\\s+", " ");
+  }
+
+    private String extractExprText(ParseTreeNode node) {
+    java.util.List<String> toks = new java.util.ArrayList<>();
+    flattenTokens(node, toks);
+    java.util.List<String> norm = new java.util.ArrayList<>();
+    for (String t : toks) { if (t != null) { String tt = t.trim(); if (!tt.isEmpty()) norm.add(tt); } }
+    // if tokens already contain '=', return as-is (joined with spaces)
+    for (String t : norm) { if ("=".equals(t)) { return String.join(" ", norm); } }
+    // reconstruct two dotted identifiers like a.b and c.d
+    java.util.LinkedHashSet<String> dotted = new java.util.LinkedHashSet<>();
+    for (int i = 0; i + 2 < norm.size(); i++) {
+      String a = norm.get(i), b = norm.get(i+1), c = norm.get(i+2);
+      if (isIdentToken(a) && ".".equals(b) && isIdentToken(c)) {
+        dotted.add(a + "." + c);
+      }
+    }
+    for (String t : norm) { if (t.indexOf('.') >= 0) dotted.add(t.replace(" ", "")); }
+    if (dotted.size() >= 2) {
+      java.util.Iterator<String> it = dotted.iterator();
+      String l = it.next(); String r = it.next();
+      return l + " = " + r;
+    }
+    // fallback: pick first two identifier-like tokens
+    java.util.List<String> ids = new java.util.ArrayList<>();
+    for (String t : norm) {
+      String u = t.toUpperCase(java.util.Locale.ROOT);
+      if ("AND".equals(u) || "OR".equals(u) || ")".equals(t) || "(".equals(t) || ",".equals(t)) continue;
+      ids.add(t);
+    }
+    if (ids.size() >= 2) return ids.get(0) + " = " + ids.get(1);
+    return String.join(" ", norm);
+  }
+  private static boolean isIdentToken(String t) {
+    if (t == null || t.isEmpty()) return false;
+    for (int i = 0; i < t.length(); i++) {
+      char ch = t.charAt(i);
+      if (!(Character.isLetterOrDigit(ch) || ch == '_' || ch == '`' || ch == '"')) return false;
+    }
+    return true;
   }
 
   private void dfs(ParseTreeNode n, StringBuilder sb) {
@@ -434,7 +474,7 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
     if (this.queryLogicalPlan.getOffset() == null) {
       for (int i = 0; i < toks.size(); i++) {
         if ("OFFSET".equalsIgnoreCase(toks.get(i)) && i+1 < toks.size()) {
-          try { this.queryLogicalPlan.setOffset(Integer.parseInt(toks.get(i+1).replaceAll("[^0-9]", ""))); } catch (Exception ignore) {}
+          try { this.queryLogicalPlan.setOffset(Integer.parseInt(toks.get(                                                                        i+1).replaceAll("[^0-9]", ""))); } catch (Exception ignore) {}
           break;
         }
       }
@@ -485,8 +525,7 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
           if (k >= 0 && k < endn) endn = k;
         }
         if (endn > wn + 5) {
-          String we = norm.substring(wn + 5, endn);
-          if (!we.isEmpty()) this.queryLogicalPlan.setWhereExpression(we);
+          /* disabled uppercase WHERE fallback */
         }
       }
     }

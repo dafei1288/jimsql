@@ -13,6 +13,8 @@ import com.dafei1288.jimsql.server.plan.logical.OrderItem;
 import com.dafei1288.jimsql.server.plan.logical.QueryLogicalPlan;
 import com.google.common.io.Files;
 import io.netty.channel.ChannelHandlerContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -29,6 +31,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class QueryPhysicalPlan implements PhysicalPlan{
+  private static final Logger LOG = LoggerFactory.getLogger(QueryPhysicalPlan.class);
   private LogicalPlan logicalPlan;
 
   @Override
@@ -93,17 +96,48 @@ public class QueryPhysicalPlan implements PhysicalPlan{
         }
         // parse ON: support simple AND of equality: <id> = <id>
         java.util.List<String[]> eqs = parseJoinOnEquals(js.getOnExpression());
+        String rAlias = (js.getAlias()!=null && !js.getAlias().isEmpty()) ? js.getAlias() : rt.getTableName();
+        // DEBUG: print JOIN ON and headers
+        try {
+          String eqsDbg = (eqs==null?"": eqs.stream().map(a -> a[0]+"="+a[1]).collect(java.util.stream.Collectors.joining(" AND ")));
+          LOG.debug("JOIN on=[{}] rAlias={} eqs={} leftHeader={} rightHeader={}", js.getOnExpression(), rAlias, eqsDbg, header, rheader);
+        } catch (Throwable ignore) {}
+        if (eqs == null || eqs.isEmpty()) {
+          // No valid ON equality parsed: avoid accidental Cartesian product
+          if (js.getType()==com.dafei1288.jimsql.server.plan.logical.JoinType.INNER) {
+            fullRows = new java.util.ArrayList<>();
+            break;
+          } else if (js.getType()==com.dafei1288.jimsql.server.plan.logical.JoinType.LEFT) {
+            java.util.List<java.util.Map<String,String>> newRows = new java.util.ArrayList<>();
+            for (java.util.Map<String,String> lr : fullRows) {
+              java.util.LinkedHashMap<String,String> out = new java.util.LinkedHashMap<>();
+              for (String k : header) out.put(k, lr.get(k));
+              for (String rk2 : rheader) out.put(rAlias+"."+rk2, null);
+              newRows.add(out);
+            }
+            java.util.List<String> newHeader = new java.util.ArrayList<>(header);
+            for (String rk2 : rheader) newHeader.add(rAlias+"."+rk2);
+            header = newHeader;
+            fullRows = newRows;
+            continue;
+          }
+        }
         // build RHS hash by key tuple
         java.util.Map<String, java.util.List<Map<String,String>>> rhs = new java.util.HashMap<>();
         for (Map<String,String> rr : rightRows) {
-          String rk = buildKey(rr, rheader, eqs, false /* isLeft */);
+          String rk = buildJoinKey(rr, header, rheader, rAlias, false /* isLeft */, eqs);
           rhs.computeIfAbsent(rk, t -> new java.util.ArrayList<>()).add(rr);
+          // DEBUG: sample a few right keys
+          if (rhs.size() <= 3) {
+            try { LOG.debug("JOIN RKEY={} row={}", rk, rr); } catch (Throwable ignore) {}
+          }
         }
         // combine
         List<Map<String,String>> newRows = new ArrayList<>();
         for (Map<String,String> lr : fullRows) {
-          String lk = buildKey(lr, header, eqs, true /* isLeft */);
+          String lk = buildJoinKey(lr, header, rheader, rAlias, true /* isLeft */, eqs);
           List<Map<String,String>> matches = rhs.get(lk);
+          try { LOG.debug("JOIN LKEY={} matches={} row={}", lk, (matches==null?0:matches.size()), lr); } catch (Throwable ignore) {}
           if (matches != null && !matches.isEmpty()) {
             for (Map<String,String> rr : matches) {
               LinkedHashMap<String,String> out = new LinkedHashMap<>();
@@ -132,16 +166,22 @@ public class QueryPhysicalPlan implements PhysicalPlan{
       }
     }// JOIN pipeline ready
 
-    // WHERE filter (enhanced: AND/OR, parentheses, IS NULL, LIKE, IN)
-    String where = qlp.getWhereExpression();
-    if (where != null && !where.trim().isEmpty()) {
-      WhereEvaluator.Node expr = WhereEvaluator.parse(where);
-      java.util.Set<String> colsRef = WhereEvaluator.referencedColumns(expr); java.util.List<String> header0 = new java.util.ArrayList<>(header); boolean canApply = colsRef.stream().allMatch(c -> headerContains(header0, c));
-      if (canApply) {
-        final WhereEvaluator.Node ex = expr;
-        final JqTable _jt = jqTable; fullRows = fullRows.stream().filter(r -> ex.eval(r, _jt)).collect(java.util.stream.Collectors.toList());
+      // WHERE filter (enhanced: AND/OR, parentheses, IS NULL, LIKE, IN)
+      String where = qlp.getWhereExpression();
+      if (where != null && !where.trim().isEmpty()) {
+          int beforeCount = fullRows.size();
+          WhereEvaluator.Node expr; try { expr = WhereEvaluator.parse(where); } catch (Throwable pe) { LOG.warn("WHERE parse error: {}", where, pe); expr = null; }
+          final WhereEvaluator.Node ex = expr; if (ex == null) { LOG.warn("Skip WHERE due to parse error: {}", where); }
+          final JqTable _jt = jqTable;
+          // Always evaluate; missing columns will read as "" and evaluate accordingly
+          fullRows = fullRows.stream()
+                  .filter(r -> {
+                      try { return ex.eval(r, _jt); } catch (Throwable t) { return true; }
+                  })
+                  .collect(java.util.stream.Collectors.toList());
+          LOG.debug("WHERE raw='{}' before={} after={}", where, beforeCount, fullRows.size());
       }
-    }
+
 
         // Aggregation: general aggregates (SUM/AVG/MIN/MAX/COUNT) with optional GROUP BY
     if (qlp.getAggregates() != null && !qlp.getAggregates().isEmpty()) {
@@ -540,7 +580,8 @@ public class QueryPhysicalPlan implements PhysicalPlan{
       return null;
   }
   // -------------- JOIN helpers --------------
-  private static java.util.List<String[]> parseJoinOnEquals(String onExpr) {
+  private static String stripParens(String s){ if (s==null) return null; s=s.trim(); while (s.startsWith("(") && s.endsWith(")")) { s = s.substring(1, s.length()-1).trim(); } return s; }
+  private static String stripTailSemi(String s){ if (s==null) return null; int i=s.length()-1; while (i>=0){ char c=s.charAt(i); if (c==';'||c==' '||c=='\t'||c=='\r'||c=='\n'){ i--; } else break; } return s.substring(0, i+1); }  private static java.util.List<String[]> parseJoinOnEquals(String onExpr) {
     java.util.List<String[]> res = new java.util.ArrayList<>();
     if (onExpr == null) return res;
     String s = onExpr.trim();
@@ -559,7 +600,7 @@ public class QueryPhysicalPlan implements PhysicalPlan{
       String[] lr = p.split("=");
       if (lr.length==2) {
         String l = lr[0].trim(); String r = lr[1].trim();
-        res.add(new String[]{stripQual(l), stripQual(r)});
+        res.add(new String[]{stripTailSemi(stripQuotes(stripParens(l))), stripTailSemi(stripQuotes(stripParens(r)))});
       }
     }
     return res;
@@ -570,4 +611,55 @@ public class QueryPhysicalPlan implements PhysicalPlan{
     for (String[] lr : eqs){ String col = isLeft? lr[0]: lr[1]; String v = getCaseInsensitive(row, stripQual(col)); sb.append('\u0001').append(v==null?"":v); }
     return sb.toString();
   }
-}
+  private static String qualifier(String id){ if (id==null) return ""; String s=stripQuotes(id).trim(); int d=s.lastIndexOf('.'); return d>=0? s.substring(0,d).trim():""; }
+  private static String simple(String id){ if (id==null) return null; String s=stripQuotes(id).trim(); int d=s.lastIndexOf('.'); return d>=0? s.substring(d+1).trim():s; }
+  private static boolean headerHasSimple(java.util.List<String> header, String simple){ if (simple==null) return false; for(String h: header){ String hs=h; int d=hs.lastIndexOf('.'); if(d>=0) hs=hs.substring(d+1); if (hs.equalsIgnoreCase(simple)) return true; } return false; }
+  private static String buildJoinKey(java.util.Map<String,String> row, java.util.List<String> leftHeader, java.util.List<String> rightHeader, String rightAlias, boolean forLeft, java.util.List<String[]> eqs){
+    StringBuilder sb=new StringBuilder();
+    String rAlias = (rightAlias==null? "": rightAlias);
+    for (String[] lr : eqs){
+      String L=lr[0], R=lr[1];
+      String qL=qualifier(L), qR=qualifier(R);
+      String sL=simple(L), sR=simple(R);
+      String pick=null;
+      if (forLeft){
+        if (qL.equalsIgnoreCase(rAlias)) pick=sR;
+        else if (qR.equalsIgnoreCase(rAlias)) pick=sL;
+        else if (headerHasSimple(leftHeader,sL) && !headerHasSimple(rightHeader,sL)) pick=sL;
+        else if (headerHasSimple(leftHeader,sR) && !headerHasSimple(rightHeader,sR)) pick=sR;
+        else if (headerHasSimple(leftHeader,sL) && !headerHasSimple(leftHeader,sR)) pick=sL;
+        else if (headerHasSimple(leftHeader,sR) && !headerHasSimple(leftHeader,sL)) pick=sR;
+      } else {
+        if (qL.equalsIgnoreCase(rAlias)) pick=sL;
+        else if (qR.equalsIgnoreCase(rAlias)) pick=sR;
+        else if (headerHasSimple(rightHeader,sL) && !headerHasSimple(leftHeader,sL)) pick=sL;
+        else if (headerHasSimple(rightHeader,sR) && !headerHasSimple(leftHeader,sR)) pick=sR;
+        else if (headerHasSimple(rightHeader,sL) && !headerHasSimple(rightHeader,sR)) pick=sL;
+        else if (headerHasSimple(rightHeader,sR) && !headerHasSimple(rightHeader,sL)) pick=sR;
+      }
+      if (pick==null){
+        String vL=getCaseInsensitive(row,sL);
+        String vR=getCaseInsensitive(row,sR);
+        pick=(vL!=null && !vL.isEmpty())? sL : ((vR!=null && !vR.isEmpty())? sR : sL);
+      }
+      String v=getCaseInsensitive(row,pick);
+      sb.append('\u0001').append(v==null? "": v);
+    }
+    return sb.toString();
+  }  private static String buildKey2(java.util.Map<String,String> row, java.util.List<String> header, java.util.List<String[]> eqs, boolean isLeft){
+    StringBuilder sb=new StringBuilder();
+    for (String[] lr : eqs){
+      String a = stripQual(lr[0]);
+      String b = stripQual(lr[1]);
+      String pick;
+      if (isLeft) {
+        pick = headerContains(header, a) ? a : (headerContains(header, b) ? b : a);
+      } else {
+        pick = headerContains(header, b) ? b : (headerContains(header, a) ? a : b);
+      }
+      String v = getCaseInsensitive(row, pick);
+      sb.append('\u0001').append(v==null?"":v);
+    }
+    return sb.toString();
+  }}
+
