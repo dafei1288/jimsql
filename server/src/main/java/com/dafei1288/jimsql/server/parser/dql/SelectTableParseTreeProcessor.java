@@ -1,5 +1,9 @@
 package com.dafei1288.jimsql.server.parser.dql;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.dafei1288.jimsql.server.plan.logical.LlmFunctionSpec;
 import com.dafei1288.jimsql.common.meta.JqColumn;
 import com.dafei1288.jimsql.common.meta.JqTable;
 import com.dafei1288.jimsql.server.parser.ScriptParseTreeProcessor;
@@ -16,7 +20,9 @@ import org.snt.inmemantlr.tree.ParseTreeNode;
 
 public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
 
-  private final QueryLogicalPlan queryLogicalPlan = new QueryLogicalPlan();
+
+  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SelectTableParseTreeProcessor.class);
+private final QueryLogicalPlan queryLogicalPlan = new QueryLogicalPlan();
   private boolean limitNext = false;
   private boolean offsetNext = false;
   private boolean whereNext = false;
@@ -77,6 +83,7 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
       java.util.List<String> _toks = new java.util.ArrayList<>();
       flattenTokens(this.parseTree.getRoot(), _toks);
     }
+    finalizeAskLlmFromText(this.parseTree.getRoot());
     return queryLogicalPlan;
   }
 
@@ -625,7 +632,113 @@ public class SelectTableParseTreeProcessor extends ScriptParseTreeProcessor {
 }
 
 
-  private void collectSelectColumns(org.snt.inmemantlr.tree.ParseTreeNode node, java.util.List<com.dafei1288.jimsql.common.meta.JqColumn> out) {
+  private void finalizeAskLlmFromText(org.snt.inmemantlr.tree.ParseTreeNode root) {
+    try {
+      String raw = extractText(root);
+      if (raw == null) return;
+      String s = raw;
+      int idx = indexOfIgnoreCase(s, "ask_llm(");
+      if (idx < 0) return;
+      int start = idx + "ask_llm(".length();
+      int end = findArgsEnd(s, start);
+      if (end < 0) return;
+      String args = s.substring(start, end);
+
+      String prompt = extractFirstQuoted(args);
+      if (prompt == null) return;
+
+      LlmFunctionSpec spec = new LlmFunctionSpec(prompt);
+
+      java.util.List<String> parts = splitTopLevel(args, ',');
+      for (int i = 1; i < parts.size(); i++) {
+        String p = parts.get(i).trim();
+        if (p.isEmpty()) continue;
+        int eq = p.indexOf('=');
+        if (eq <= 0) continue;
+        String k = p.substring(0, eq).trim().toLowerCase(java.util.Locale.ROOT);
+        String v = unquote(p.substring(eq + 1).trim());
+        if ("label".equals(k)) spec.setLabel(v);
+        else if ("model".equals(k)) spec.setModel(v);
+        else if ("base_url".equals(k)) spec.setBaseUrl(v);
+        else if ("api_key".equals(k)) spec.setApiKey(v);
+        else if ("api_type".equals(k)) spec.setApiType(v);
+        else if ("temperature".equals(k)) spec.setTemperature(v);
+        else if ("stream".equals(k)) spec.setStream(v);
+        else if ("thinking".equals(k)) spec.setThinking(v);
+      }
+
+      if (log.isDebugEnabled()) {
+        StringBuilder keys = new StringBuilder();
+        if (spec.getModel() != null) keys.append("model,");
+        if (spec.getBaseUrl() != null) keys.append("base_url,");
+        if (spec.getApiKey() != null) keys.append("api_key,");
+        if (spec.getApiType() != null) keys.append("api_type,");
+        if (spec.getTemperature() != null) keys.append("temperature,");
+        if (spec.getStream() != null) keys.append("stream,");
+        if (spec.getThinking() != null) keys.append("thinking,");
+        if (keys.length() > 0) keys.setLength(keys.length() - 1);
+        log.debug("ASK_LLM parsed: label={}, prompt.len={}, overrides=[{}]",
+            spec.getLabel(),
+            spec.getPrompt() == null ? 0 : spec.getPrompt().length(),
+            keys.toString());
+      }
+      queryLogicalPlan.setLlmFunctionSpec(spec);
+    } catch (Throwable ignore) {}
+  }
+
+  private static int indexOfIgnoreCase(String s, String pat) {
+    for (int i = 0; i + pat.length() <= s.length(); i++) {
+      if (s.regionMatches(true, i, pat, 0, pat.length())) return i;
+    }
+    return -1;
+  }
+
+  private static int findArgsEnd(String s, int from) {
+    boolean inS = false; char q = 0; int depth = 0;
+    for (int i = from; i < s.length(); i++) {
+      char c = s.charAt(i);
+      if (inS) { if (c == q) inS = false; continue; }
+      if (c == '\'' || c == '"') { inS = true; q = c; continue; }
+      if (c == '(') { depth++; continue; }
+      if (c == ')') { if (depth == 0) return i; depth--; continue; }
+    }
+    return -1;
+  }
+
+  private static java.util.List<String> splitTopLevel(String s, char sep) {
+    java.util.List<String> out = new java.util.ArrayList<>();
+    boolean inS = false; char q = 0; int last = 0;
+    for (int i = 0; i < s.length(); i++) {
+      char c = s.charAt(i);
+      if (inS) { if (c == q) inS = false; continue; }
+      if (c == '\'' || c == '"') { inS = true; q = c; continue; }
+      if (c == sep) { out.add(s.substring(last, i)); last = i + 1; }
+    }
+    out.add(s.substring(last));
+    return out;
+  }
+
+  private static String extractFirstQuoted(String s) {
+    for (int i = 0; i < s.length(); i++) {
+      char c = s.charAt(i);
+      if (c == '\'' || c == '"') {
+        char q = c; int j = i + 1;
+        while (j < s.length() && s.charAt(j) != q) j++;
+        if (j < s.length()) return s.substring(i + 1, j);
+        break;
+      }
+    }
+    return null;
+  }
+
+  private static String unquote(String v) {
+    if (v == null) return null;
+    v = v.trim();
+    if ((v.startsWith("'") && v.endsWith("'")) || (v.startsWith("\"") && v.endsWith("\""))) {
+      return v.substring(1, v.length() - 1);
+    }
+    return v;
+  }  private void collectSelectColumns(org.snt.inmemantlr.tree.ParseTreeNode node, java.util.List<com.dafei1288.jimsql.common.meta.JqColumn> out) {
   if ("columnName".equals(node.getRule())) {
     com.dafei1288.jimsql.common.meta.JqColumn c = new com.dafei1288.jimsql.common.meta.JqColumn();
     c.setColumnName(stripQuotes(node.getLabel()));

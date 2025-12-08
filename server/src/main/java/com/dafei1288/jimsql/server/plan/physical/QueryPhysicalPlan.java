@@ -186,7 +186,85 @@ public class QueryPhysicalPlan implements PhysicalPlan{
       }
 
 
-        // Aggregation: general aggregates (SUM/AVG/MIN/MAX/COUNT) with optional GROUP BY
+            // Built-in: ask_llm
+    if (qlp.getLlmFunctionSpec() != null) {
+      var spec = qlp.getLlmFunctionSpec();
+      LOG.debug("ASK_LLM start: filtered rows={}", fullRows.size());
+
+      if (fullRows.isEmpty()) {
+        return;
+      }
+      if (fullRows.size() > 1) {
+        LOG.warn("ASK_LLM multiple rows matched ({}); expect exactly one row", fullRows.size());
+      }
+
+      java.util.Map<String,String> row = fullRows.get(0);
+      String tModel = row.get("model");
+      String tBaseUrl = row.get("base_url");
+      String tApiKey = row.get("api_key");
+      String tApiType = row.get("api_type");
+      String tTemperature = row.get("temperature");
+      String tStream = row.get("stream");
+      String tThinking = row.get("thinking");
+
+      String model = pick(spec.getModel(), tModel);
+      String baseUrl = pick(spec.getBaseUrl(), tBaseUrl);
+      String apiKey = pick(spec.getApiKey(), tApiKey);
+      String apiType = pick(spec.getApiType(), tApiType);
+      Double temperature = pickDouble(spec.getTemperature(), tTemperature);
+      String stream = pick(spec.getStream(), tStream);
+      String thinking = pick(spec.getThinking(), tThinking);
+
+      String prompt = spec.getPrompt();
+      String label = (spec.getLabel() != null && !spec.getLabel().isEmpty()) ? spec.getLabel() : "ask_llm";
+
+      String dry = System.getenv("JIMSQL_LLM_DRYRUN");
+      LOG.debug("ASK_LLM resolved: apiType={}, model={}, baseUrl={}, temperature={}, stream={}, thinking={}, dryrun={}",
+          apiType, model, baseUrl, temperature, stream, thinking, dry);
+
+      String out;
+      if (dry != null && Boolean.parseBoolean(dry)) {
+        out = "DRYRUN: " + prompt;
+        LOG.debug("ASK_LLM DRYRUN output.len={}", out.length());
+      } else {
+        String t = (apiType == null) ? "openai" : apiType.toLowerCase(java.util.Locale.ROOT);
+        dev.langchain4j.model.chat.ChatLanguageModel lm;
+        switch (t) {
+          case "ollama": {
+            dev.langchain4j.model.ollama.OllamaChatModel.OllamaChatModelBuilder b = dev.langchain4j.model.ollama.OllamaChatModel.builder();
+            if (baseUrl != null && !baseUrl.isEmpty()) b = b.baseUrl(baseUrl);
+            if (model != null && !model.isEmpty()) b = b.modelName(model);
+            if (temperature != null) b = b.temperature(temperature);
+            LOG.debug("ASK_LLM provider=ollama baseUrl={} model={}", baseUrl, model);
+            lm = b.build();
+            break;
+          }
+          case "openai":
+          case "openai_compatible":
+          case "openai_response":
+          default: {
+            dev.langchain4j.model.openai.OpenAiChatModel.OpenAiChatModelBuilder b = dev.langchain4j.model.openai.OpenAiChatModel.builder();
+            if (apiKey != null && !apiKey.isEmpty()) b = b.apiKey(apiKey);
+            if (model != null && !model.isEmpty()) b = b.modelName(model);
+            if (baseUrl != null && !baseUrl.isEmpty()) b = b.baseUrl(baseUrl);
+            if (temperature != null) b = b.temperature(temperature);
+            LOG.debug("ASK_LLM provider=openai baseUrl={} model={} apiKey={}", baseUrl, model, mask(apiKey));
+            lm = b.build();
+            break;
+          }
+        }
+        out = lm.generate(prompt);
+        LOG.debug("ASK_LLM response.len={}", out == null ? 0 : out.length());
+      }
+
+      java.util.LinkedHashMap<String,Object> datatrans = new java.util.LinkedHashMap<>();
+      datatrans.put(label, out);
+      RowData rowData = new RowData();
+      rowData.setNext(true);
+      rowData.setDatas(datatrans);
+      ctx.writeAndFlush(rowData);
+      return;
+    }    // Aggregation: general aggregates (SUM/AVG/MIN/MAX/COUNT) with optional GROUP BY
     if (qlp.getAggregates() != null && !qlp.getAggregates().isEmpty()) {
       java.util.List<com.dafei1288.jimsql.server.plan.logical.AggregateSpec> specs = qlp.getAggregates();
       java.util.List<com.dafei1288.jimsql.common.meta.JqColumn> gcols = qlp.getGroupByColumns();
@@ -705,7 +783,17 @@ public class QueryPhysicalPlan implements PhysicalPlan{
       sb.append('\u0001').append(v==null?"":v);
     }
     return sb.toString();
+  }
+  private static String pick(String ov, String tv) {
+    return (ov != null && !ov.isEmpty()) ? ov : tv;
+  }
+  private static Double pickDouble(String ov, String tv) {
+    String v = pick(ov, tv);
+    if (v == null || v.isEmpty()) return null;
+    try { return Double.parseDouble(v); } catch (NumberFormatException e) { return null; }
+  }
+  private static String mask(String v) {
+    if (v == null || v.isEmpty()) return String.valueOf(v);
+    int keep = Math.min(4, v.length());
+    return "***" + v.substring(v.length() - keep);
   }}
-
-
-  private static String pick(String a, String b){ return (a!=null && !a.isEmpty()) ? a : b; }
