@@ -1,4 +1,4 @@
-package com.dafei1288.jimsql.server.parser.dql;
+﻿package com.dafei1288.jimsql.server.parser.dql;
 
 
 import org.slf4j.Logger;
@@ -99,6 +99,7 @@ private final QueryLogicalPlan queryLogicalPlan = new QueryLogicalPlan();
               if (!cols.isEmpty()) {
                   queryLogicalPlan.setStar(false);
                   queryLogicalPlan.setJqColumnList(cols);
+              if (log.isDebugEnabled()) { log.debug("SELECT columns: {}", cols.stream().map(com.dafei1288.jimsql.common.meta.JqColumn::getColumnName).collect(java.util.stream.Collectors.joining(","))); }
               }
           }
       }
@@ -706,31 +707,31 @@ private final QueryLogicalPlan queryLogicalPlan = new QueryLogicalPlan();
       return v.substring(1, v.length() - 1);
     }
     return v;
-  }  private void collectSelectColumns(org.snt.inmemantlr.tree.ParseTreeNode node, java.util.List<com.dafei1288.jimsql.common.meta.JqColumn> out) {
-  if ("columnName".equals(node.getRule())) {
+  }  private void collectSelectColumns(org.snt.inmemantlr.tree.ParseTreeNode node, java.util.List<com.dafei1288.jimsql.common.meta.JqColumn> out) {  if ("columnName".equals(node.getRule())) {
     com.dafei1288.jimsql.common.meta.JqColumn c = new com.dafei1288.jimsql.common.meta.JqColumn();
     c.setColumnName(stripQuotes(node.getLabel()));
     out.add(c);
     return;
   }
   if ("qualifiedName".equals(node.getRule())) {
-    String last = null;
+    java.util.List<String> idents = new java.util.ArrayList<>();
     for (org.snt.inmemantlr.tree.ParseTreeNode ch : node.getChildren()) {
       if ("identifier".equals(ch.getRule())) {
-        last = stripQuotes(ch.getLabel());
+        idents.add(stripQuotes(ch.getLabel()));
       }
     }
-    if (last != null) {
+    if (!idents.isEmpty()) {
+      String qn = String.join(".", idents);
       com.dafei1288.jimsql.common.meta.JqColumn c = new com.dafei1288.jimsql.common.meta.JqColumn();
-      c.setColumnName(last);
+      c.setColumnName(qn);
       out.add(c);
       return;
     }
   }
   for (org.snt.inmemantlr.tree.ParseTreeNode ch : node.getChildren()) {
     collectSelectColumns(ch, out);
-  }
-}
+  }}
 
 }
+
 
