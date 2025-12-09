@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="zh-CN" data-theme="light">
 <head>
   <meta charset="utf-8" />
@@ -259,11 +259,27 @@ java -jar jimsql_mcp_server\target\jimsql_mcp_server-3.3.9.jar</code></pre>
       </div>
       <p class="muted">默认端口：8821 (server)、8825 (debug)。默认数据目录：<code>server/src/main/resources/datadir</code>。</p>
     </section>
+      <section class="container" id="updates">
+      <h2>最近更新</h2>
+      <ul class="list">
+        <li>SELECT 显式投影：只返回选择的列；右表列采用 <code>别名.列</code> 标签</li>
+        <li>JOIN 执行与 WHERE 扩展：AND/OR/NOT、IN/NOT IN、LIKE/NOT LIKE、IS [NOT] NULL；列名不区分大小写；数值比较按元数据</li>
+        <li>内置函数 <code>ask_llm</code>：支持 OpenAI / 兼容 / Ollama；从 <code>llm.csv</code> 读取配置，可在 SQL 中覆盖；<code>JIMSQL_LLM_DRYRUN=true</code> 无网络演练</li>
+        <li>日志体系：logback；INFO 打印 SQL，DEBUG 打印 plan/join/where/llm（不打印密钥）</li>
+        <li>JDBC PreparedStatement：参数绑定与 executeQuery/executeUpdate/execute</li>
+        <li>统一 JDK 21：构建与文档已统一至 JDK 21</li>
+      </ul>
+      <div class="card glass">
+        <h3>ask_llm 示例</h3>
+        <pre><code class="language-sql">select ask_llm('你好，你是谁？') from llm where name='ds';
+select ask_llm('你好', api_type='ollama', base_url='http://localhost:11434', model='llama3') from llm where name='local';</code></pre>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer container">
     <div>© JimSQL. All rights reserved.</div>
-    <div class="muted">Built with Java 17+. 准备好接入你的文件与应用。</div>
+    <div class="muted">Built with Java 21+. 准备好接入你的文件与应用。</div>
   </footer>
 
   <script src="assets/app-light.js"></script>
