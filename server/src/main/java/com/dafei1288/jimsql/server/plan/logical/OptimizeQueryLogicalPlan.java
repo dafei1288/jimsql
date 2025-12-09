@@ -203,7 +203,88 @@ import java.util.stream.Collectors;
       return;
     }
 
-    // JOIN + SELECT *: build metadata from left table plus each right table with alias prefix
+        // Explicit column selection (no star, no aggregates)
+    if (!this.queryLogicalPlan.isStar()) {
+      java.util.List<com.dafei1288.jimsql.common.meta.JqColumn> sel = this.queryLogicalPlan.getJqColumnList();
+      if (sel != null && !sel.isEmpty()) {
+        java.util.LinkedHashMap<String, JqColumnResultSetMetadata> out = new java.util.LinkedHashMap<>();
+        com.dafei1288.jimsql.common.meta.JqTable lt = serverMetadata.fetchTableByName(currentDatabaseName, currentTableName);
+
+        // gather right prefixes (alias or tableName)
+        java.util.List<com.dafei1288.jimsql.server.plan.logical.JoinSpec> joins = this.queryLogicalPlan.getJoins();
+        java.util.List<String> rightPrefixes = new java.util.ArrayList<>();
+        if (joins != null) {
+          for (com.dafei1288.jimsql.server.plan.logical.JoinSpec js : joins) {
+            String pref = (js.getAlias()!=null && !js.getAlias().isEmpty()) ? js.getAlias() : js.getRightTable().getTableName();
+            rightPrefixes.add(pref);
+          }
+        }
+
+        int idx = 1;
+        for (com.dafei1288.jimsql.common.meta.JqColumn c : sel) {
+          String raw = c.getColumnName();
+          String label = raw;
+          String simple = raw;
+          String qualifier = "";
+          int dot = raw.lastIndexOf('.');
+          if (dot >= 0) { qualifier = raw.substring(0, dot); simple = raw.substring(dot + 1); }
+
+          com.dafei1288.jimsql.common.meta.JqColumn src = null;
+          com.dafei1288.jimsql.common.meta.JqTable srcTable = lt;
+
+          String __q = qualifier; if (!qualifier.isEmpty() && rightPrefixes.stream().anyMatch(p -> p.equalsIgnoreCase(__q))) {
+            for (com.dafei1288.jimsql.server.plan.logical.JoinSpec js : (joins==null? java.util.List.<com.dafei1288.jimsql.server.plan.logical.JoinSpec>of() : joins)) {
+              String pref = (js.getAlias()!=null && !js.getAlias().isEmpty()) ? js.getAlias() : js.getRightTable().getTableName();
+              if (pref.equalsIgnoreCase(qualifier)) {
+                com.dafei1288.jimsql.common.meta.JqTable rt = serverMetadata.fetchTableByName(currentDatabaseName, js.getRightTable().getTableName());
+                src = findColumnIgnoreCase(rt, simple);
+                srcTable = rt;
+                label = pref + "." + simple;
+                break;
+              }
+            }
+          } else {
+            src = findColumnIgnoreCase(lt, simple);
+            label = simple;
+            if (src == null && joins != null) {
+              for (com.dafei1288.jimsql.server.plan.logical.JoinSpec js : joins) {
+                com.dafei1288.jimsql.common.meta.JqTable rt = serverMetadata.fetchTableByName(currentDatabaseName, js.getRightTable().getTableName());
+                com.dafei1288.jimsql.common.meta.JqColumn rcol = findColumnIgnoreCase(rt, simple);
+                if (rcol != null) {
+                  String pref = (js.getAlias()!=null && !js.getAlias().isEmpty()) ? js.getAlias() : rt.getTableName();
+                  src = rcol;
+                  srcTable = rt;
+                  label = pref + "." + simple;
+                  break;
+                }
+              }
+            }
+          }
+
+          JqColumnResultSetMetadata m = new JqColumnResultSetMetadata();
+          m.setIndex(idx++);
+          m.setLabelName(label);
+          if (src != null) {
+            m.setClazz(src.getColumnClazzType());
+            m.setClazzStr(src.getColumnClazzType().getName());
+            m.setColumnType(src.getColumnType());
+            m.setTableName(srcTable.getTableName());
+          } else {
+            m.setClazz(String.class);
+            m.setClazzStr("java.lang.String");
+            m.setColumnType(java.sql.Types.VARCHAR);
+            m.setTableName(currentTableName);
+          }
+          out.put(m.getLabelName(), m);
+        }
+        this.jqColumnResultSetMetadataList.clear();
+        this.jqColumnResultSetMetadataList.putAll(out);
+        this.jqResultSetMetaData.setColumnMeta(this.jqColumnResultSetMetadataList);
+        if (log.isDebugEnabled()) { log.debug("PROJECTION metadata={}", out.keySet()); }
+        return;
+      }
+    }
+    // JOIN + SELECT *: build metadata from left table plus each right table with alias prefix: build metadata from left table plus each right table with alias prefix
     if (this.queryLogicalPlan.isStar() && this.queryLogicalPlan.getJoins() != null && !this.queryLogicalPlan.getJoins().isEmpty()) {
       java.util.LinkedHashMap<String, JqColumnResultSetMetadata> out = new java.util.LinkedHashMap<>();
       int idx = 1;
@@ -277,3 +358,5 @@ import java.util.stream.Collectors;
   
   private static String normalizeCol(String c){ if (c==null) return ""; int d=c.lastIndexOf('.'); if (d>=0) c=c.substring(d+1); if (c.startsWith("`")&&c.endsWith("`")) c=c.substring(1,c.length()-1); if (c.startsWith("\"")&&c.endsWith("\"")) c=c.substring(1,c.length()-1); return c; }
   private static com.dafei1288.jimsql.common.meta.JqColumn findColumnIgnoreCase(com.dafei1288.jimsql.common.meta.JqTable jt, String name){ if (jt==null||name==null) return null; String n = normalizeCol(name); for (String k : jt.getJqTableLinkedHashMap().keySet()){ if (k.equalsIgnoreCase(n)) return jt.getJqTableLinkedHashMap().get(k); } return null; }}
+
+

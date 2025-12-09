@@ -433,7 +433,7 @@ public class QueryPhysicalPlan implements PhysicalPlan{
     // Project selected columns only, then write
     LinkedHashMap<String,JqColumnResultSetMetadata> rsMeta = optimizeQueryLogicalPlan.getJqColumnResultSetMetadataList();
     Set<String> selectedCols = rsMeta.keySet();
-
+    if (LOG.isDebugEnabled()) { LOG.debug("PROJECTION headers={}", selectedCols); }
     for (Map<String,String> full : finalRows) {
       LinkedHashMap<String,Object> datatrans = new LinkedHashMap<>();
       for (String key : selectedCols) {

@@ -60,10 +60,16 @@ public class JqConnection implements Connection {
   }
 
   @Override
-  public PreparedStatement prepareStatement(String sql) throws SQLException {
-    return null;
+    public PreparedStatement prepareStatement(String sql) throws SQLException {
+    String proto = info.getProperty("protocol", System.getProperty("jimsql.protocol","legacy"));
+    java.sql.Statement st;
+    if ("jspv1".equalsIgnoreCase(proto)) {
+      st = new com.dafei1288.jimsql.jdbc.protocol.JspV1Statement(this);
+    } else {
+      st = new JqStatement(this);
+    }
+    return new JqPreparedStatement(this, sql, st);
   }
-
   @Override
   public CallableStatement prepareCall(String sql) throws SQLException {
     return null;
