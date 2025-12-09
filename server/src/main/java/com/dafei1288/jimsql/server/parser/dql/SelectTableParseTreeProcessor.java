@@ -8,7 +8,6 @@ import com.dafei1288.jimsql.common.meta.JqColumn;
 import com.dafei1288.jimsql.common.meta.JqTable;
 import com.dafei1288.jimsql.server.parser.ScriptParseTreeProcessor;
 import com.dafei1288.jimsql.server.plan.logical.QueryLogicalPlan;
-import com.dafei1288.jimsql.server.plan.logical.LlmFunctionSpec;
 import com.dafei1288.jimsql.server.plan.logical.OrderItem;
 import com.dafei1288.jimsql.server.plan.logical.JoinSpec;
 import com.dafei1288.jimsql.server.plan.logical.JoinType;
@@ -109,39 +108,8 @@ private final QueryLogicalPlan queryLogicalPlan = new QueryLogicalPlan();
     if ("functionCall".equals(parseTreeNode.getRule())) {
       String fname = null;
       for (org.snt.inmemantlr.tree.ParseTreeNode ch : parseTreeNode.getChildren()) {
-        if ("identifier".equals(ch.getRule())) { fn = stripQuotes(ch.getLabel()); break; }
+        if ("identifier".equals(ch.getRule())) { fname = stripQuotes(ch.getLabel()); break; }
       }
-    // detect ask_llm built-in
-    if ("functionCall".equals(parseTreeNode.getRule())) {
-      String fn = null;
-      java.util.List<String> toks = new java.util.ArrayList<>();
-      flattenTokens(parseTreeNode, toks);
-      for (org.snt.inmemantlr.tree.ParseTreeNode ch : parseTreeNode.getChildren()) {
-        if ("identifier".equals(ch.getRule())) { fn = stripQuotes(ch.getLabel()); break; }
-      }
-      if (fn != null && fn.equalsIgnoreCase("ask_llm")) {
-        LlmFunctionSpec spec = new LlmFunctionSpec();
-        // prompt: first quoted string token
-        String prompt = null;
-        for (String t : toks) {
-          if (t != null && t.length() >= 2) {
-            char f = t.charAt(0); char l = t.charAt(t.length()-1);
-            if (((f == '\'' ) && (l == '\'' )) || ((f == '"') && (l == '"'))) { prompt = t.substring(1, t.length()-1); break; }
-          }
-        }
-        if (prompt != null) spec.setPrompt(prompt);
-        // named overrides: key = value pairs
-        for (int i=0;i+2<toks.size();i++) {
-          String a=toks.get(i), b=toks.get(i+1), ccc=toks.get(i+2);
-          if ("=".equals(b)) {
-            String key = stripQuotes(a); String val = stripQuotes(ccc);
-            spec.getOverrides().put(key.toLowerCase(java.util.Locale.ROOT), val);
-            i += 2;
-          }
-        }
-        this.queryLogicalPlan.setLlmFunctionSpec(spec);
-      }
-    }
       if (fname != null && fname.equalsIgnoreCase("count")) {
         this.queryLogicalPlan.setCountStar(true);
       }
@@ -152,7 +120,7 @@ private final QueryLogicalPlan queryLogicalPlan = new QueryLogicalPlan();
       String argCol = null; // null => COUNT(*) or COUNT(1)
       for (org.snt.inmemantlr.tree.ParseTreeNode ch : parseTreeNode.getChildren()) {
         String r = ch.getRule();
-        if ("identifier".equals(r)) { fn = stripQuotes(ch.getLabel()); continue; }
+        if ("identifier".equals(r)) { fname = stripQuotes(ch.getLabel()); continue; }
         if ("qualifiedName".equals(r) || "columnName".equals(r) || "identifier".equals(r)) {
           argCol = stripQuotes(ch.getLabel());
         }

@@ -1,0 +1,5 @@
+name,model,base_url,api_key,api_type,temperature,stream,thinking
+ds,deepseek-chat,https://api.deepseek.com,sk-xxxx,openai,0.2,false,false
+
+# select ask_llm("今天天气？") from llm where name = 'ds';
+# select ask_llm("今天天气？", model='' ,base_url='' ... ) from llm where name = 'ds';

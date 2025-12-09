@@ -7,7 +7,7 @@ import com.dafei1288.jimsql.server.plan.physical.PhysicalPlan;
 import com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan;
 import java.util.List;
 import java.util.ArrayList;
-import com.dafei1288.jimsql.server.plan.logical.LlmFunctionSpec;`r`n
+
 public class QueryLogicalPlan implements LogicalPlan {
   private boolean star;
   private List<JqColumn> jqColumnList;
