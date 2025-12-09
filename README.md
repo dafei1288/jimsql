@@ -103,3 +103,14 @@ SELECT SUM(age), AVG(age), MIN(age), MAX(age) FROM user;
 SELECT age, COUNT(*) FROM user GROUP BY age HAVING count > 0;
 SELECT age, SUM(age), AVG(age), MIN(age), MAX(age) FROM user GROUP BY age;
 ```
+## Core Features
+- Filesystem-backed CSV database; simple, visible, easy to integrate
+- Lightweight Netty server; fast startup; low footprint
+- JDBC driver with PreparedStatement; protocols: legacy/jspv1 (DML update count semantics)
+- SQL engine: SELECT projection; WHERE (AND/OR/NOT, (), comparisons, LIKE, IN, IS [NOT] NULL); JOIN (INNER/LEFT/CROSS); GROUP BY/HAVING + aggregates; ORDER BY/LIMIT
+- DML: INSERT/UPDATE/DELETE (CSV backend)
+- SHOW/DESC/EXPLAIN: SHOW DATABASES/TABLES/DESCRIBE/SHOW CREATE TABLE/EXPLAIN
+- Built-in ask_llm: providers openai/openai_compatible/openai_response/ollama; DRYRUN via JIMSQL_LLM_DRYRUN
+- MCP integration: stdio; env-based connection (JIMSQL_URL or host/port/db/user/password)
+- Logging: logback; INFO SQL; DEBUG plan/join/where/llm; secrets masked
+- Docker: official image + compose example
