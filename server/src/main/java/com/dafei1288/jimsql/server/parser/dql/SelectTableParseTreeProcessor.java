@@ -1,4 +1,4 @@
-﻿package com.dafei1288.jimsql.server.parser.dql;
+package com.dafei1288.jimsql.server.parser.dql;
 
 
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-﻿package com.dafei1288.jimsql.server.plan.physical;
+package com.dafei1288.jimsql.server.plan.physical;
 
 import com.dafei1288.jimsql.common.JqColumnResultSetMetadata;
 import com.dafei1288.jimsql.common.RowData;

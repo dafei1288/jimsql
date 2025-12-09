@@ -1,4 +1,4 @@
-﻿package com.dafei1288.jimsql.server.plan.logical;
+package com.dafei1288.jimsql.server.plan.logical;
 
 
 import org.slf4j.Logger;
@@ -232,7 +232,7 @@ import java.util.stream.Collectors;
           com.dafei1288.jimsql.common.meta.JqColumn src = null;
           com.dafei1288.jimsql.common.meta.JqTable srcTable = lt;
 
-          if (!qualifier.isEmpty() && rightPrefixes.stream().anyMatch(p -> p.equalsIgnoreCase(qualifier))) {
+          String __q = qualifier; if (!qualifier.isEmpty() && rightPrefixes.stream().anyMatch(p -> p.equalsIgnoreCase(__q))) {
             for (com.dafei1288.jimsql.server.plan.logical.JoinSpec js : (joins==null? java.util.List.<com.dafei1288.jimsql.server.plan.logical.JoinSpec>of() : joins)) {
               String pref = (js.getAlias()!=null && !js.getAlias().isEmpty()) ? js.getAlias() : js.getRightTable().getTableName();
               if (pref.equalsIgnoreCase(qualifier)) {
@@ -358,4 +358,5 @@ import java.util.stream.Collectors;
   
   private static String normalizeCol(String c){ if (c==null) return ""; int d=c.lastIndexOf('.'); if (d>=0) c=c.substring(d+1); if (c.startsWith("`")&&c.endsWith("`")) c=c.substring(1,c.length()-1); if (c.startsWith("\"")&&c.endsWith("\"")) c=c.substring(1,c.length()-1); return c; }
   private static com.dafei1288.jimsql.common.meta.JqColumn findColumnIgnoreCase(com.dafei1288.jimsql.common.meta.JqTable jt, String name){ if (jt==null||name==null) return null; String n = normalizeCol(name); for (String k : jt.getJqTableLinkedHashMap().keySet()){ if (k.equalsIgnoreCase(n)) return jt.getJqTableLinkedHashMap().get(k); } return null; }}
+
 
