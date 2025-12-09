@@ -88,35 +88,35 @@
         </div>
         <div class="card glass">
           <h3>JDBC 兼容</h3>
-          <p>提供驱动 <code>com.dafei1288.jimsql.jdbc</code>，支持 <code>PreparedStatement</code> 参数绑定；协议 <code>legacy</code>/<code>jspv1</code>（DML 返回值语义不同）。</p>
+          <p>提供驱动 <code>com.dafei1288.jimsql.jdbc</code>，支持 <code>PreparedStatement</code> 参数绑定; 协议 <code>legacy</code>/<code>jspv1</code>(DML 返回值语义不同)。</p>
         </div>
         <div class="card glass">
           <h3>SQL 引擎</h3>
           <ul class="list">
-            <li>SELECT 显式投影；ORDER BY / LIMIT</li>
+            <li>SELECT 显式投影; ORDER BY / LIMIT</li>
             <li>WHERE 扩展：AND/OR/NOT、()、比较、LIKE、IN、IS [NOT] NULL</li>
             <li>JOIN：INNER / LEFT / CROSS</li>
-            <li>GROUP BY / HAVING + 聚合（COUNT/SUM/AVG/MIN/MAX）</li>
+            <li>GROUP BY / HAVING + 聚合(COUNT/SUM/AVG/MIN/MAX)</li>
           </ul>
         </div>
         <div class="card glass">
           <h3>DML / SHOW</h3>
           <ul class="list">
-            <li>DML：INSERT / UPDATE / DELETE（CSV 后端）</li>
+            <li>DML：INSERT / UPDATE / DELETE(CSV 后端)</li>
             <li>SHOW：DATABASES、TABLES、DESCRIBE、SHOW CREATE TABLE、EXPLAIN</li>
           </ul>
         </div>
         <div class="card glass">
           <h3>内置 ask_llm</h3>
-          <p>从 <code>llm.csv</code> 读取配置，可在 SQL 覆盖；支持 OpenAI / 兼容 / Ollama；支持 <code>JIMSQL_LLM_DRYRUN=true</code> 无网络演练。</p>
+          <p>从 <code>llm.csv</code> 读取配置，可在 SQL 覆盖; 支持 OpenAI / 兼容 / Ollama; 支持 <code>JIMSQL_LLM_DRYRUN=true</code> 无网络演练。</p>
         </div>
         <div class="card glass">
           <h3>MCP 集成</h3>
-          <p>Spring Boot MCP Server，支持 stdio；连接通过环境变量（<code>JIMSQL_URL</code> 或主机/端口/DB/用户/密码）。</p>
+          <p>Spring Boot MCP Server，支持 stdio; 连接通过环境变量(<code>JIMSQL_URL</code> 或主机/端口/DB/用户/密码)。</p>
         </div>
         <div class="card glass">
           <h3>容器化部署</h3>
-          <p>官方镜像与 Compose 示例，一条命令即刻运行；可通过环境变量注入运行参数。</p>
+          <p>官方镜像与 Compose 示例，一条命令即刻运行; 可通过环境变量注入运行参数。</p>
         </div>
       </div>
     </section>
@@ -196,7 +196,7 @@ java -jar jimsql_mcp_server\target\jimsql_mcp_server-3.3.9.jar</code></pre>
       <h2>模块结构</h2>
       <div class="grid">
         <div class="card glass"><h3>common/</h3><p>共享模型、元数据与工具。</p></div>
-        <div class="card glass"><h3>server/</h3><p>Netty 服务端；包含 Dockerfile 与 docker-compose。</p></div>
+        <div class="card glass"><h3>server/</h3><p>Netty 服务端; 包含 Dockerfile 与 docker-compose。</p></div>
         <div class="card glass"><h3>jdbc/</h3><p>JDBC 驱动：包名 <code>com.dafei1288.jimsql.jdbc</code>。</p></div>
         <div class="card glass"><h3>jimsql_mcp_server/</h3><p>Spring Boot MCP 集成，支持 stdio。</p></div>
       </div>
@@ -209,7 +209,7 @@ java -jar jimsql_mcp_server\target\jimsql_mcp_server-3.3.9.jar</code></pre>
         <li>按模块构建：<code>mvn -pl server -am package -DskipTests</code></li>
         <li>运行服务端 (本地 JAR)：<code>java -jar server/target/*-jar-with-dependencies.jar 8821 0.0.0.0 server/src/main/resources/datadir</code></li>
         <li>Docker 启动：<code>docker compose -f server/docker-compose.yml up -d</code></li>
-        <li>运行测试：<code>mvn test</code>；按模块：<code>mvn -pl jdbc test</code></li>
+        <li>运行测试：<code>mvn test</code>; 按模块：<code>mvn -pl jdbc test</code></li>
       </ul>
     </section>
 
@@ -228,9 +228,9 @@ java -jar jimsql_mcp_server\target\jimsql_mcp_server-3.3.9.jar</code></pre>
         <div class="card glass">
           <h3>执行计划</h3>
           <ul class="list">
-            <li>已实现：ORDER BY、LIMIT/OFFSET；WHERE 简单比较</li>
-            <li>规划：GROUP BY/HAVING (COUNT/SUM/AVG)</li>
-            <li>规划：JOIN 执行 (等值连接)</li>
+            <li>已实现: ORDER BY、LIMIT/OFFSET; WHERE 简单比较</li>
+            <li>规划: GROUP BY/HAVING (COUNT/SUM/AVG)</li>
+            <li>规划: JOIN 执行 (等值连接)</li>
           </ul>
         </div>
       </div>
