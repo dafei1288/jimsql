@@ -214,44 +214,45 @@ java -jar jimsql_mcp_server\target\jimsql_mcp_server-3.3.9.jar</code></pre>
     </section>
 
         <section class="container" id="roadmap">
-      <h2>&#36335;&#32447;&#22270;&#25688;&#35201;</h2>
-      <div class="grid">
-        <div class="card glass">
-          <h3>&#35821;&#27861;&#25903;&#25345;</h3>
-          <ul class="list">
-            <li>SELECT &#22686;&#24378;&#65306;JOIN/WHERE/ORDER/LIMIT/UNION (&#37096;&#20998;)</li>
-            <li>INSERT&#65306;VALUES&#12289;SELECT&#12289;SET (&#35299;&#26512;)</li>
-            <li>&#35745;&#21010;&#20013;&#65306;UPDATE/DELETE&#12289;&#20005;&#26684; DDL (CREATE/ALTER/DROP)</li>
-            <li>SHOW/DESC/EXPLAIN &#21464;&#20307;&#19982;&#27979;&#35797;&#23436;&#21892;</li>
-          </ul>
-        </div>
-        <div class="card glass">
-          <h3>&#25191;&#34892;&#35745;&#21010;</h3>
-          <ul class="list">
-            <li>&#24050;&#23454;&#29616;: ORDER BY&#12289;LIMIT/OFFSET; WHERE &#31616;&#21333;&#27604;&#36739;</li>
-            <li>&#35268;&#21010;: GROUP BY/HAVING (COUNT/SUM/AVG)</li>
-            <li>&#35268;&#21010;: JOIN &#25191;&#34892; (&#31561;&#20540;&#36830;&#25509;)</li>
-          </ul>
-        </div>
-      </div>
-      <p class="muted">&#40664;&#35748;&#31471;&#21475;&#65306;8821 (server)&#12289;8825 (debug)&#12290;&#40664;&#35748;&#25968;&#25454;&#30446;&#24405;&#65306;<code>server/src/main/resources/datadir</code>&#12290;</p>
-    </section>
-      <section class="container" id="updates">
-      <h2>&#37832;&#8364;&#26473;&#25118;&#27967;&#37826;?/h2>
+  <h2>路线图摘要</h2>
+  <div class="grid">
+    <div class="card glass">
+      <h3>语法支持</h3>
       <ul class="list">
-        <li>SELECT &#37828;&#24807;&#32033;&#37814;&#26334;&#22870;&#38171;&#27692;&#24423;&#26473;&#26047;&#27926;&#38315;&#22795;&#23272;&#37928;&#21227;&#22442;&#38171;&#28056;&#24440;&#29723;&#12581;&#22442;&#38322;&#22249;&#25956; <code>&#37714;&#57506;&#24725;.&#37714;?/code> &#37837;&#22249;&#57655;</li>
-        <li>JOIN &#37813;&#1094;&#58641;&#28051;?WHERE &#37813;&#9537;&#30541;&#38171;&#27440;ND/OR/NOT&#37510;&#20001;N/NOT IN&#37510;&#20009;IKE/NOT LIKE&#37510;&#20001;S [NOT] NULL&#38171;&#28056;&#22442;&#37722;&#23940;&#31497;&#37718;&#21700;&#22414;&#28598;&#1091;&#30380;&#37712;&#27417;&#32049;&#37825;&#26495;&#8364;&#20860;&#30254;&#26440;&#20905;&#23516;&#37711;&#20905;&#26271;&#37817;?/li>
-        <li>&#37712;&#21615;&#30086;&#37713;&#33445;&#26271; <code>ask_llm</code>&#38171;&#27693;&#25966;&#37816;?OpenAI / &#37711;&#29006;&#57744; / Ollama&#38171;&#28055;&#31904; <code>llm.csv</code> &#29831;&#35826;&#24391;&#38320;&#23943;&#30086;&#38171;&#23677;&#24434;&#37734;?SQL &#28051;&#57697;&#59115;&#37929;&#26677;&#32049;<code>JIMSQL_LLM_DRYRUN=true</code> &#37827;&#29365;&#32137;&#32513;&#28356;&#32040;&#32513;?/li>
-        <li>&#37827;&#12517;&#32340;&#28003;&#25782;&#37108;&#38171;&#27501;ogback&#38171;&#27757;NFO &#37813;&#25779;&#23875; SQL&#38171;&#23372;EBUG &#37813;&#25779;&#23875; plan/join/where/llm&#38171;&#22556;&#31497;&#37813;&#25779;&#23875;&#28725;&#21979;&#25372;&#38171;?/li>
-        <li>JDBC PreparedStatement&#38171;&#27692;&#24364;&#37825;&#25198;&#31910;&#28729;&#27691;&#31500; executeQuery/executeUpdate/execute</li>
-        <li>&#32513;&#29110;&#31476; JDK 21&#38171;&#27693;&#28719;&#23524;&#36720;&#31500;&#37826;&#22248;&#12290;&#23480;&#33580;&#31930;&#28051;&#8364;&#38007;?JDK 21</li>
+        <li>SELECT 增强：JOIN/WHERE/ORDER/LIMIT/UNION（部分）</li>
+        <li>INSERT：VALUES、SELECT、SET（解析）</li>
+        <li>计划中：UPDATE/DELETE、严格 DDL（CREATE/ALTER/DROP）</li>
+        <li>SHOW/DESC/EXPLAIN 变体与测试完善</li>
       </ul>
-      <div class="card glass">
-        <h3>ask_llm &#32448;&#36720;&#32229;</h3>
-        <pre><code class="language-sql">select ask_llm('&#28003;&#29362;&#12477;&#38171;&#23676;&#32152;&#37828;&#57885;&#30365;&#38171;?) from llm where name='ds';
-select ask_llm('&#28003;&#29362;&#12477;', api_type='ollama', base_url='http://localhost:11434', model='llama3') from llm where name='local';</code></pre>
-      </div>
-    </section>
+    </div>
+    <div class="card glass">
+      <h3>执行计划</h3>
+      <ul class="list">
+        <li>已实现：ORDER BY、LIMIT/OFFSET；WHERE 简单比较与扩展</li>
+        <li>规划：GROUP BY/HAVING（COUNT/SUM/AVG 等）</li>
+        <li>规划：JOIN 执行优化（更大数据量、排序/索引、RIGHT/FULL）</li>
+      </ul>
+    </div>
+  </div>
+  <p class="muted">默认端口：8821（server）、8825（debug）。默认数据目录：<code>server/src/main/resources/datadir</code>。</p>
+</section>
+      <section class="container" id="updates">
+  <h2>最近更新</h2>
+  <ul class="list">
+    <li>SELECT 显式投影：只返回 SELECT 中点名的列；JOIN 右表列使用 <code>别名.列</code> 标签</li>
+    <li>WHERE 扩展：AND/OR/NOT 与括号；比较 <code>= != > >= < <=</code>；<code>IS NULL/IS NOT NULL</code>；<code>LIKE/NOT LIKE</code>；<code>IN/NOT IN</code>；列名大小写不敏感；按元数据进行数值/字符串比较</li>
+    <li>JOIN 执行：支持 <code>INNER/LEFT/CROSS</code>；ON 支持等值连接（可 AND 组合）；执行顺序：JOIN → WHERE → GROUP BY/HAVING → ORDER BY/LIMIT</li>
+    <li>内置函数 <code>ask_llm</code>：从 <code>llm.csv</code> 读取配置，可在 SQL 覆盖；支持 OpenAI / 兼容 / 返回兼容 / Ollama；<code>JIMSQL_LLM_DRYRUN=true</code> 支持无网络演练；日志屏蔽密钥</li>
+    <li>日志体系：logback；INFO 打印 SQL；DEBUG 打印计划（JOIN 键、过滤前后行数、ask_llm 参数与响应长度）</li>
+    <li>JDBC PreparedStatement：参数绑定与 <code>executeQuery/executeUpdate/execute</code></li>
+    <li>JDK 21：构建与文档统一至 JDK 21</li>
+  </ul>
+  <div class="card glass">
+    <h3>ask_llm 示例</h3>
+    <pre><code class="language-sql">select ask_llm('你好，你是谁？') from llm where name='ds';
+select ask_llm('你好', api_type='ollama', base_url='http://localhost:11434', model='llama3') from llm where name='local';</code></pre>
+  </div>
+</section>
   </main>
 
     <footer class="site-footer container">
