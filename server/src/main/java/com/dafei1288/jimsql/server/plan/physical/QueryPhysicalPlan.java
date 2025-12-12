@@ -434,10 +434,13 @@ public class QueryPhysicalPlan implements PhysicalPlan{
     LinkedHashMap<String,JqColumnResultSetMetadata> rsMeta = optimizeQueryLogicalPlan.getJqColumnResultSetMetadataList();
     Set<String> selectedCols = rsMeta.keySet();
     if (LOG.isDebugEnabled()) { LOG.debug("PROJECTION headers={}", selectedCols); }
+    java.util.LinkedHashMap<String,String> srcMap = optimizeQueryLogicalPlan.getProjectionSourceMap();
+    boolean useMap = (srcMap != null && !srcMap.isEmpty());
+    if (LOG.isDebugEnabled()) { LOG.debug("PROJECTION headers={}", selectedCols); }
     for (Map<String,String> full : finalRows) {
       LinkedHashMap<String,Object> datatrans = new LinkedHashMap<>();
       for (String key : selectedCols) {
-        datatrans.put(key, full.get(key));
+        String src = useMap ? srcMap.getOrDefault(key, key) : key; datatrans.put(key, full.get(src));
       }
       RowData rowData = new RowData();
       rowData.setNext(true);
@@ -753,3 +756,7 @@ public class QueryPhysicalPlan implements PhysicalPlan{
     int keep = Math.min(4, v.length());
     return "***" + v.substring(v.length() - keep);
   }}
+
+
+
+
