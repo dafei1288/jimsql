@@ -258,6 +258,13 @@ import java.util.stream.Collectors;
 
           String outLabel = (alias != null && !alias.isBlank()) ? alias : (right ? (rAlias + "." + simple) : simple);
           String sourceKey = right ? (rAlias + "." + simple) : simple;
+          // guard: if alias accidentally leaked into sourceKey (e.g., "namen"), strip alias suffix for left table
+          if (!right && alias != null && !alias.isBlank()) {
+            String sk = sourceKey;
+            if (sk != null && sk.endsWith(alias) && sk.length() > alias.length()) {
+              sourceKey = sk.substring(0, sk.length() - alias.length()).trim();
+            }
+          }
 
           JqColumnResultSetMetadata m = new JqColumnResultSetMetadata();
           m.setIndex(idxCol++);
@@ -444,3 +451,4 @@ import java.util.stream.Collectors;
   private static com.dafei1288.jimsql.common.meta.JqColumn findColumnIgnoreCase(com.dafei1288.jimsql.common.meta.JqTable jt, String name){ if (jt==null||name==null) return null; String n = normalizeCol(name); for (String k : jt.getJqTableLinkedHashMap().keySet()){ if (k.equalsIgnoreCase(n)) return jt.getJqTableLinkedHashMap().get(k); } return null; }
   private static String cleanIdent(String s) { if (s == null) return null; String r = s.trim(); if (r.length() >= 2) { char f = r.charAt(0); char l = r.charAt(r.length() - 1); if ((f == '"' && l == '"') || (f == 96 && l == 96) || (f == '\'' && l == '\'')) { r = r.substring(1, r.length() - 1); } } int ws = r.indexOf(' '); if (ws > 0) r = r.substring(0, ws).trim(); return r; }
 }
+
