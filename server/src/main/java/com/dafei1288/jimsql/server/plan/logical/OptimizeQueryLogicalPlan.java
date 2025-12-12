@@ -213,16 +213,14 @@ import java.util.stream.Collectors;
         for (com.dafei1288.jimsql.server.plan.logical.SelectItem it : items) {
           String rawSel = (it.getColumnName() == null ? "" : it.getColumnName().trim());
           String alias = it.getAlias();
-          String qualifier = null;
-          String simple = rawSel;
+          String qualifier = null; String simple = rawSel;
 
-          int dot = rawSel.lastIndexOf('.');
-          if (dot > 0) {
-            qualifier = rawSel.substring(0, dot).trim();
-            simple = rawSel.substring(dot + 1).trim();
-          }
+          int dot = rawSel.lastIndexOf('.'); if (dot > 0) { qualifier = rawSel.substring(0, dot).trim(); simple = rawSel.substring(dot + 1).trim(); }
 
           com.dafei1288.jimsql.common.meta.JqTable srcTable = lt;
+          qualifier = cleanIdent(qualifier);
+          simple = cleanIdent(simple);
+
           com.dafei1288.jimsql.common.meta.JqColumn srcCol = null;
           boolean right = false;
           String rAlias = null;
@@ -317,6 +315,9 @@ import java.util.stream.Collectors;
 
           com.dafei1288.jimsql.common.meta.JqColumn src = null;
           com.dafei1288.jimsql.common.meta.JqTable srcTable = lt;
+          qualifier = cleanIdent(qualifier);
+          simple = cleanIdent(simple);
+
 
           String __q = qualifier; if (!qualifier.isEmpty() && rightPrefixes.stream().anyMatch(p -> p.equalsIgnoreCase(__q))) {
             for (com.dafei1288.jimsql.server.plan.logical.JoinSpec js : (joins==null? java.util.List.<com.dafei1288.jimsql.server.plan.logical.JoinSpec>of() : joins)) {
@@ -439,11 +440,7 @@ import java.util.stream.Collectors;
     this.jqResultSetMetaData.setColumnMeta(this.jqColumnResultSetMetadataList);
   }
   
-  private static String normalizeCol(String c){ if (c==null) return ""; int d=c.lastIndexOf('.'); if (d>=0) c=c.substring(d+1); if (c.startsWith("`")&&c.endsWith("`")) c=c.substring(1,c.length()-1); if (c.startsWith("\"")&&c.endsWith("\"")) c=c.substring(1,c.length()-1); return c; }
-  private static com.dafei1288.jimsql.common.meta.JqColumn findColumnIgnoreCase(com.dafei1288.jimsql.common.meta.JqTable jt, String name){ if (jt==null||name==null) return null; String n = normalizeCol(name); for (String k : jt.getJqTableLinkedHashMap().keySet()){ if (k.equalsIgnoreCase(n)) return jt.getJqTableLinkedHashMap().get(k); } return null; }}
-
-
-
-
-
-
+    private static String normalizeCol(String c){ if (c==null) return ""; int d=c.lastIndexOf('.'); if (d>=0) c=c.substring(d+1); if (c.startsWith("")&&c.endsWith("")) c=c.substring(1,c.length()-1); if (c.startsWith("\"")&&c.endsWith("\"")) c=c.substring(1,c.length()-1); return c; }
+  private static com.dafei1288.jimsql.common.meta.JqColumn findColumnIgnoreCase(com.dafei1288.jimsql.common.meta.JqTable jt, String name){ if (jt==null||name==null) return null; String n = normalizeCol(name); for (String k : jt.getJqTableLinkedHashMap().keySet()){ if (k.equalsIgnoreCase(n)) return jt.getJqTableLinkedHashMap().get(k); } return null; }
+  private static String cleanIdent(String s) { if (s == null) return null; String r = s.trim(); if (r.length() >= 2) { char f = r.charAt(0); char l = r.charAt(r.length() - 1); if ((f == '"' && l == '"') || (f == 96 && l == 96) || (f == '\'' && l == '\'')) { r = r.substring(1, r.length() - 1); } } int ws = r.indexOf(' '); if (ws > 0) r = r.substring(0, ws).trim(); return r; }
+}
