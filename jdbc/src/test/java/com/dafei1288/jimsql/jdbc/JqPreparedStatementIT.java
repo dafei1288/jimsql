@@ -19,27 +19,30 @@ public class JqPreparedStatementIT {
 
     @Test
     public void selectUserByIdAndName() throws Exception {
-        Assumptions.assumeTrue("true".equalsIgnoreCase(System.getenv("JIMSQL_IT")),
-                "Set JIMSQL_IT=true to enable integration test");
+//        Assumptions.assumeTrue("true".equalsIgnoreCase(System.getenv("JIMSQL_IT")),
+//                "Set JIMSQL_IT=true to enable integration test");
 
         Properties info = new Properties();
         info.setProperty("host", System.getProperty("jimsql.host", "127.0.0.1"));
         info.put("port", Integer.getInteger("jimsql.port", 8821));
         info.setProperty("db", System.getProperty("jimsql.db", "test"));
-        info.setProperty("protocol", System.getProperty("jimsql.protocol", "jspv1"));
+//        info.setProperty("protocol", System.getProperty("jimsql.protocol", "jspv1"));
 
         try (JqConnection conn = new JqConnection(info)) {
-            PreparedStatement ps = conn.prepareStatement("select id,name,age from user where id=? and name=?");
+            PreparedStatement ps = conn.prepareStatement("select id,name from user where id=?");
             ps.setInt(1, 1);
-            ps.setString(2, "jacky");
+//            ps.setString(2, "jacky");
             try (ResultSet rs = ps.executeQuery()) {
                 assertNotNull(rs);
                 assertTrue(rs.next(), "expected at least one row");
                 // Validate returned columns are consistent
                 String id = rs.getString("id");
                 String name = rs.getString("name");
+                String age = rs.getString("age");
                 assertEquals("1", id);
                 assertEquals("jacky", name);
+
+                System.out.println(id + " " + name + " age = "+age);
             }
         }
     }

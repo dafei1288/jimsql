@@ -368,12 +368,12 @@ public class JqResultSet implements ResultSet {
 
   @Override
   public Object getObject(int columnIndex) throws SQLException {
-    return null;
+    return getString(columnIndex);
   }
 
   @Override
   public Object getObject(String columnLabel) throws SQLException {
-    return null;
+    return getString(columnLabel);
   }
 
   @Override
