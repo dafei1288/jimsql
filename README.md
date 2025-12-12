@@ -2,7 +2,17 @@
 
 JimSql = Jim Isn't MySQL. Jim is a filesystem database system implemention use Java.
 
-# Useage
+
+## Requirements
+- JDK 21+ (set JAVA_HOME to a JDK 21 installation)
+- Maven 3.9+
+
+## What's New
+- SELECT explicit projection honored; right-side columns labeled as alias.col
+- JOIN execution fixes; WHERE extended (AND/OR/NOT, IN/NOT IN, LIKE/NOT LIKE, IS [NOT] NULL; case-insensitive columns; numeric-aware compare)
+- Built-in function ask_llm(prompt[, named overrides]) backed by llm.csv; providers: openai/openai_compatible/openai_response/ollama; DRYRUN via env JIMSQL_LLM_DRYRUN=true; logs mask api_key
+- Logging: logback-based; INFO prints SQL; DEBUG prints plan/join/where/llm
+- JDBC PreparedStatement: minimal executeQuery/executeUpdate/execute with client-side parameter binding# Useage
 
 use `docker-compose` to start a server
 ```yaml
@@ -82,12 +92,10 @@ SELECT id,name,age FROM user WHERE age = 3 OR (age = 22 AND name LIKE 'ja%') ORD
 SELECT id,name FROM user WHERE name IN ('jacky','doudou') AND age IS NOT NULL;
 ```
 ## Aggregation
-
-- COUNT(*|col), SUM(col), AVG(col), MIN(col), MAX(col)
-- `GROUP BY` + `HAVING` supported; ORDER BY/LIMIT 在聚合结果上生效
-- 列名：未指定 alias 时回退为 `count`/`sum_<col>`/`avg_<col>`/`min_<col>`/`max_<col>`
-- 类型：COUNT=BIGINT；SUM/AVG=DECIMAL；MIN/MAX=源列类型
-- CSV 空串即 NULL：COUNT(col) 不计空串；SUM/AVG 跳过空串；MIN/MAX 忽略空串
+- Functions: COUNT(*|col), SUM(col), AVG(col), MIN(col), MAX(col)
+- GROUP BY/HAVING supported; aggregate labels: `count`/`sum_<col>`/`avg_<col>`/`min_<col>`/`max_<col>`
+- Types: COUNT -> BIGINT; SUM/AVG -> DECIMAL; MIN/MAX -> source column type
+- CSV NULL semantics: empty string treated as NULL; COUNT(col) skips empties; SUM/AVG skip empties; MIN/MAX ignore empties
 
 Examples:
 ```sql
@@ -95,3 +103,14 @@ SELECT SUM(age), AVG(age), MIN(age), MAX(age) FROM user;
 SELECT age, COUNT(*) FROM user GROUP BY age HAVING count > 0;
 SELECT age, SUM(age), AVG(age), MIN(age), MAX(age) FROM user GROUP BY age;
 ```
+## Core Features
+- Filesystem-backed CSV database; simple, visible, easy to integrate
+- Lightweight Netty server; fast startup; low footprint
+- JDBC driver with PreparedStatement; protocols: legacy/jspv1 (DML update count semantics)
+- SQL engine: SELECT projection; WHERE (AND/OR/NOT, (), comparisons, LIKE, IN, IS [NOT] NULL); JOIN (INNER/LEFT/CROSS); GROUP BY/HAVING + aggregates; ORDER BY/LIMIT
+- DML: INSERT/UPDATE/DELETE (CSV backend)
+- SHOW/DESC/EXPLAIN: SHOW DATABASES/TABLES/DESCRIBE/SHOW CREATE TABLE/EXPLAIN
+- Built-in ask_llm: providers openai/openai_compatible/openai_response/ollama; DRYRUN via JIMSQL_LLM_DRYRUN
+- MCP integration: stdio; env-based connection (JIMSQL_URL or host/port/db/user/password)
+- Logging: logback; INFO SQL; DEBUG plan/join/where/llm; secrets masked
+- Docker: official image + compose example

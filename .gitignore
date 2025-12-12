@@ -40,3 +40,5 @@ build/
 # Local temp files from stdio runner
 _tmp_*.txt
 
+
+server\src\main\resources\datadir\test\llm.csv

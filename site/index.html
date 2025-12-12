@@ -2,9 +2,10 @@
 <html lang="zh-CN" data-theme="light">
 <head>
   <meta charset="utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>JimSQL - 文件系统数据库 · JDBC 兼容 · MCP Ready</title>
-  <meta name="description" content="JimSQL: 基于文件系统的轻量级数据库。纯 Java、容器化、JDBC 兼容、MCP 集成。" />
+  <title>JimSQL - CSV SQL Engine - JDBC Compatible - MCP Ready</title>
+  <meta name="description" content="JimSQL: CSV-backed lightweight SQL engine in Java. Dockerized, JDBC compatible, MCP integration." />
   
     <link rel="stylesheet" href="assets/styles.css" />
 <style>
@@ -28,7 +29,7 @@
       <img class="logo-img" src="assets/logo.png" alt="JimSQL logo" />
       <span class="brand-text">JimSQL</span>
     </div>
-    <nav class="nav">
+        <nav class="nav">
       <a href="#features">特性</a>
       <a href="#quickstart">快速开始</a>
       <a href="#mcp">MCP 集成</a>
@@ -36,7 +37,7 @@
       <a href="#build">构建与测试</a>
       <a href="#roadmap">路线图</a>
     </nav>
-    <button id="themeToggle" class="btn theme-toggle" aria-label="切换主题" title="切换主题">
+    <button id="themeToggle" class="btn theme-toggle" aria-label="鍒囨崲涓婚" title="鍒囨崲涓婚">
       <svg class="icon sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         <circle cx="12" cy="12" r="5" fill="currentColor" />
         <rect x="11" y="1" width="2" height="4" rx="1" fill="currentColor" />
@@ -62,8 +63,8 @@
   </header>
 
   <main>
-    <section class="hero container" id="top">
-<!--            <img class="hero-logo" src="assets/logo.png" alt="JimSQL logo" />-->
+        <section class="hero container" id="top">
+      <!--            <img class="hero-logo" src="assets/logo.png" alt="JimSQL logo" />-->
       <h1 class="title gradient-text">JimSQL</h1>
       <p class="subtitle">Jim Isn't MySQL. 基于文件系统的轻量级数据库系统 (Java)。</p>
       <p class="subtext">纯 Java · 可嵌入 · 容器化 · JDBC 兼容 · MCP Ready</p>
@@ -74,43 +75,53 @@
       </div>
     </section>
 
-    <section class="container" id="features">
+        <section class="container" id="features">
       <h2>核心特性</h2>
       <div class="grid">
         <div class="card glass">
-          <div class="icon">📁</div>
           <h3>文件即数据库</h3>
-          <p>以文件为基础的数据存储与访问模型，直观、可视、易于集成现有工具链。</p>
+          <p>以 CSV 文件为基础的数据存储与访问模型，直观、可视、易于集成现有工具链。</p>
         </div>
         <div class="card glass">
-          <div class="icon">⚡</div>
           <h3>轻量服务端</h3>
-          <p>基于 Netty 的小型服务端，启动快、占用低，适合本地与容器环境。</p>
+          <p>基于 Netty 的服务端，启动快、占用低，适合本地与容器环境。</p>
         </div>
         <div class="card glass">
-          <div class="icon">🔌</div>
           <h3>JDBC 兼容</h3>
-          <p>提供 JDBC 驱动 <code>com.dafei1288.jimsql.jdbc</code>，现有应用几乎零改造接入。</p>
+          <p>提供驱动 <code>com.dafei1288.jimsql.jdbc</code>，支持 <code>PreparedStatement</code> 参数绑定; 协议 <code>legacy</code>/<code>jspv1</code>(DML 返回值语义不同)。</p>
         </div>
         <div class="card glass">
-          <div class="icon">🐳</div>
-          <h3>容器化部署</h3>
-          <p>官方镜像与 Compose 示例，一条命令即刻运行与调试。</p>
+          <h3>SQL 引擎</h3>
+          <ul class="list">
+            <li>SELECT 显式投影; ORDER BY / LIMIT</li>
+            <li>WHERE 扩展：AND/OR/NOT、()、比较、LIKE、IN、IS [NOT] NULL</li>
+            <li>JOIN：INNER / LEFT / CROSS</li>
+            <li>GROUP BY / HAVING + 聚合(COUNT/SUM/AVG/MIN/MAX)</li>
+          </ul>
         </div>
         <div class="card glass">
-          <div class="icon">🧠</div>
+          <h3>DML / SHOW</h3>
+          <ul class="list">
+            <li>DML：INSERT / UPDATE / DELETE(CSV 后端)</li>
+            <li>SHOW：DATABASES、TABLES、DESCRIBE、SHOW CREATE TABLE、EXPLAIN</li>
+          </ul>
+        </div>
+        <div class="card glass">
+          <h3>内置 ask_llm</h3>
+          <p>从 <code>llm.csv</code> 读取配置，可在 SQL 覆盖; 支持 OpenAI / 兼容 / Ollama; 支持 <code>JIMSQL_LLM_DRYRUN=true</code> 无网络演练。</p>
+        </div>
+        <div class="card glass">
           <h3>MCP 集成</h3>
-          <p>提供 <code>jimsql_mcp_server</code>，支持 stdio 模式，轻松接入 AI 工具链。</p>
+          <p>Spring Boot MCP Server，支持 stdio; 连接通过环境变量(<code>JIMSQL_URL</code> 或主机/端口/DB/用户/密码)。</p>
         </div>
         <div class="card glass">
-          <div class="icon">🧩</div>
-          <h3>一体化开发</h3>
-          <p>Maven 多模块管理，统一构建与测试，脚本与文档完备。</p>
+          <h3>容器化部署</h3>
+          <p>官方镜像与 Compose 示例，一条命令即刻运行; 可通过环境变量注入运行参数。</p>
         </div>
       </div>
     </section>
 
-    <section class="container" id="quickstart">
+        <section class="container" id="quickstart">
       <h2>快速开始</h2>
       <div class="grid code-grid">
         <div class="card glass">
@@ -132,62 +143,28 @@ services:
         <div class="card glass">
           <h3>本地运行 (JAR)</h3>
           <pre><code class="language-bash">java -jar server/target/*-jar-with-dependencies.jar 8821 0.0.0.0 server/src/main/resources/datadir</code></pre>
-          <h4>Maven 仓库 (SNAPSHOT)</h4>
-          <pre><code class="language-xml">&lt;repositories&gt;
-  &lt;repository&gt;
-    &lt;id&gt;jim&lt;/id&gt;
-    &lt;url&gt;https://oss.sonatype.org/content/repositories/snapshots&lt;/url&gt;
-  &lt;/repository&gt;
-&lt;/repositories&gt;</code></pre>
-          <h4>JDBC 依赖</h4>
-          <pre><code class="language-xml">&lt;dependency&gt;
-  &lt;groupId&gt;com.dafei1288&lt;/groupId&gt;
-  &lt;artifactId&gt;jdbc&lt;/artifactId&gt;
-  &lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
-        </div>
-        <div class="card glass">
-          <h3>JDBC 示例 (Java)</h3>
-          <pre><code class="language-java">import java.sql.*;
-import java.util.*;
-
-public class TestServer {
-  public static void main(String[] args) throws Exception {
-    Class.forName("com.dafei1288.jimsql.jdbc.JqDriver");
-    Connection conn = DriverManager.getConnection("jdbc:jimsql://localhost:8821/test");
-    Statement statement = conn.createStatement();
-    ResultSet resultSet = statement.executeQuery("select id,name from user");
-    while (resultSet.next()) {
-      ResultSetMetaData m = resultSet.getMetaData();
-      for (int i = 0; i &lt; m.getColumnCount(); i++) {
-        String col = m.getColumnLabel(i);
-        System.out.println(col + ": " + resultSet.getString(col));
-      }
-    }
-  }
-}</code></pre>
         </div>
       </div>
     </section>
 
-    <section class="container" id="mcp">
+        <section class="container" id="mcp">
       <h2>MCP 集成与配置</h2>
       <p>优先使用环境变量 <code>JIMSQL_URL</code>。否则使用 <code>JIMSQL_HOST</code>/<code>JIMSQL_PORT</code>/<code>JIMSQL_DB</code>/<code>JIMSQL_USER</code>/<code>JIMSQL_PASSWORD</code>。启用 stdio：<code>MCP_STDIO=true</code> 或 JVM 参数 <code>-Dmcp.stdio=true</code>。</p>
       <div class="grid code-grid">
         <div class="card glass">
           <h3>Windows PowerShell (stdio, granular env)</h3>
-          <pre><code class="language-powershell">$env:JIMSQL_HOST="127.0.0.1"
-$env:JIMSQL_PORT="8821"
-$env:JIMSQL_DB="test"
-$env:JIMSQL_USER=""
-$env:JIMSQL_PASSWORD=""
-$env:MCP_STDIO="true"
+          <pre><code class="language-powershell">="127.0.0.1"
+="8821"
+="test"
+=""
+=""
+="true"
 java -jar jimsql_mcp_server\target\jimsql_mcp_server-3.3.9.jar</code></pre>
         </div>
         <div class="card glass">
           <h3>Windows PowerShell (stdio, single URL)</h3>
-          <pre><code class="language-powershell">$env:JIMSQL_URL="jdbc:jimsql://127.0.0.1:8821/test"
-$env:MCP_STDIO="true"
+          <pre><code class="language-powershell">="jdbc:jimsql://127.0.0.1:8821/test"
+="true"
 java -jar jimsql_mcp_server\target\jimsql_mcp_server-3.3.9.jar</code></pre>
           <h3>Bash (stdio)</h3>
           <pre><code class="language-bash">JIMSQL_URL="jdbc:jimsql://127.0.0.1:8821/test" MCP_STDIO=true \
@@ -215,55 +192,72 @@ java -jar jimsql_mcp_server\target\jimsql_mcp_server-3.3.9.jar</code></pre>
       </div>
     </section>
 
-    <section class="container" id="modules">
+        <section class="container" id="modules">
       <h2>模块结构</h2>
       <div class="grid">
         <div class="card glass"><h3>common/</h3><p>共享模型、元数据与工具。</p></div>
-        <div class="card glass"><h3>server/</h3><p>Netty 服务端；包含 Dockerfile 与 docker-compose。</p></div>
+        <div class="card glass"><h3>server/</h3><p>Netty 服务端; 包含 Dockerfile 与 docker-compose。</p></div>
         <div class="card glass"><h3>jdbc/</h3><p>JDBC 驱动：包名 <code>com.dafei1288.jimsql.jdbc</code>。</p></div>
         <div class="card glass"><h3>jimsql_mcp_server/</h3><p>Spring Boot MCP 集成，支持 stdio。</p></div>
       </div>
     </section>
 
-    <section class="container" id="build">
+        <section class="container" id="build">
       <h2>构建与测试</h2>
       <ul class="list">
         <li>全仓构建：<code>mvn clean install -DskipTests</code></li>
         <li>按模块构建：<code>mvn -pl server -am package -DskipTests</code></li>
         <li>运行服务端 (本地 JAR)：<code>java -jar server/target/*-jar-with-dependencies.jar 8821 0.0.0.0 server/src/main/resources/datadir</code></li>
         <li>Docker 启动：<code>docker compose -f server/docker-compose.yml up -d</code></li>
-        <li>运行测试：<code>mvn test</code>；按模块：<code>mvn -pl jdbc test</code></li>
+        <li>运行测试：<code>mvn test</code>; 按模块：<code>mvn -pl jdbc test</code></li>
       </ul>
     </section>
 
-    <section class="container" id="roadmap">
-      <h2>路线图摘要</h2>
-      <div class="grid">
-        <div class="card glass">
-          <h3>语法支持</h3>
-          <ul class="list">
-            <li>SELECT 增强：JOIN/WHERE/ORDER/LIMIT/UNION (部分)</li>
-            <li>INSERT：VALUES、SELECT、SET (解析)</li>
-            <li>计划中：UPDATE/DELETE、严格 DDL (CREATE/ALTER/DROP)</li>
-            <li>SHOW/DESC/EXPLAIN 变体与测试完善</li>
-          </ul>
-        </div>
-        <div class="card glass">
-          <h3>执行计划</h3>
-          <ul class="list">
-            <li>已实现：ORDER BY、LIMIT/OFFSET；WHERE 简单比较</li>
-            <li>规划：GROUP BY/HAVING (COUNT/SUM/AVG)</li>
-            <li>规划：JOIN 执行 (等值连接)</li>
-          </ul>
-        </div>
-      </div>
-      <p class="muted">默认端口：8821 (server)、8825 (debug)。默认数据目录：<code>server/src/main/resources/datadir</code>。</p>
-    </section>
+        <section class="container" id="roadmap">
+  <h2>路线图摘要</h2>
+  <div class="grid">
+    <div class="card glass">
+      <h3>语法支持</h3>
+      <ul class="list">
+        <li>SELECT 增强：JOIN/WHERE/ORDER/LIMIT/UNION（部分）</li>
+        <li>INSERT：VALUES、SELECT、SET（解析）</li>
+        <li>计划中：UPDATE/DELETE、严格 DDL（CREATE/ALTER/DROP）</li>
+        <li>SHOW/DESC/EXPLAIN 变体与测试完善</li>
+      </ul>
+    </div>
+    <div class="card glass">
+      <h3>执行计划</h3>
+      <ul class="list">
+        <li>已实现：ORDER BY、LIMIT/OFFSET；WHERE 简单比较与扩展</li>
+        <li>规划：GROUP BY/HAVING（COUNT/SUM/AVG 等）</li>
+        <li>规划：JOIN 执行优化（更大数据量、排序/索引、RIGHT/FULL）</li>
+      </ul>
+    </div>
+  </div>
+  <p class="muted">默认端口：8821（server）、8825（debug）。默认数据目录：<code>server/src/main/resources/datadir</code>。</p>
+</section>
+      <section class="container" id="updates">
+  <h2>最近更新</h2>
+  <ul class="list">
+    <li>SELECT 显式投影：只返回 SELECT 中点名的列；JOIN 右表列使用 <code>别名.列</code> 标签</li>
+    <li>WHERE 扩展：AND/OR/NOT 与括号；比较 <code>= != > >= < <=</code>；<code>IS NULL/IS NOT NULL</code>；<code>LIKE/NOT LIKE</code>；<code>IN/NOT IN</code>；列名大小写不敏感；按元数据进行数值/字符串比较</li>
+    <li>JOIN 执行：支持 <code>INNER/LEFT/CROSS</code>；ON 支持等值连接（可 AND 组合）；执行顺序：JOIN → WHERE → GROUP BY/HAVING → ORDER BY/LIMIT</li>
+    <li>内置函数 <code>ask_llm</code>：从 <code>llm.csv</code> 读取配置，可在 SQL 覆盖；支持 OpenAI / 兼容 / 返回兼容 / Ollama；<code>JIMSQL_LLM_DRYRUN=true</code> 支持无网络演练；日志屏蔽密钥</li>
+    <li>日志体系：logback；INFO 打印 SQL；DEBUG 打印计划（JOIN 键、过滤前后行数、ask_llm 参数与响应长度）</li>
+    <li>JDBC PreparedStatement：参数绑定与 <code>executeQuery/executeUpdate/execute</code></li>
+    <li>JDK 21：构建与文档统一至 JDK 21</li>
+  </ul>
+  <div class="card glass">
+    <h3>ask_llm 示例</h3>
+    <pre><code class="language-sql">select ask_llm('你好，你是谁？') from llm where name='ds';
+select ask_llm('你好', api_type='ollama', base_url='http://localhost:11434', model='llama3') from llm where name='local';</code></pre>
+  </div>
+</section>
   </main>
 
-  <footer class="site-footer container">
+    <footer class="site-footer container">
     <div>© JimSQL. All rights reserved.</div>
-    <div class="muted">Built with Java 17+. 准备好接入你的文件与应用。</div>
+    <div class="muted">Built with Java 21+. 准备好接入你的文件与应用。</div>
   </footer>
 
   <script src="assets/app-light.js"></script>
