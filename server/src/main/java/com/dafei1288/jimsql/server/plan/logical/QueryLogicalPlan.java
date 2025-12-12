@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class QueryLogicalPlan implements LogicalPlan {
+  // SELECT items with optional aliases (may be empty if parser did not set)
+  private java.util.List<com.dafei1288.jimsql.server.plan.logical.SelectItem> selectItems = new java.util.ArrayList<>();
   private boolean star;
   private List<JqColumn> jqColumnList;
   private JqTable fromTable;
@@ -88,4 +90,9 @@ private OptimizeQueryLogicalPlan optimizeQueryLogicalPlan;
   public void setAggregates(List<AggregateSpec> aggregates) { this.aggregates = aggregates; }
   public LlmFunctionSpec getLlmFunctionSpec() { return llmFunctionSpec; }
   public void setLlmFunctionSpec(LlmFunctionSpec llmFunctionSpec) { this.llmFunctionSpec = llmFunctionSpec; }
-}
+  public java.util.List<com.dafei1288.jimsql.server.plan.logical.SelectItem> getSelectItems() { return selectItems; }
+  public void setSelectItems(java.util.List<com.dafei1288.jimsql.server.plan.logical.SelectItem> items) {
+    this.selectItems.clear();
+    if (items != null) this.selectItems.addAll(items);
+  }}
+
