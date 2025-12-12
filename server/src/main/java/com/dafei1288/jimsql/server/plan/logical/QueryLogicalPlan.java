@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class QueryLogicalPlan implements LogicalPlan {
+  private String rawSql;
+
   // SELECT items with optional aliases (may be empty if parser did not set)
   private java.util.List<com.dafei1288.jimsql.server.plan.logical.SelectItem> selectItems = new java.util.ArrayList<>();
   private boolean star;
@@ -94,5 +96,10 @@ private OptimizeQueryLogicalPlan optimizeQueryLogicalPlan;
   public void setSelectItems(java.util.List<com.dafei1288.jimsql.server.plan.logical.SelectItem> items) {
     this.selectItems.clear();
     if (items != null) this.selectItems.addAll(items);
-  }}
+  }
+  public String getRawSql() { return rawSql; }
+  public void setRawSql(String rawSql) { this.rawSql = rawSql; }
+}
+
+
 
