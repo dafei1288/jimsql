@@ -35,9 +35,9 @@ public class DmlScriptParseTreeProcessor extends ScriptParseTreeProcessor {
     String r = n.getRule();
     if ("updateTable".equals(r)) { handleUpdate(n); }
     if ("deleteTable".equals(r)) { handleDelete(n); }
+      if ("insertTable".equals(r)) { handleInsert(n); }
   }
-
-  private void handleUpdate(ParseTreeNode n) {
+private void handleUpdate(ParseTreeNode n) {
     UpdateLogicalPlan plan = new UpdateLogicalPlan();
     JqTable t = new JqTable();
     // table name
@@ -111,15 +111,19 @@ public class DmlScriptParseTreeProcessor extends ScriptParseTreeProcessor {
     return sb.toString().trim().replaceAll("\\s+", " ");
   }
 
-  private void dfs(ParseTreeNode n, StringBuilder sb) {
-    String lbl = n.getLabel();
-    if (lbl == null || lbl.isEmpty()) {
-      String r = n.getRule();
-      if (r != null && r.endsWith("_SYMBOL")) lbl = r.substring(0, r.length() - "_SYMBOL".length());
-    }
-    if (lbl != null && !lbl.isEmpty()) {
-      if (sb.length() > 0) sb.append(' ');
-      sb.append(lbl);
+    private void dfs(ParseTreeNode n, StringBuilder sb) {
+    // Append only leaf node labels to avoid duplication
+    if (n.getChildren().isEmpty()) {
+      String lbl = n.getLabel();
+      if (lbl == null || lbl.isEmpty()) {
+        String r = n.getRule();
+        if (r != null && r.endsWith("_SYMBOL")) lbl = r.substring(0, r.length() - "_SYMBOL".length());
+      }
+      if (lbl != null && !lbl.isEmpty()) {
+        if (sb.length() > 0) sb.append(' ');
+        sb.append(lbl);
+      }
+      return;
     }
     for (ParseTreeNode c : n.getChildren()) dfs(c, sb);
   }

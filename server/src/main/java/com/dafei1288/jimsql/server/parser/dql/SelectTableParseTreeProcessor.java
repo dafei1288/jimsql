@@ -105,79 +105,22 @@ private final QueryLogicalPlan queryLogicalPlan = new QueryLogicalPlan();
             }
             parts.add(seg.substring(last));
             java.util.List<com.dafei1288.jimsql.server.plan.logical.SelectItem> out = new java.util.ArrayList<>();
-            for (String it : parts) {
+                        for (String it : parts) {
               String t = it.trim(); if (t.isEmpty()) continue;
               String col = t; String alias = null;
-              String tl = t.toLowerCase(java.util.Locale.ROOT);
-              int asIdx = tl.lastIndexOf(" as ");
-              if (asIdx > 0) { col = t.substring(0, asIdx).trim(); alias = t.substring(asIdx + 4).trim(); }
-              else {
-                int lastWs = -1; inS = false; q = 0; depth = 0;
+              java.util.regex.Matcher mAs = java.util.regex.Pattern.compile("(?is)^(.+?)\s+as\s+(.+)$").matcher(t);
+              if (mAs.find()) {
+                col = mAs.group(1).trim();
+                alias = mAs.group(2).trim();
+              } else {
+                int lastWs = -1; boolean inS2 = false; char q2 = 0; int depth2 = 0;
                 for (int i2 = 0; i2 < t.length(); i2++) {
                   char c2 = t.charAt(i2);
-                  if (inS) { if (c2 == q) inS = false; continue; }
-                  if (c2 == '\'' || c2 == '"') { inS = true; q = c2; continue; }
-                  if (c2 == '(') { depth++; continue; }
-                  if (c2 == ')') { if (depth > 0) depth--; continue; }
-                  if (depth == 0 && Character.isWhitespace(c2)) lastWs = i2;
-                }
-                if (lastWs > 0 && lastWs < t.length() - 1) { alias = t.substring(lastWs + 1).trim(); col = t.substring(0, lastWs).trim(); }
-              }
-              if (alias != null && !alias.isEmpty()) {
-                if ((alias.startsWith("`") && alias.endsWith("`")) || (alias.startsWith("\"") && alias.endsWith("\""))) {
-                  if (alias.length() >= 2) alias = alias.substring(1, alias.length() - 1);
-                }
-              } else alias = null;
-              com.dafei1288.jimsql.server.plan.logical.SelectItem si = new com.dafei1288.jimsql.server.plan.logical.SelectItem();
-              si.setColumnName(col);
-              si.setAlias(alias);
-              out.add(si);
-            }
-            if (!out.isEmpty()) queryLogicalPlan.setSelectItems(out);
-          }
-        }
-      }
-    } catch (Throwable ignore) {}
-
-    // Fallback: if selectItems not set by tree, parse from raw SELECT ... FROM segment
-    try {
-      java.util.List<com.dafei1288.jimsql.server.plan.logical.SelectItem> _sis = queryLogicalPlan.getSelectItems();
-      if (_sis == null || _sis.isEmpty()) {
-        String whole2 = extractText(this.parseTree.getRoot());
-        if (whole2 != null) {
-          java.util.regex.Pattern _p = java.util.regex.Pattern.compile("(?is)\\bselect\\s+(.*?)\\s+from\\b");
-          java.util.regex.Matcher _m = _p.matcher(whole2);
-          if (_m.find()) {
-            String seg = _m.group(1).trim();
-            java.util.List<String> parts = new java.util.ArrayList<>();
-            int last = 0; int depth = 0; boolean inS = false; char q = 0;
-            for (int i = 0; i < seg.length(); i++) {
-              char c = seg.charAt(i);
-              if (inS) { if (c == q) inS = false; continue; }
-              if (c == '\'' || c == '"') { inS = true; q = c; continue; }
-              if (c == '(') { depth++; continue; }
-              if (c == ')') { if (depth > 0) depth--; continue; }
-              if (c == ',' && depth == 0) { parts.add(seg.substring(last, i)); last = i + 1; }
-            }
-            parts.add(seg.substring(last));
-            java.util.List<com.dafei1288.jimsql.server.plan.logical.SelectItem> out = new java.util.ArrayList<>();
-            for (String it : parts) {
-              String t = it.trim(); if (t.isEmpty()) continue;
-              String col = t; String alias = null;
-              String tl = t.toLowerCase(java.util.Locale.ROOT);
-              int asIdx = tl.lastIndexOf(" as ");
-              if (asIdx > 0) {
-                col = t.substring(0, asIdx).trim();
-                alias = t.substring(asIdx + 4).trim();
-              } else {
-                int lastWs = -1; inS = false; q = 0; depth = 0;
-                for (int i = 0; i < t.length(); i++) {
-                  char c = t.charAt(i);
-                  if (inS) { if (c == q) inS = false; continue; }
-                  if (c == '\'' || c == '"') { inS = true; q = c; continue; }
-                  if (c == '(') { depth++; continue; }
-                  if (c == ')') { if (depth > 0) depth--; continue; }
-                  if (depth == 0 && Character.isWhitespace(c)) lastWs = i;
+                  if (inS2) { if (c2 == q2) inS2 = false; continue; }
+                  if (c2 == '\'' || c2 == '"') { inS2 = true; q2 = c2; continue; }
+                  if (c2 == '(') { depth2++; continue; }
+                  if (c2 == ')') { if (depth2 > 0) depth2--; continue; }
+                  if (depth2 == 0 && Character.isWhitespace(c2)) lastWs = i2;
                 }
                 if (lastWs > 0 && lastWs < t.length() - 1) {
                   alias = t.substring(lastWs + 1).trim();
@@ -185,21 +128,48 @@ private final QueryLogicalPlan queryLogicalPlan = new QueryLogicalPlan();
                 }
               }
               if (alias != null && !alias.isEmpty()) {
-                if ((alias.startsWith("") && alias.endsWith("")) || (alias.startsWith("\"") && alias.endsWith("\""))) {
-                  alias = alias.substring(1, alias.length() - 1);
+                if ((alias.startsWith("`") && alias.endsWith("`")) || (alias.startsWith("\"") && alias.endsWith("\""))) {
+                  if (alias.length() >= 2) alias = alias.substring(1, alias.length() - 1);
                 }
-              } else { alias = null; }
+              } else {
+                alias = null;
+              }
               com.dafei1288.jimsql.server.plan.logical.SelectItem si = new com.dafei1288.jimsql.server.plan.logical.SelectItem();
               si.setColumnName(col);
               si.setAlias(alias);
               out.add(si);
-            }
-            if (!out.isEmpty()) { queryLogicalPlan.setSelectItems(out); }
+            }if (!out.isEmpty()) queryLogicalPlan.setSelectItems(out);
           }
         }
       }
     } catch (Throwable ignore) {}
-    return queryLogicalPlan;
+
+    
+        // --- alias fallback: robust parse from raw SQL ---
+    try {
+      if (queryLogicalPlan.getRawSql() == null) {
+        queryLogicalPlan.setRawSql(extractText(this.parseTree.getRoot()));
+      }
+      java.util.List<com.dafei1288.jimsql.server.plan.logical.SelectItem> parsed2 =
+          parseSelectItemsFromRaw(queryLogicalPlan.getRawSql());
+      boolean parsed2HasStar = false;
+      boolean parsed2HasAlias = false;
+      for (com.dafei1288.jimsql.server.plan.logical.SelectItem si : parsed2) {
+        if ("*".equals(si.getColumnName())) { parsed2HasStar = true; break; }
+        if (si.getAlias() != null && !si.getAlias().isEmpty()) parsed2HasAlias = true;
+      }
+      java.util.List<com.dafei1288.jimsql.server.plan.logical.SelectItem> cur = queryLogicalPlan.getSelectItems();
+      boolean curEmpty = (cur == null || cur.isEmpty());
+      if (!parsed2HasStar && (parsed2HasAlias || curEmpty) && parsed2 != null && !parsed2.isEmpty()) {
+        queryLogicalPlan.setSelectItems(parsed2);
+        if (log.isDebugEnabled()) {
+          log.debug("SELECT alias fallback(final): {}",
+              parsed2.stream()
+                     .map(x -> x.getAlias() != null && !x.getAlias().isEmpty() ? x.getAlias() : x.getColumnName())
+                     .collect(java.util.stream.Collectors.joining(",")));
+        }
+      }
+    } catch (Throwable ignore) {}    return queryLogicalPlan;
   }
 
   @Override
@@ -823,6 +793,62 @@ private final QueryLogicalPlan queryLogicalPlan = new QueryLogicalPlan();
       return v.substring(1, v.length() - 1);
     }
     return v;
+  }    private java.util.List<com.dafei1288.jimsql.server.plan.logical.SelectItem> parseSelectItemsFromRaw(String whole) {
+    if (whole == null || whole.isEmpty()) return new java.util.ArrayList<>();
+    java.util.regex.Matcher m = java.util.regex.Pattern.compile("(?is)\\bselect\\s+(.*?)\\s+from\\b").matcher(whole);
+    if (!m.find()) return new java.util.ArrayList<>();
+    String seg = m.group(1).trim();
+
+    java.util.List<String> parts = new java.util.ArrayList<>();
+    int last = 0, depth = 0; boolean inS = false; char q = 0;
+    for (int i = 0; i < seg.length(); i++) {
+      char c = seg.charAt(i);
+      if (inS) { if (c == q) inS = false; continue; }
+      if (c == '\'' || c == '"') { inS = true; q = c; continue; }
+      if (c == '(') { depth++; continue; }
+      if (c == ')') { if (depth > 0) depth--; continue; }
+      if (c == ',' && depth == 0) { parts.add(seg.substring(last, i)); last = i + 1; }
+    }
+    parts.add(seg.substring(last));
+
+    java.util.List<com.dafei1288.jimsql.server.plan.logical.SelectItem> out = new java.util.ArrayList<>();
+    for (String it : parts) {
+      String t = it.trim(); if (t.isEmpty()) continue;
+      String col = t, alias = null;
+
+      java.util.regex.Matcher mAs = java.util.regex.Pattern.compile("(?is)^(.+?)\\s+as\\s+(.+)$").matcher(t);
+      if (mAs.find()) {
+        col = mAs.group(1).trim();
+        alias = mAs.group(2).trim();
+      } else {
+        int lastWs = -1; boolean inS2 = false; char q2 = 0; int depth2 = 0;
+        for (int i = 0; i < t.length(); i++) {
+          char c = t.charAt(i);
+          if (inS2) { if (c == q2) inS2 = false; continue; }
+          if (c == '\'' || c == '"') { inS2 = true; q2 = c; continue; }
+          if (c == '(') { depth2++; continue; }
+          if (c == ')') { if (depth2 > 0) depth2--; continue; }
+          if (depth2 == 0 && Character.isWhitespace(c)) lastWs = i;
+        }
+        if (lastWs > 0 && lastWs < t.length() - 1) {
+          alias = t.substring(lastWs + 1).trim();
+          col = t.substring(0, lastWs).trim();
+        }
+      }
+
+      if (alias != null && !alias.isEmpty()) {
+        if ((alias.startsWith("`") && alias.endsWith("`")) || (alias.startsWith("\"") && alias.endsWith("\""))) {
+          if (alias.length() >= 2) alias = alias.substring(1, alias.length() - 1);
+        }
+        if (alias.isEmpty()) alias = null;
+      }
+
+      com.dafei1288.jimsql.server.plan.logical.SelectItem si = new com.dafei1288.jimsql.server.plan.logical.SelectItem();
+      si.setColumnName(col);
+      si.setAlias(alias);
+      out.add(si);
+    }
+    return out;
   }  private void collectSelectColumns(org.snt.inmemantlr.tree.ParseTreeNode node, java.util.List<com.dafei1288.jimsql.common.meta.JqColumn> out) {  if ("columnName".equals(node.getRule())) {
     com.dafei1288.jimsql.common.meta.JqColumn c = new com.dafei1288.jimsql.common.meta.JqColumn();
     c.setColumnName(stripQuotes(node.getLabel()));
@@ -849,6 +875,8 @@ private final QueryLogicalPlan queryLogicalPlan = new QueryLogicalPlan();
   }}
 
 }
+
+
 
 
 

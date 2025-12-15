@@ -77,6 +77,21 @@ public class JimServerHandler extends ChannelInboundHandlerAdapter {
         queryLogicalPlan = ((SelectTableParseTreeProcessor) cur).getResult();
       }
       if (queryLogicalPlan == null) { throw new IllegalStateException("no plan for SELECT"); }
+      // ensure raw SQL present for alias fallback
+      try { if (queryLogicalPlan.getRawSql() == null || queryLogicalPlan.getRawSql().isEmpty()) queryLogicalPlan.setRawSql(jqQueryReq.getSql()); } catch (Throwable ignore) {}
+      // alias fallback at handler level: if parser did not set selectItems, parse from raw SQL text
+      try {
+        java.util.List<com.dafei1288.jimsql.server.plan.logical.SelectItem> sis = queryLogicalPlan.getSelectItems();
+        if (sis == null || sis.isEmpty()) {
+          java.util.List<com.dafei1288.jimsql.server.plan.logical.SelectItem> parsed = parseSelectItemsFromRaw(jqQueryReq.getSql());
+          if (parsed != null && !parsed.isEmpty()) {
+            queryLogicalPlan.setSelectItems(parsed);
+            if (LOG.isDebugEnabled()) {
+              LOG.debug("SELECT alias fallback(handler): {}", parsed.stream().map(x -> (x.getAlias()!=null && !x.getAlias().isEmpty())? x.getAlias(): x.getColumnName()).collect(java.util.stream.Collectors.joining(",")));
+            }
+          }
+        }
+      } catch (Throwable ignore) {}
       LOG.debug("plan where={}, having={}", queryLogicalPlan.getWhereExpression(), queryLogicalPlan.getHavingExpression());
       if (queryLogicalPlan.getLlmFunctionSpec() != null) {
         LlmFunctionSpec s = queryLogicalPlan.getLlmFunctionSpec();
@@ -301,5 +316,27 @@ private String sqlTypeToName(int t) {
     }
     sb.append(nl).append(");");
     return sb.toString();
+  }
+
+  private static java.util.List<com.dafei1288.jimsql.server.plan.logical.SelectItem> parseSelectItemsFromRaw(String whole) {
+    if (whole == null || whole.isEmpty()) return new java.util.ArrayList<>();
+    java.util.regex.Matcher m = java.util.regex.Pattern.compile("(?is)\\bselect\\s+(.*?)\\s+from\\b").matcher(whole);
+    if (!m.find()) return new java.util.ArrayList<>();
+    String seg = m.group(1).trim();
+    java.util.List<String> parts = new java.util.ArrayList<>();
+    int last = 0, depth = 0; boolean inS = false; char q = 0;
+    for (int i = 0; i < seg.length(); i++) { char c = seg.charAt(i); if (inS) { if (c == q) inS = false; continue; } if (c == '\'' || c == '"') { inS = true; q = c; continue; } if (c == '(') { depth++; continue; } if (c == ')') { if (depth > 0) depth--; continue; } if (c == ',' && depth == 0) { parts.add(seg.substring(last, i)); last = i + 1; } }
+    parts.add(seg.substring(last));
+    java.util.List<com.dafei1288.jimsql.server.plan.logical.SelectItem> out = new java.util.ArrayList<>();
+    for (String it : parts) {
+      String t = it.trim(); if (t.isEmpty()) continue;
+      String col = t, alias = null;
+      java.util.regex.Matcher mAs = java.util.regex.Pattern.compile("(?is)^(.+?)\\s+as\\s+(.+)$").matcher(t);
+      if (mAs.find()) { col = mAs.group(1).trim(); alias = mAs.group(2).trim(); }
+      else { int lastWs = -1; boolean inS2 = false; char q2 = 0; int depth2 = 0; for (int i = 0; i < t.length(); i++) { char c = t.charAt(i); if (inS2) { if (c == q2) inS2 = false; continue; } if (c == '\'' || c == '"') { inS2 = true; q2 = c; continue; } if (c == '(') { depth2++; continue; } if (c == ')') { if (depth2 > 0) depth2--; continue; } if (depth2 == 0 && Character.isWhitespace(c)) lastWs = i; } if (lastWs > 0 && lastWs < t.length() - 1) { alias = t.substring(lastWs + 1).trim(); col = t.substring(0, lastWs).trim(); } }
+      if (alias != null && !alias.isEmpty()) { if ((alias.startsWith("`") && alias.endsWith("`")) || (alias.startsWith("\"") && alias.endsWith("\""))) { if (alias.length() >= 2) alias = alias.substring(1, alias.length() - 1); } if (alias.isEmpty()) alias = null; }
+      com.dafei1288.jimsql.server.plan.logical.SelectItem si = new com.dafei1288.jimsql.server.plan.logical.SelectItem(); si.setColumnName(col); si.setAlias(alias); out.add(si);
+    }
+    return out;
   }
 }

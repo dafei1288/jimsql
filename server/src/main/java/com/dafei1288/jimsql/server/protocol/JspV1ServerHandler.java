@@ -18,6 +18,9 @@ import com.dafei1288.jimsql.common.meta.JqTable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.AttributeKey;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -27,7 +30,9 @@ import java.util.stream.Collectors;
 
 public class JspV1ServerHandler extends SimpleChannelInboundHandler<ProtocolFrame> {
 
-  private static final AttributeKey<String> ATTR_DB = AttributeKey.valueOf("jspv1.db");
+  
+  private static final Logger LOG = LoggerFactory.getLogger(JspV1ServerHandler.class);
+private static final AttributeKey<String> ATTR_DB = AttributeKey.valueOf("jspv1.db");
   private static final AttributeKey<Boolean> ATTR_COMPRESS = AttributeKey.valueOf("jspv1.compress");
   private static final AttributeKey<java.util.Map<String, CursorState>> ATTR_CURSORS = AttributeKey.valueOf("jspv1.cursors");
   private static final AttributeKey<Integer> ATTR_CURSOR_SEQ = AttributeKey.valueOf("jspv1.cursor.seq");
@@ -39,7 +44,7 @@ public class JspV1ServerHandler extends SimpleChannelInboundHandler<ProtocolFram
       int typeCode = msg.header.type & 0xFF;
       String kind = MessageType.fromCode(typeCode).name();
       String extra = (typeCode == MessageType.RESULTSET_BATCH.code) ? ("len="+msg.header.payloadLen+", flags="+msg.header.flags) : new String(msg.payload, StandardCharsets.UTF_8);
-      System.out.printf("[wirelog] S<-C %s req=%d flags=%d len=%d payload=%s%n", kind, msg.header.requestId, (int)msg.header.flags, msg.header.payloadLen, extra);
+      LOG.info("[wirelog] S<-C {} req={} flags={} len={} payload={}", kind, msg.header.requestId, (int)msg.header.flags, msg.header.payloadLen, extra);
     }
     MessageType type = MessageType.fromCode(msg.header.type & 0xFF);
     switch (type) {
@@ -456,7 +461,7 @@ public class JspV1ServerHandler extends SimpleChannelInboundHandler<ProtocolFram
     if (comp != null && comp) { payload = Compression.lz4(payload); flags |= 0x1; }
     FrameHeader h = new FrameHeader((byte)1, (byte)MessageType.RESULTSET_BATCH.code, flags, requestId, payload.length, 0);
     if ("json".equalsIgnoreCase(WIRELOG)) {
-      System.out.printf("[wirelog] S->C RESULTSET_BATCH req=%d flags=%d len=%d rows=%d%n", requestId, (int)flags, payload.length, rows.size());
+      LOG.info("[wirelog] S->C RESULTSET_BATCH req={} flags={} len={} rows={}", requestId, (int)flags, payload.length, rows.size());
     }
     ctx.writeAndFlush(new ProtocolFrame(h, payload));
   }
@@ -465,7 +470,7 @@ public class JspV1ServerHandler extends SimpleChannelInboundHandler<ProtocolFram
     byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
     FrameHeader h = new FrameHeader((byte)1, (byte)type.code, (short)0, requestId, bytes.length, 0);
     if ("json".equalsIgnoreCase(WIRELOG)) {
-      System.out.printf("[wirelog] S->C %s req=%d flags=%d len=%d payload=%s%n", type.name(), requestId, 0, bytes.length, json);
+      LOG.info("[wirelog] S->C {} req={} flags={} len={} payload={}", type.name(), requestId, 0, bytes.length, json);
     }
     ctx.writeAndFlush(new ProtocolFrame(h, bytes));
   }

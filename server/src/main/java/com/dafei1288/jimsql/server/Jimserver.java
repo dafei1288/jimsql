@@ -5,7 +5,11 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 public class Jimserver {
+  private static final Logger LOG = LoggerFactory.getLogger(Jimserver.class);
 
   private static String HOST = "0.0.0.0";
   private static int PORT = 8821;
@@ -32,24 +36,24 @@ public class Jimserver {
     PORT = port;
     HOST = host;
 
-    //循环组接收连接，不进行处转交给下面的线程
+    // Boss 组负责接收连接，不处理后续数据
     bossGroup = new NioEventLoopGroup();
-    //循环组处理连接，获取参数，进行工作处
+    // Worker 组处理连接，执行业务逻辑
     workerGroup = new NioEventLoopGroup();
+    // 服务端启动引导
     try {
-      //服务端进行启动类
+      // 使用 NIO，配置初始化器等
       ServerBootstrap serverBootstrap = new ServerBootstrap();
-      //使用NIO模式，初始化器等�?
       serverBootstrap.group(bossGroup, workerGroup)
           .channel(NioServerSocketChannel.class)
           .childHandler(useJspV1() ? new JimServerV1Initializer() : new JimServerInitializer());
-      //绑定端口
+      // 绑定端口
       channelFuture = serverBootstrap.bind(host,port).sync();
-          //serverBootstrap.bind(host,port).sync();
+      //serverBootstrap.bind(host,port).sync();
       System.out.println(String.format("jimsql server is running on %s:%s , with data dir : %s ",host,port,datadir));
       channelFuture.channel().closeFuture().sync();
     } catch (InterruptedException e) {
-      e.printStackTrace();
+      LOG.error("error", e);
     } finally {
       bossGroup.shutdownGracefully();
       workerGroup.shutdownGracefully();
@@ -57,14 +61,14 @@ public class Jimserver {
   }
 
   void shutdown(){
-    System.out.println("Stopping server");
+    LOG.info("Stopping server");
     try{
       bossGroup.shutdownGracefully().sync();
       workerGroup.shutdownGracefully().sync();
       channelFuture.channel().close();
-      System.out.println("Server stopped");
+      LOG.info("Server stopped");
     }catch (InterruptedException e){
-      e.printStackTrace();
+      LOG.error("error", e);
     }
   }
 
