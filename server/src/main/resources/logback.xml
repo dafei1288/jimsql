@@ -21,7 +21,7 @@
   </appender>
 
   <!-- Default to INFO; enable DEBUG here for deeper execution logs -->
-  <logger name="com.dafei1288.jimsql.server" level="DEBUG" />
+  <logger name="com.dafei1288.jimsql.server" level="INFO" />
   <logger name="io.netty" level="INFO" />
 
   <root level="INFO">

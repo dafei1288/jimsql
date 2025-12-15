@@ -1,4 +1,4 @@
-package com.dafei1288.jimsql.server.parser.dml;
+﻿package com.dafei1288.jimsql.server.parser.dml;
 
 import com.dafei1288.jimsql.common.meta.JqTable;
 import com.dafei1288.jimsql.server.parser.ScriptParseTreeProcessor;
@@ -35,7 +35,7 @@ public class DmlScriptParseTreeProcessor extends ScriptParseTreeProcessor {
     String r = n.getRule();
     if ("updateTable".equals(r)) { handleUpdate(n); }
     if ("deleteTable".equals(r)) { handleDelete(n); }
-  }
+      if ("insertTable".equals(r)) { handleInsert(n); }`r`n}
 
   private void handleUpdate(ParseTreeNode n) {
     UpdateLogicalPlan plan = new UpdateLogicalPlan();

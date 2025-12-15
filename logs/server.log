@@ -1,0 +1,1617 @@
+2025-12-09 00:02:33.250 WARN  [nioEventLoopGroup-3-3] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
+	at java.base/sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:46)
+	at java.base/sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:340)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:294)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:269)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:425)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 00:03:46.071 WARN  [nioEventLoopGroup-3-4] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
+	at java.base/sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:46)
+	at java.base/sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:340)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:294)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:269)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:425)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 00:04:43.572 WARN  [nioEventLoopGroup-3-5] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
+	at java.base/sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:46)
+	at java.base/sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:340)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:294)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:269)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:425)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 00:43:55.574 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select * from user u inner join userinfo ui on u.id = ui.uid where u.name = 'jacky' (ctx=1209607693)
+2025-12-09 00:43:59.458 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 00:43:59.459 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 00:43:59.459 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: u.name = 'jacky'
+2025-12-09 00:43:59.508 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 00:43:59.509 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 00:43:59.527 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 00:43:59.572 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN on=[u.id = ui.uid] rAlias=ui eqs=u.id=ui.uid leftHeader=[id, name, age] rightHeader=[id, uid, a1, a2, b1, b2]
+2025-12-09 00:43:59.574 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=1 row={id=1, uid=1, a1=a11, a2=a12, b1=b11, b2=b21}
+2025-12-09 00:43:59.574 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=2 row={id=2, uid=2, a1=a21, a2=a22, b1=b21, b2=b22}
+2025-12-09 00:43:59.574 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=1 matches=1 row={id=1, name=jacky, age=22}
+2025-12-09 00:43:59.575 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=2 matches=1 row={id=2, name=doudou, age=3}
+2025-12-09 00:43:59.575 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=3 matches=0 row={id=3, name=maimai, age=3}
+2025-12-09 00:43:59.589 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='u.name = 'jacky'' before=2 after=1
+2025-12-09 00:44:03.988 INFO  [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - SQL: select ask_llm('你好，你是谁？') from llm where name='ds' (ctx=1879389662)
+2025-12-09 00:44:04.006 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - ASK_LLM parsed: label=ask_llm, prompt.len=7, overrides=[]
+2025-12-09 00:44:04.006 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - ASK_LLM parsed: label=ask_llm, prompt.len=7, overrides=[]
+2025-12-09 00:44:04.008 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 00:44:04.008 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - ASK_LLM parsed: label=ask_llm, prompt.len=7, overrides=[]
+2025-12-09 00:44:04.009 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 00:44:04.009 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan llmSpec: label=ask_llm, apiType=null, model=null, baseUrl=null
+2025-12-09 00:44:04.010 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: name='ds'
+2025-12-09 00:44:04.010 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - ASK_LLM metadata: single column label='ask_llm'
+2025-12-09 00:44:04.010 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 00:44:04.010 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 00:44:04.011 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 00:44:04.012 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='name='ds'' before=4 after=1
+2025-12-09 00:44:04.012 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - ASK_LLM start: filtered rows=1
+2025-12-09 00:44:04.013 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - ASK_LLM resolved: apiType=openai, model=deepseek-chat, baseUrl=https://api.deepseek.com, temperature=0.2, stream=false, thinking=false, dryrun=null
+2025-12-09 00:44:04.019 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - ASK_LLM provider=openai baseUrl=https://api.deepseek.com model=deepseek-chat apiKey=***c94f
+2025-12-09 00:44:10.522 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - ASK_LLM response.len=274
+2025-12-09 09:04:22.665 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select * from user u inner join userinfo ui on u.id = ui.uid where u.name = 'jacky' (ctx=1209607693)
+2025-12-09 09:04:27.268 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 09:04:27.269 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 09:04:27.269 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: u.name = 'jacky'
+2025-12-09 09:04:27.365 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 09:04:27.366 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 09:04:27.394 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 09:04:27.451 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN on=[u.id = ui.uid] rAlias=ui eqs=u.id=ui.uid leftHeader=[id, name, age] rightHeader=[id, uid, a1, a2, b1, b2]
+2025-12-09 09:04:27.452 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=1 row={id=1, uid=1, a1=a11, a2=a12, b1=b11, b2=b21}
+2025-12-09 09:04:27.452 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=2 row={id=2, uid=2, a1=a21, a2=a22, b1=b21, b2=b22}
+2025-12-09 09:04:27.453 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=1 matches=1 row={id=1, name=jacky, age=22}
+2025-12-09 09:04:27.453 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=2 matches=1 row={id=2, name=doudou, age=3}
+2025-12-09 09:04:27.454 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=3 matches=0 row={id=3, name=maimai, age=3}
+2025-12-09 09:04:27.461 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='u.name = 'jacky'' before=2 after=1
+2025-12-09 09:04:33.436 INFO  [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - SQL: select ask_llm('你好，你是谁？') from llm where name='ds' (ctx=1758483989)
+2025-12-09 09:04:33.454 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - ASK_LLM parsed: label=ask_llm, prompt.len=7, overrides=[]
+2025-12-09 09:04:33.455 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - ASK_LLM parsed: label=ask_llm, prompt.len=7, overrides=[]
+2025-12-09 09:04:33.455 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 09:04:33.456 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - ASK_LLM parsed: label=ask_llm, prompt.len=7, overrides=[]
+2025-12-09 09:04:33.457 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 09:04:33.457 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan llmSpec: label=ask_llm, apiType=null, model=null, baseUrl=null
+2025-12-09 09:04:33.458 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: name='ds'
+2025-12-09 09:04:33.458 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - ASK_LLM metadata: single column label='ask_llm'
+2025-12-09 09:04:33.458 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 09:04:33.459 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 09:04:33.460 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 09:04:33.460 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='name='ds'' before=4 after=1
+2025-12-09 09:04:33.461 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - ASK_LLM start: filtered rows=1
+2025-12-09 09:04:33.461 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - ASK_LLM resolved: apiType=openai, model=deepseek-chat, baseUrl=https://api.deepseek.com, temperature=0.2, stream=false, thinking=false, dryrun=null
+2025-12-09 09:04:33.469 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - ASK_LLM provider=openai baseUrl=https://api.deepseek.com model=deepseek-chat apiKey=***xxxx
+2025-12-09 09:04:34.690 WARN  [nioEventLoopGroup-3-2] dev.langchain4j.internal.RetryUtils - Exception was thrown on attempt 1 of 3
+dev.ai4j.openai4j.OpenAiHttpException: {"error":{"message":"Authentication Fails, Your api key: xxxx is invalid","type":"authentication_error","param":null,"code":"invalid_request_error"}}
+	at dev.ai4j.openai4j.Utils.toException(Utils.java:8)
+	at dev.ai4j.openai4j.SyncRequestExecutor.execute(SyncRequestExecutor.java:28)
+	at dev.ai4j.openai4j.RequestExecutor.execute(RequestExecutor.java:59)
+	at dev.langchain4j.model.openai.OpenAiChatModel.lambda$generate$1(OpenAiChatModel.java:250)
+	at dev.langchain4j.internal.RetryUtils$RetryPolicy.withRetry(RetryUtils.java:192)
+	at dev.langchain4j.internal.RetryUtils.withRetry(RetryUtils.java:229)
+	at dev.langchain4j.model.openai.OpenAiChatModel.generate(OpenAiChatModel.java:250)
+	at dev.langchain4j.model.openai.OpenAiChatModel.generate(OpenAiChatModel.java:174)
+	at dev.langchain4j.model.chat.ChatLanguageModel.generate(ChatLanguageModel.java:44)
+	at dev.langchain4j.model.chat.ChatLanguageModel.generate(ChatLanguageModel.java:32)
+	at com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan.proxyWrite(QueryPhysicalPlan.java:253)
+	at com.dafei1288.jimsql.server.JimServerHandler.processQuery(JimServerHandler.java:113)
+	at com.dafei1288.jimsql.server.JimServerHandler.channelRead(JimServerHandler.java:54)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:327)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:299)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 09:04:35.237 WARN  [nioEventLoopGroup-3-2] dev.langchain4j.internal.RetryUtils - Exception was thrown on attempt 2 of 3
+dev.ai4j.openai4j.OpenAiHttpException: {"error":{"message":"Authentication Fails, Your api key: xxxx is invalid","type":"authentication_error","param":null,"code":"invalid_request_error"}}
+	at dev.ai4j.openai4j.Utils.toException(Utils.java:8)
+	at dev.ai4j.openai4j.SyncRequestExecutor.execute(SyncRequestExecutor.java:28)
+	at dev.ai4j.openai4j.RequestExecutor.execute(RequestExecutor.java:59)
+	at dev.langchain4j.model.openai.OpenAiChatModel.lambda$generate$1(OpenAiChatModel.java:250)
+	at dev.langchain4j.internal.RetryUtils$RetryPolicy.withRetry(RetryUtils.java:192)
+	at dev.langchain4j.internal.RetryUtils.withRetry(RetryUtils.java:229)
+	at dev.langchain4j.model.openai.OpenAiChatModel.generate(OpenAiChatModel.java:250)
+	at dev.langchain4j.model.openai.OpenAiChatModel.generate(OpenAiChatModel.java:174)
+	at dev.langchain4j.model.chat.ChatLanguageModel.generate(ChatLanguageModel.java:44)
+	at dev.langchain4j.model.chat.ChatLanguageModel.generate(ChatLanguageModel.java:32)
+	at com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan.proxyWrite(QueryPhysicalPlan.java:253)
+	at com.dafei1288.jimsql.server.JimServerHandler.processQuery(JimServerHandler.java:113)
+	at com.dafei1288.jimsql.server.JimServerHandler.channelRead(JimServerHandler.java:54)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:327)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:299)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 09:04:36.039 ERROR [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - processQuery error
+java.lang.RuntimeException: dev.ai4j.openai4j.OpenAiHttpException: {"error":{"message":"Authentication Fails, Your api key: xxxx is invalid","type":"authentication_error","param":null,"code":"invalid_request_error"}}
+	at dev.langchain4j.internal.RetryUtils$RetryPolicy.withRetry(RetryUtils.java:195)
+	at dev.langchain4j.internal.RetryUtils.withRetry(RetryUtils.java:229)
+	at dev.langchain4j.model.openai.OpenAiChatModel.generate(OpenAiChatModel.java:250)
+	at dev.langchain4j.model.openai.OpenAiChatModel.generate(OpenAiChatModel.java:174)
+	at dev.langchain4j.model.chat.ChatLanguageModel.generate(ChatLanguageModel.java:44)
+	at dev.langchain4j.model.chat.ChatLanguageModel.generate(ChatLanguageModel.java:32)
+	at com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan.proxyWrite(QueryPhysicalPlan.java:253)
+	at com.dafei1288.jimsql.server.JimServerHandler.processQuery(JimServerHandler.java:113)
+	at com.dafei1288.jimsql.server.JimServerHandler.channelRead(JimServerHandler.java:54)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:327)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:299)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: dev.ai4j.openai4j.OpenAiHttpException: {"error":{"message":"Authentication Fails, Your api key: xxxx is invalid","type":"authentication_error","param":null,"code":"invalid_request_error"}}
+	at dev.ai4j.openai4j.Utils.toException(Utils.java:8)
+	at dev.ai4j.openai4j.SyncRequestExecutor.execute(SyncRequestExecutor.java:28)
+	at dev.ai4j.openai4j.RequestExecutor.execute(RequestExecutor.java:59)
+	at dev.langchain4j.model.openai.OpenAiChatModel.lambda$generate$1(OpenAiChatModel.java:250)
+	at dev.langchain4j.internal.RetryUtils$RetryPolicy.withRetry(RetryUtils.java:192)
+	... 29 common frames omitted
+2025-12-09 09:06:05.386 INFO  [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - SQL: select ask_llm('你好，你是谁？') from llm where name='ds' (ctx=1656929487)
+2025-12-09 09:06:05.391 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - ASK_LLM parsed: label=ask_llm, prompt.len=7, overrides=[]
+2025-12-09 09:06:05.392 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - ASK_LLM parsed: label=ask_llm, prompt.len=7, overrides=[]
+2025-12-09 09:06:05.392 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 09:06:05.393 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - ASK_LLM parsed: label=ask_llm, prompt.len=7, overrides=[]
+2025-12-09 09:06:05.393 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 09:06:05.393 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - plan llmSpec: label=ask_llm, apiType=null, model=null, baseUrl=null
+2025-12-09 09:06:05.394 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: name='ds'
+2025-12-09 09:06:05.394 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - ASK_LLM metadata: single column label='ask_llm'
+2025-12-09 09:06:05.394 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 09:06:05.394 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 09:06:05.395 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 09:06:05.396 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='name='ds'' before=4 after=1
+2025-12-09 09:06:05.397 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - ASK_LLM start: filtered rows=1
+2025-12-09 09:06:05.397 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - ASK_LLM resolved: apiType=openai, model=deepseek-chat, baseUrl=https://api.deepseek.com, temperature=0.2, stream=false, thinking=false, dryrun=null
+2025-12-09 09:06:05.397 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - ASK_LLM provider=openai baseUrl=https://api.deepseek.com model=deepseek-chat apiKey=***8b21
+2025-12-09 09:06:11.726 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - ASK_LLM response.len=271
+2025-12-09 11:31:28.060 WARN  [nioEventLoopGroup-3-1] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
+	at java.base/sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:46)
+	at java.base/sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:340)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:294)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:269)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:425)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:33:55.194 WARN  [nioEventLoopGroup-3-2] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
+	at java.base/sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:46)
+	at java.base/sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:340)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:294)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:269)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:425)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:36:36.680 INFO  [nioEventLoopGroup-3-6] com.dafei1288.jimsql.server.JimServerHandler - SQL: select id, name from user where id = 1; (ctx=351850228)
+2025-12-09 11:36:41.109 DEBUG [nioEventLoopGroup-3-6] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 11:36:41.110 DEBUG [nioEventLoopGroup-3-6] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 11:36:41.111 DEBUG [nioEventLoopGroup-3-6] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: id = 1
+2025-12-09 11:36:41.183 DEBUG [nioEventLoopGroup-3-6] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 11:36:41.183 DEBUG [nioEventLoopGroup-3-6] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 11:36:41.210 DEBUG [nioEventLoopGroup-3-6] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 11:36:41.287 DEBUG [nioEventLoopGroup-3-6] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='id = 1' before=3 after=1
+2025-12-09 11:37:35.740 INFO  [nioEventLoopGroup-3-7] com.dafei1288.jimsql.server.JimServerHandler - SQL: select id, name from user where id = 1; (ctx=1782231158)
+2025-12-09 11:37:35.745 DEBUG [nioEventLoopGroup-3-7] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 11:37:35.746 DEBUG [nioEventLoopGroup-3-7] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 11:37:35.746 DEBUG [nioEventLoopGroup-3-7] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: id = 1
+2025-12-09 11:37:35.747 DEBUG [nioEventLoopGroup-3-7] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 11:37:35.747 DEBUG [nioEventLoopGroup-3-7] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 11:37:35.748 DEBUG [nioEventLoopGroup-3-7] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 11:37:35.749 DEBUG [nioEventLoopGroup-3-7] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='id = 1' before=3 after=1
+2025-12-09 11:39:17.448 INFO  [nioEventLoopGroup-3-8] com.dafei1288.jimsql.server.JimServerHandler - SQL: select id, name from user ; (ctx=546134406)
+2025-12-09 11:39:17.451 DEBUG [nioEventLoopGroup-3-8] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 11:39:17.451 DEBUG [nioEventLoopGroup-3-8] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 11:39:17.452 DEBUG [nioEventLoopGroup-3-8] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 11:39:17.452 DEBUG [nioEventLoopGroup-3-8] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 11:39:17.453 DEBUG [nioEventLoopGroup-3-8] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 11:40:22.351 INFO  [nioEventLoopGroup-3-9] com.dafei1288.jimsql.server.JimServerHandler - SQL: select id, name from user where id = 1 ; (ctx=426786983)
+2025-12-09 11:40:22.355 DEBUG [nioEventLoopGroup-3-9] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 11:40:22.355 DEBUG [nioEventLoopGroup-3-9] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 11:40:22.356 DEBUG [nioEventLoopGroup-3-9] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: id = 1
+2025-12-09 11:40:22.356 DEBUG [nioEventLoopGroup-3-9] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 11:40:22.356 DEBUG [nioEventLoopGroup-3-9] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 11:40:22.357 DEBUG [nioEventLoopGroup-3-9] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 11:40:22.358 DEBUG [nioEventLoopGroup-3-9] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='id = 1' before=3 after=1
+2025-12-09 11:40:54.213 INFO  [nioEventLoopGroup-3-10] com.dafei1288.jimsql.server.JimServerHandler - SQL: select id, name from user where id = 1 ; (ctx=744321425)
+2025-12-09 11:40:54.217 DEBUG [nioEventLoopGroup-3-10] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 11:40:54.217 DEBUG [nioEventLoopGroup-3-10] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 11:40:54.217 DEBUG [nioEventLoopGroup-3-10] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: id = 1
+2025-12-09 11:40:54.217 DEBUG [nioEventLoopGroup-3-10] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 11:40:54.219 DEBUG [nioEventLoopGroup-3-10] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 11:40:54.220 DEBUG [nioEventLoopGroup-3-10] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 11:40:54.220 DEBUG [nioEventLoopGroup-3-10] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='id = 1' before=3 after=1
+2025-12-09 11:41:05.267 INFO  [nioEventLoopGroup-3-11] com.dafei1288.jimsql.server.JimServerHandler - SQL: select id, name from user where id = 1 ; (ctx=1343598193)
+2025-12-09 11:41:05.270 DEBUG [nioEventLoopGroup-3-11] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 11:41:05.270 DEBUG [nioEventLoopGroup-3-11] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 11:41:05.270 DEBUG [nioEventLoopGroup-3-11] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: id = 1
+2025-12-09 11:41:05.270 DEBUG [nioEventLoopGroup-3-11] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 11:41:05.270 DEBUG [nioEventLoopGroup-3-11] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 11:41:05.271 DEBUG [nioEventLoopGroup-3-11] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 11:41:05.272 DEBUG [nioEventLoopGroup-3-11] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='id = 1' before=3 after=1
+2025-12-09 11:52:22.496 WARN  [nioEventLoopGroup-3-12] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
+	at java.base/sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:46)
+	at java.base/sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:340)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:294)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:269)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:425)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:22.866 WARN  [nioEventLoopGroup-3-13] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1048576: 1246974288 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:507)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:493)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.exceededFrameLength(LengthFieldBasedFrameDecoder.java:377)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:423)
+	at io.netty.handler.codec.serialization.ObjectDecoder.decode(ObjectDecoder.java:69)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:333)
+	at io.netty.handler.codec.ByteToMessageDecoder.decodeRemovalReentryProtection(ByteToMessageDecoder.java:510)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:449)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:279)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:22.894 WARN  [nioEventLoopGroup-3-15] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1048576: 1246974288 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:507)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:493)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.exceededFrameLength(LengthFieldBasedFrameDecoder.java:377)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:423)
+	at io.netty.handler.codec.serialization.ObjectDecoder.decode(ObjectDecoder.java:69)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:333)
+	at io.netty.handler.codec.ByteToMessageDecoder.decodeRemovalReentryProtection(ByteToMessageDecoder.java:510)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:449)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:279)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:22.894 WARN  [nioEventLoopGroup-3-14] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
+	at java.base/sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:46)
+	at java.base/sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:340)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:294)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:269)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:425)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:22.904 WARN  [nioEventLoopGroup-3-16] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
+	at java.base/sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:46)
+	at java.base/sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:340)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:294)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:269)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:425)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:22.904 WARN  [nioEventLoopGroup-3-17] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1048576: 1246974288 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:507)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:493)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.exceededFrameLength(LengthFieldBasedFrameDecoder.java:377)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:423)
+	at io.netty.handler.codec.serialization.ObjectDecoder.decode(ObjectDecoder.java:69)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:333)
+	at io.netty.handler.codec.ByteToMessageDecoder.decodeRemovalReentryProtection(ByteToMessageDecoder.java:510)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:449)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:279)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:22.912 WARN  [nioEventLoopGroup-3-19] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1048576: 1246974288 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:507)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:493)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.exceededFrameLength(LengthFieldBasedFrameDecoder.java:377)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:423)
+	at io.netty.handler.codec.serialization.ObjectDecoder.decode(ObjectDecoder.java:69)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:333)
+	at io.netty.handler.codec.ByteToMessageDecoder.decodeRemovalReentryProtection(ByteToMessageDecoder.java:510)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:449)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:279)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:22.912 WARN  [nioEventLoopGroup-3-18] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
+	at java.base/sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:46)
+	at java.base/sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:340)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:294)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:269)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:425)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:22.930 WARN  [nioEventLoopGroup-3-21] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1048576: 1246974288 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:507)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:493)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.exceededFrameLength(LengthFieldBasedFrameDecoder.java:377)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:423)
+	at io.netty.handler.codec.serialization.ObjectDecoder.decode(ObjectDecoder.java:69)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:333)
+	at io.netty.handler.codec.ByteToMessageDecoder.decodeRemovalReentryProtection(ByteToMessageDecoder.java:510)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:449)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:279)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:22.930 WARN  [nioEventLoopGroup-3-20] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
+	at java.base/sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:46)
+	at java.base/sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:340)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:294)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:269)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:425)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:22.941 WARN  [nioEventLoopGroup-3-23] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1048576: 1246974288 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:507)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:493)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.exceededFrameLength(LengthFieldBasedFrameDecoder.java:377)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:423)
+	at io.netty.handler.codec.serialization.ObjectDecoder.decode(ObjectDecoder.java:69)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:333)
+	at io.netty.handler.codec.ByteToMessageDecoder.decodeRemovalReentryProtection(ByteToMessageDecoder.java:510)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:449)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:279)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:22.941 WARN  [nioEventLoopGroup-3-22] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
+	at java.base/sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:46)
+	at java.base/sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:340)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:294)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:269)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:425)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:22.952 WARN  [nioEventLoopGroup-3-25] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1048576: 1246974288 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:507)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:493)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.exceededFrameLength(LengthFieldBasedFrameDecoder.java:377)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:423)
+	at io.netty.handler.codec.serialization.ObjectDecoder.decode(ObjectDecoder.java:69)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:333)
+	at io.netty.handler.codec.ByteToMessageDecoder.decodeRemovalReentryProtection(ByteToMessageDecoder.java:510)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:449)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:279)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:22.952 WARN  [nioEventLoopGroup-3-24] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
+	at java.base/sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:46)
+	at java.base/sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:340)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:294)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:269)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:425)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:22.962 WARN  [nioEventLoopGroup-3-26] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
+	at java.base/sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:46)
+	at java.base/sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:340)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:294)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:269)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:425)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:22.963 WARN  [nioEventLoopGroup-3-27] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1048576: 1246974288 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:507)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:493)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.exceededFrameLength(LengthFieldBasedFrameDecoder.java:377)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:423)
+	at io.netty.handler.codec.serialization.ObjectDecoder.decode(ObjectDecoder.java:69)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:333)
+	at io.netty.handler.codec.ByteToMessageDecoder.decodeRemovalReentryProtection(ByteToMessageDecoder.java:510)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:449)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:279)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:22.972 WARN  [nioEventLoopGroup-3-29] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1048576: 1246974288 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:507)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:493)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.exceededFrameLength(LengthFieldBasedFrameDecoder.java:377)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:423)
+	at io.netty.handler.codec.serialization.ObjectDecoder.decode(ObjectDecoder.java:69)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:333)
+	at io.netty.handler.codec.ByteToMessageDecoder.decodeRemovalReentryProtection(ByteToMessageDecoder.java:510)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:449)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:279)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:22.972 WARN  [nioEventLoopGroup-3-28] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
+	at java.base/sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:46)
+	at java.base/sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:340)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:294)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:269)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:425)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:22.980 WARN  [nioEventLoopGroup-3-31] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1048576: 1246974288 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:507)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:493)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.exceededFrameLength(LengthFieldBasedFrameDecoder.java:377)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:423)
+	at io.netty.handler.codec.serialization.ObjectDecoder.decode(ObjectDecoder.java:69)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:333)
+	at io.netty.handler.codec.ByteToMessageDecoder.decodeRemovalReentryProtection(ByteToMessageDecoder.java:510)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:449)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:279)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:22.980 WARN  [nioEventLoopGroup-3-30] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
+	at java.base/sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:46)
+	at java.base/sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:340)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:294)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:269)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:425)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:22.989 WARN  [nioEventLoopGroup-3-32] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
+	at java.base/sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:46)
+	at java.base/sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:340)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:294)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:269)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:425)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:23.106 INFO  [nioEventLoopGroup-3-33] com.dafei1288.jimsql.server.JimServerHandler - SQL: SELECT age, SUM(age), AVG(age), MIN(age), MAX(age) FROM user GROUP BY age (ctx=955143351)
+2025-12-09 11:52:23.116 DEBUG [nioEventLoopGroup-3-33] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 11:52:23.117 DEBUG [nioEventLoopGroup-3-33] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 11:52:23.118 DEBUG [nioEventLoopGroup-3-33] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 11:52:23.119 DEBUG [nioEventLoopGroup-3-33] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 11:52:23.126 DEBUG [nioEventLoopGroup-3-33] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 11:52:23.164 INFO  [nioEventLoopGroup-3-35] com.dafei1288.jimsql.server.JimServerHandler - SQL: SELECT SUM(age), AVG(age), MIN(age), MAX(age) FROM user (ctx=1535801728)
+2025-12-09 11:52:23.164 WARN  [nioEventLoopGroup-3-34] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
+	at java.base/sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:46)
+	at java.base/sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:340)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:294)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:269)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:425)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:23.169 DEBUG [nioEventLoopGroup-3-35] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 11:52:23.170 DEBUG [nioEventLoopGroup-3-35] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 11:52:23.170 DEBUG [nioEventLoopGroup-3-35] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 11:52:23.170 DEBUG [nioEventLoopGroup-3-35] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 11:52:23.171 DEBUG [nioEventLoopGroup-3-35] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 11:52:23.205 WARN  [nioEventLoopGroup-3-36] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
+	at java.base/sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:46)
+	at java.base/sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:340)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:294)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:269)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:425)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:23.206 INFO  [nioEventLoopGroup-3-37] com.dafei1288.jimsql.server.JimServerHandler - SQL: SELECT age, COUNT(*) FROM user GROUP BY age HAVING count > 0 (ctx=1499397231)
+2025-12-09 11:52:23.214 WARN  [nioEventLoopGroup-3-37] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+org.snt.inmemantlr.exceptions.ParsingException: SQL parse error: (line 1,char 18): no viable alternative at input 'SELECT age, COUNT(*'; sql="SELECT age, COUNT(*) FROM user GROUP BY age HAVING count > 0"
+	at com.dafei1288.jimsql.server.parser.SqlParser.parser(SqlParser.java:96)
+	at com.dafei1288.jimsql.server.JimServerHandler.channelRead(JimServerHandler.java:50)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:327)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:299)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:23.225 INFO  [nioEventLoopGroup-3-39] com.dafei1288.jimsql.server.JimServerHandler - SQL: SELECT COUNT(*) FROM user (ctx=398520909)
+2025-12-09 11:52:23.226 WARN  [nioEventLoopGroup-3-38] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
+	at java.base/sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:46)
+	at java.base/sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:340)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:294)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:269)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:425)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:52:23.226 WARN  [nioEventLoopGroup-3-39] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+org.snt.inmemantlr.exceptions.ParsingException: SQL parse error: (line 1,char 13): no viable alternative at input 'SELECT COUNT(*'; sql="SELECT COUNT(*) FROM user"
+	at com.dafei1288.jimsql.server.parser.SqlParser.parser(SqlParser.java:96)
+	at com.dafei1288.jimsql.server.JimServerHandler.channelRead(JimServerHandler.java:50)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:327)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:299)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-09 11:57:52.520 INFO  [nioEventLoopGroup-3-40] com.dafei1288.jimsql.server.JimServerHandler - SQL: select id,name,age from user where id=1 and name='jacky' (ctx=1753129550)
+2025-12-09 11:57:52.524 DEBUG [nioEventLoopGroup-3-40] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 11:57:52.524 DEBUG [nioEventLoopGroup-3-40] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 11:57:52.524 DEBUG [nioEventLoopGroup-3-40] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: id=1 and name='jacky'
+2025-12-09 11:57:52.526 DEBUG [nioEventLoopGroup-3-40] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 11:57:52.526 DEBUG [nioEventLoopGroup-3-40] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 11:57:52.527 DEBUG [nioEventLoopGroup-3-40] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 11:57:52.529 DEBUG [nioEventLoopGroup-3-40] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='id=1 and name='jacky'' before=3 after=1
+2025-12-09 11:58:42.096 INFO  [nioEventLoopGroup-3-41] com.dafei1288.jimsql.server.JimServerHandler - SQL: select id,name,age from user where id=1 (ctx=1556487567)
+2025-12-09 11:58:42.098 DEBUG [nioEventLoopGroup-3-41] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 11:58:42.099 DEBUG [nioEventLoopGroup-3-41] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 11:58:42.099 DEBUG [nioEventLoopGroup-3-41] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: id=1
+2025-12-09 11:58:42.099 DEBUG [nioEventLoopGroup-3-41] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 11:58:42.100 DEBUG [nioEventLoopGroup-3-41] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 11:58:42.100 DEBUG [nioEventLoopGroup-3-41] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 11:58:42.101 DEBUG [nioEventLoopGroup-3-41] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='id=1' before=3 after=1
+2025-12-09 11:59:03.146 INFO  [nioEventLoopGroup-3-42] com.dafei1288.jimsql.server.JimServerHandler - SQL: select id, name from user where id = 1 ; (ctx=1898320011)
+2025-12-09 11:59:03.149 DEBUG [nioEventLoopGroup-3-42] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 11:59:03.149 DEBUG [nioEventLoopGroup-3-42] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 11:59:03.150 DEBUG [nioEventLoopGroup-3-42] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: id = 1
+2025-12-09 11:59:03.150 DEBUG [nioEventLoopGroup-3-42] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 11:59:03.150 DEBUG [nioEventLoopGroup-3-42] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 11:59:03.151 DEBUG [nioEventLoopGroup-3-42] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 11:59:03.151 DEBUG [nioEventLoopGroup-3-42] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='id = 1' before=3 after=1
+2025-12-09 12:05:11.316 INFO  [nioEventLoopGroup-3-43] com.dafei1288.jimsql.server.JimServerHandler - SQL: select id, name from user where id = 1 ; (ctx=772866687)
+2025-12-09 12:05:11.319 DEBUG [nioEventLoopGroup-3-43] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 12:05:11.320 DEBUG [nioEventLoopGroup-3-43] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 12:05:11.320 DEBUG [nioEventLoopGroup-3-43] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: id = 1
+2025-12-09 12:05:11.320 DEBUG [nioEventLoopGroup-3-43] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 12:05:11.321 DEBUG [nioEventLoopGroup-3-43] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 12:05:11.322 DEBUG [nioEventLoopGroup-3-43] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 12:05:11.322 DEBUG [nioEventLoopGroup-3-43] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='id = 1' before=3 after=1
+2025-12-09 12:08:44.723 INFO  [nioEventLoopGroup-3-44] com.dafei1288.jimsql.server.JimServerHandler - SQL: select id,name,age from user where id=1 (ctx=1265323512)
+2025-12-09 12:08:44.726 DEBUG [nioEventLoopGroup-3-44] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 12:08:44.727 DEBUG [nioEventLoopGroup-3-44] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 12:08:44.727 DEBUG [nioEventLoopGroup-3-44] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: id=1
+2025-12-09 12:08:44.728 DEBUG [nioEventLoopGroup-3-44] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 12:08:44.728 DEBUG [nioEventLoopGroup-3-44] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 12:08:44.729 DEBUG [nioEventLoopGroup-3-44] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 12:08:44.730 DEBUG [nioEventLoopGroup-3-44] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='id=1' before=3 after=1
+2025-12-09 12:09:08.372 INFO  [nioEventLoopGroup-3-45] com.dafei1288.jimsql.server.JimServerHandler - SQL: select id,name from user where id=1 (ctx=1452845472)
+2025-12-09 12:09:08.374 DEBUG [nioEventLoopGroup-3-45] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 12:09:08.374 DEBUG [nioEventLoopGroup-3-45] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 12:09:08.374 DEBUG [nioEventLoopGroup-3-45] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: id=1
+2025-12-09 12:09:08.375 DEBUG [nioEventLoopGroup-3-45] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 12:09:08.375 DEBUG [nioEventLoopGroup-3-45] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 12:09:08.376 DEBUG [nioEventLoopGroup-3-45] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 12:09:08.377 DEBUG [nioEventLoopGroup-3-45] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='id=1' before=3 after=1
+2025-12-09 12:55:27.565 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select id,name from user where id=1 (ctx=1852100098)
+2025-12-09 12:55:31.908 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 12:55:31.910 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 12:55:31.910 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: id=1
+2025-12-09 12:55:31.978 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 12:55:31.978 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 12:55:31.999 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 12:55:32.053 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='id=1' before=3 after=1
+2025-12-09 12:56:49.921 INFO  [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - SQL: select id, name from user where id = 1 ; (ctx=1591706426)
+2025-12-09 12:56:49.927 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 12:56:49.928 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 12:56:49.928 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: id = 1
+2025-12-09 12:56:49.929 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 12:56:49.929 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 12:56:49.930 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 12:56:49.931 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='id = 1' before=3 after=1
+2025-12-09 13:54:04.374 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select * from user u inner join userinfo ui on u.id = ui.uid where u.name = 'jacky' (ctx=1209607693)
+2025-12-09 13:54:08.880 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 13:54:08.881 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 13:54:08.882 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: u.name = 'jacky'
+2025-12-09 13:54:08.945 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 13:54:08.946 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 13:54:08.965 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 13:54:08.987 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN on=[u.id = ui.uid] rAlias=ui eqs=u.id=ui.uid leftHeader=[id, name, age] rightHeader=[id, uid, a1, a2, b1, b2]
+2025-12-09 13:54:08.990 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=1 row={id=1, uid=1, a1=a11, a2=a12, b1=b11, b2=b21}
+2025-12-09 13:54:08.990 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=2 row={id=2, uid=2, a1=a21, a2=a22, b1=b21, b2=b22}
+2025-12-09 13:54:08.990 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=1 matches=1 row={id=1, name=jacky, age=22}
+2025-12-09 13:54:08.991 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=2 matches=1 row={id=2, name=doudou, age=3}
+2025-12-09 13:54:08.991 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=3 matches=0 row={id=3, name=maimai, age=3}
+2025-12-09 13:54:09.003 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='u.name = 'jacky'' before=2 after=1
+2025-12-09 13:54:14.930 INFO  [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - SQL: select ask_llm('你好，你是谁？') from llm where name='ds' (ctx=1701733301)
+2025-12-09 13:54:14.945 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - ASK_LLM parsed: label=ask_llm, prompt.len=7, overrides=[]
+2025-12-09 13:54:14.946 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - ASK_LLM parsed: label=ask_llm, prompt.len=7, overrides=[]
+2025-12-09 13:54:14.947 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 13:54:14.948 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - ASK_LLM parsed: label=ask_llm, prompt.len=7, overrides=[]
+2025-12-09 13:54:14.948 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 13:54:14.948 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan llmSpec: label=ask_llm, apiType=null, model=null, baseUrl=null
+2025-12-09 13:54:14.948 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: name='ds'
+2025-12-09 13:54:14.950 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - ASK_LLM metadata: single column label='ask_llm'
+2025-12-09 13:54:14.950 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 13:54:14.950 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 13:54:14.951 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 13:54:14.952 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='name='ds'' before=4 after=1
+2025-12-09 13:54:14.952 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - ASK_LLM start: filtered rows=1
+2025-12-09 13:54:14.953 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - ASK_LLM resolved: apiType=openai, model=deepseek-chat, baseUrl=https://api.deepseek.com, temperature=0.2, stream=false, thinking=false, dryrun=null
+2025-12-09 13:54:14.957 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - ASK_LLM provider=openai baseUrl=https://api.deepseek.com model=deepseek-chat apiKey=***8b21
+2025-12-09 13:54:22.426 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - ASK_LLM response.len=274
+2025-12-09 14:40:20.947 INFO  [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - SQL: select id, name from user where id = 1 ; (ctx=1014202728)
+2025-12-09 14:40:20.979 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 14:40:20.980 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 14:40:20.980 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: id = 1
+2025-12-09 14:40:20.980 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 14:40:20.981 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 14:40:20.982 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 14:40:20.987 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='id = 1' before=3 after=1
+2025-12-09 15:07:51.058 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select ask_llm('你好，你是谁？') from llm where name='ds' (ctx=1986477026)
+2025-12-09 15:07:55.619 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - ASK_LLM parsed: label=ask_llm, prompt.len=7, overrides=[]
+2025-12-09 15:07:55.622 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - ASK_LLM parsed: label=ask_llm, prompt.len=7, overrides=[]
+2025-12-09 15:07:55.624 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 15:07:55.625 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - ASK_LLM parsed: label=ask_llm, prompt.len=7, overrides=[]
+2025-12-09 15:07:55.626 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 15:07:55.626 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan llmSpec: label=ask_llm, apiType=null, model=null, baseUrl=null
+2025-12-09 15:07:55.627 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: name='ds'
+2025-12-09 15:07:55.647 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - ASK_LLM metadata: single column label='ask_llm'
+2025-12-09 15:07:55.660 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 15:07:55.661 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 15:07:55.689 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 15:07:55.816 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='name='ds'' before=4 after=1
+2025-12-09 15:07:55.816 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - ASK_LLM start: filtered rows=1
+2025-12-09 15:07:55.816 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - ASK_LLM resolved: apiType=openai, model=deepseek-chat, baseUrl=https://api.deepseek.com, temperature=0.2, stream=false, thinking=false, dryrun=null
+2025-12-09 15:07:55.835 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - ASK_LLM provider=openai baseUrl=https://api.deepseek.com model=deepseek-chat apiKey=***8b21
+2025-12-09 15:08:04.433 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - ASK_LLM response.len=274
+2025-12-09 15:08:07.649 INFO  [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - SQL: select * from user u inner join userinfo ui on u.id = ui.uid where u.name = 'jacky' (ctx=358422538)
+2025-12-09 15:08:07.659 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 15:08:07.659 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 15:08:07.660 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: u.name = 'jacky'
+2025-12-09 15:08:07.661 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 15:08:07.662 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 15:08:07.664 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 15:08:07.665 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN on=[u.id = ui.uid] rAlias=ui eqs=u.id=ui.uid leftHeader=[id, name, age] rightHeader=[id, uid, a1, a2, b1, b2]
+2025-12-09 15:08:07.666 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=1 row={id=1, uid=1, a1=a11, a2=a12, b1=b11, b2=b21}
+2025-12-09 15:08:07.666 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=2 row={id=2, uid=2, a1=a21, a2=a22, b1=b21, b2=b22}
+2025-12-09 15:08:07.666 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=1 matches=1 row={id=1, name=jacky, age=22}
+2025-12-09 15:08:07.667 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=2 matches=1 row={id=2, name=doudou, age=3}
+2025-12-09 15:08:07.667 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=3 matches=0 row={id=3, name=maimai, age=3}
+2025-12-09 15:08:07.668 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='u.name = 'jacky'' before=2 after=1
+2025-12-09 15:08:07.668 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-09 15:08:22.897 INFO  [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - SQL: select id, name from user where id = 1 ; (ctx=1369282507)
+2025-12-09 15:08:22.904 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: id,name
+2025-12-09 15:08:22.904 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-09 15:08:22.904 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-09 15:08:22.904 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: id = 1
+2025-12-09 15:08:22.905 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[id, name]
+2025-12-09 15:08:22.905 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-09 15:08:22.905 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-09 15:08:22.907 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-09 15:08:22.908 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='id = 1' before=3 after=1
+2025-12-09 15:08:22.909 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name]
+2025-12-12 13:54:46.969 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select * from user u inner join userinfo ui on u.id = ui.uid where u.name = 'jacky' (ctx=235891602)
+2025-12-12 13:54:51.167 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 13:54:51.167 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 13:54:51.169 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: u.name = 'jacky'
+2025-12-12 13:54:51.228 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 13:54:51.228 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 13:54:51.247 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 13:54:51.282 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN on=[u.id = ui.uid] rAlias=ui eqs=u.id=ui.uid leftHeader=[id, name, age] rightHeader=[id, uid, a1, a2, b1, b2]
+2025-12-12 13:54:51.283 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=1 row={id=1, uid=1, a1=a11, a2=a12, b1=b11, b2=b21}
+2025-12-12 13:54:51.283 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=2 row={id=2, uid=2, a1=a21, a2=a22, b1=b21, b2=b22}
+2025-12-12 13:54:51.284 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=1 matches=1 row={id=1, name=jacky, age=22}
+2025-12-12 13:54:51.284 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=2 matches=1 row={id=2, name=doudou, age=3}
+2025-12-12 13:54:51.284 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=3 matches=0 row={id=3, name=maimai, age=3}
+2025-12-12 13:54:51.292 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='u.name = 'jacky'' before=2 after=1
+2025-12-12 13:54:51.292 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-12 13:54:51.293 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-12 13:54:59.196 INFO  [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - SQL: select 1 (ctx=1274198125)
+2025-12-12 13:54:59.203 WARN  [nioEventLoopGroup-3-2] io.netty.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+org.snt.inmemantlr.exceptions.ParsingException: SQL parse error: (line 1,char 8): no viable alternative at input 'select 1'; sql="select 1"
+	at com.dafei1288.jimsql.server.parser.SqlParser.parser(SqlParser.java:96)
+	at com.dafei1288.jimsql.server.JimServerHandler.channelRead(JimServerHandler.java:50)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:327)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:299)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-12 13:55:25.070 INFO  [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name n from user u (ctx=1864256120)
+2025-12-12 13:55:25.074 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 13:55:25.074 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 13:55:25.074 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 13:55:25.075 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[n] mapping={n=namen name name name name name name name name n}
+2025-12-12 13:55:25.075 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 13:55:25.075 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 13:55:25.077 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 13:55:25.077 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[n]
+2025-12-12 13:55:25.078 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[n]
+2025-12-12 13:55:36.276 INFO  [nioEventLoopGroup-3-4] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name  from user u (ctx=390660971)
+2025-12-12 13:55:36.278 DEBUG [nioEventLoopGroup-3-4] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 13:55:36.278 DEBUG [nioEventLoopGroup-3-4] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 13:55:36.279 DEBUG [nioEventLoopGroup-3-4] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 13:55:36.279 DEBUG [nioEventLoopGroup-3-4] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name] mapping={name=name name name name name name name name}
+2025-12-12 13:55:36.279 DEBUG [nioEventLoopGroup-3-4] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 13:55:36.280 DEBUG [nioEventLoopGroup-3-4] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 13:55:36.280 DEBUG [nioEventLoopGroup-3-4] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 13:55:36.282 DEBUG [nioEventLoopGroup-3-4] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 13:55:36.282 DEBUG [nioEventLoopGroup-3-4] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 13:55:50.687 INFO  [nioEventLoopGroup-3-5] com.dafei1288.jimsql.server.JimServerHandler - SQL: select u.name n from user u (ctx=2100024330)
+2025-12-12 13:55:50.689 DEBUG [nioEventLoopGroup-3-5] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: u.name
+2025-12-12 13:55:50.689 DEBUG [nioEventLoopGroup-3-5] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 13:55:50.689 DEBUG [nioEventLoopGroup-3-5] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 13:55:50.690 DEBUG [nioEventLoopGroup-3-5] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[n] mapping={n=name u name n}
+2025-12-12 13:55:50.690 DEBUG [nioEventLoopGroup-3-5] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 13:55:50.690 DEBUG [nioEventLoopGroup-3-5] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 13:55:50.691 DEBUG [nioEventLoopGroup-3-5] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 13:55:50.692 DEBUG [nioEventLoopGroup-3-5] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[n]
+2025-12-12 13:55:50.692 DEBUG [nioEventLoopGroup-3-5] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[n]
+2025-12-12 14:29:29.264 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select u.name n from user u (ctx=1986477026)
+2025-12-12 14:29:33.572 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: u.name
+2025-12-12 14:29:33.577 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 14:29:33.578 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 14:29:33.637 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[n] mapping={n=name u name n}
+2025-12-12 14:29:33.653 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 14:29:33.653 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 14:29:33.678 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 14:29:33.746 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[n]
+2025-12-12 14:29:33.747 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[n]
+2025-12-12 14:33:23.830 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select u.name n from user u (ctx=1986477026)
+2025-12-12 14:33:28.223 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: u.name
+2025-12-12 14:33:28.228 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 14:33:28.229 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 14:33:28.288 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[n] mapping={n=name u name n}
+2025-12-12 14:33:28.302 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 14:33:28.302 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 14:33:28.329 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 14:33:28.400 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[n]
+2025-12-12 14:33:28.400 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[n]
+2025-12-12 14:33:32.190 INFO  [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name  from user u (ctx=905614462)
+2025-12-12 14:33:32.193 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 14:33:32.194 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 14:33:32.195 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 14:33:32.195 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name] mapping={name=name name name name name name name name}
+2025-12-12 14:33:32.196 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 14:33:32.196 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 14:33:32.197 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 14:33:32.198 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 14:33:32.198 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 14:33:36.147 INFO  [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - SQL: select * from user u inner join userinfo ui on u.id = ui.uid where u.name = 'jacky' (ctx=748568525)
+2025-12-12 14:33:36.157 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 14:33:36.157 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 14:33:36.157 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: u.name = 'jacky'
+2025-12-12 14:33:36.158 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 14:33:36.158 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 14:33:36.160 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 14:33:36.160 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN on=[u.id = ui.uid] rAlias=ui eqs=u.id=ui.uid leftHeader=[id, name, age] rightHeader=[id, uid, a1, a2, b1, b2]
+2025-12-12 14:33:36.162 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=1 row={id=1, uid=1, a1=a11, a2=a12, b1=b11, b2=b21}
+2025-12-12 14:33:36.162 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=2 row={id=2, uid=2, a1=a21, a2=a22, b1=b21, b2=b22}
+2025-12-12 14:33:36.163 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=1 matches=1 row={id=1, name=jacky, age=22}
+2025-12-12 14:33:36.163 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=2 matches=1 row={id=2, name=doudou, age=3}
+2025-12-12 14:33:36.163 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=3 matches=0 row={id=3, name=maimai, age=3}
+2025-12-12 14:33:36.166 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='u.name = 'jacky'' before=2 after=1
+2025-12-12 14:33:36.167 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-12 14:33:36.167 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-12 14:51:01.449 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select * from user u inner join userinfo ui on u.id = ui.uid where u.name = 'jacky' (ctx=1209607693)
+2025-12-12 14:51:06.010 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 14:51:06.011 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 14:51:06.012 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: u.name = 'jacky'
+2025-12-12 14:51:06.094 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 14:51:06.095 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 14:51:06.120 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 14:51:06.187 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN on=[u.id = ui.uid] rAlias=ui eqs=u.id=ui.uid leftHeader=[id, name, age] rightHeader=[id, uid, a1, a2, b1, b2]
+2025-12-12 14:51:06.188 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=1 row={id=1, uid=1, a1=a11, a2=a12, b1=b11, b2=b21}
+2025-12-12 14:51:06.188 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=2 row={id=2, uid=2, a1=a21, a2=a22, b1=b21, b2=b22}
+2025-12-12 14:51:06.188 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=1 matches=1 row={id=1, name=jacky, age=22}
+2025-12-12 14:51:06.190 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=2 matches=1 row={id=2, name=doudou, age=3}
+2025-12-12 14:51:06.190 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=3 matches=0 row={id=3, name=maimai, age=3}
+2025-12-12 14:51:06.206 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='u.name = 'jacky'' before=2 after=1
+2025-12-12 14:51:06.206 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-12 14:51:06.206 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-12 14:51:09.200 INFO  [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name  from user u (ctx=350274445)
+2025-12-12 14:51:09.203 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 14:51:09.204 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 14:51:09.204 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 14:51:09.205 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name] mapping={name=name}
+2025-12-12 14:51:09.205 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 14:51:09.205 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 14:51:09.206 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 14:51:09.207 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 14:51:09.207 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 14:51:13.352 INFO  [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name n from user u (ctx=1249358235)
+2025-12-12 14:51:13.354 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 14:51:13.354 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 14:51:13.355 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 14:51:13.355 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[n] mapping={n=namen}
+2025-12-12 14:51:13.355 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 14:51:13.356 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 14:51:13.357 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 14:51:13.358 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[n]
+2025-12-12 14:51:13.359 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[n]
+2025-12-12 14:59:54.282 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name n from user u (ctx=1209607693)
+2025-12-12 14:59:58.822 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 14:59:58.826 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 14:59:58.827 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 14:59:58.897 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[n] mapping={n=name}
+2025-12-12 14:59:58.913 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 14:59:58.914 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 14:59:58.940 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 14:59:58.999 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[n]
+2025-12-12 14:59:58.999 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[n]
+2025-12-12 15:00:02.934 INFO  [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name  from user u (ctx=748568525)
+2025-12-12 15:00:02.936 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 15:00:02.937 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 15:00:02.937 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 15:00:02.937 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name] mapping={name=name}
+2025-12-12 15:00:02.937 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 15:00:02.938 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 15:00:02.939 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 15:00:02.939 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 15:00:02.940 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 15:00:12.456 INFO  [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - SQL: select * from user u inner join userinfo ui on u.id = ui.uid where u.name = 'jacky' (ctx=1368355904)
+2025-12-12 15:00:12.466 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 15:00:12.466 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 15:00:12.466 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: u.name = 'jacky'
+2025-12-12 15:00:12.467 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 15:00:12.467 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 15:00:12.468 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 15:00:12.470 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN on=[u.id = ui.uid] rAlias=ui eqs=u.id=ui.uid leftHeader=[id, name, age] rightHeader=[id, uid, a1, a2, b1, b2]
+2025-12-12 15:00:12.471 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=1 row={id=1, uid=1, a1=a11, a2=a12, b1=b11, b2=b21}
+2025-12-12 15:00:12.471 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=2 row={id=2, uid=2, a1=a21, a2=a22, b1=b21, b2=b22}
+2025-12-12 15:00:12.472 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=1 matches=1 row={id=1, name=jacky, age=22}
+2025-12-12 15:00:12.472 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=2 matches=1 row={id=2, name=doudou, age=3}
+2025-12-12 15:00:12.472 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=3 matches=0 row={id=3, name=maimai, age=3}
+2025-12-12 15:00:12.476 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='u.name = 'jacky'' before=2 after=1
+2025-12-12 15:00:12.476 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-12 15:00:12.476 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-12 15:27:59.871 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select * from user u inner join userinfo ui on u.id = ui.uid where u.name = 'jacky' (ctx=1986477026)
+2025-12-12 15:28:04.093 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 15:28:04.095 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 15:28:04.095 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: u.name = 'jacky'
+2025-12-12 15:28:04.157 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 15:28:04.157 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 15:28:04.178 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 15:28:04.202 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN on=[u.id = ui.uid] rAlias=ui eqs=u.id=ui.uid leftHeader=[id, name, age] rightHeader=[id, uid, a1, a2, b1, b2]
+2025-12-12 15:28:04.202 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=1 row={id=1, uid=1, a1=a11, a2=a12, b1=b11, b2=b21}
+2025-12-12 15:28:04.203 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=2 row={id=2, uid=2, a1=a21, a2=a22, b1=b21, b2=b22}
+2025-12-12 15:28:04.203 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=1 matches=1 row={id=1, name=jacky, age=22}
+2025-12-12 15:28:04.204 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=2 matches=1 row={id=2, name=doudou, age=3}
+2025-12-12 15:28:04.204 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=3 matches=0 row={id=3, name=maimai, age=3}
+2025-12-12 15:28:04.215 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='u.name = 'jacky'' before=2 after=1
+2025-12-12 15:28:04.216 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-12 15:28:06.895 INFO  [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name  from user u (ctx=1383362709)
+2025-12-12 15:28:06.899 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 15:28:06.899 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 15:28:06.900 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 15:28:06.900 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name]
+2025-12-12 15:28:06.900 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 15:28:06.901 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 15:28:06.902 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 15:28:06.902 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 15:28:11.386 INFO  [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name n from user u (ctx=1426577151)
+2025-12-12 15:28:11.388 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 15:28:11.389 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 15:28:11.389 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 15:28:11.390 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name]
+2025-12-12 15:28:11.390 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 15:28:11.390 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 15:28:11.391 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 15:28:11.392 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 15:59:17.572 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name n from user u (ctx=1740292890)
+2025-12-12 15:59:21.806 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 15:59:21.811 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 15:59:21.812 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 15:59:21.868 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name]
+2025-12-12 15:59:21.884 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 15:59:21.884 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 15:59:21.910 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 15:59:21.965 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 15:59:21.966 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 15:59:26.130 INFO  [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name  from user u (ctx=1529274698)
+2025-12-12 15:59:26.131 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 15:59:26.133 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 15:59:26.133 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 15:59:26.133 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name]
+2025-12-12 15:59:26.133 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 15:59:26.133 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 15:59:26.134 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 15:59:26.134 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 15:59:26.135 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 15:59:29.605 INFO  [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - SQL: select * from user u inner join userinfo ui on u.id = ui.uid where u.name = 'jacky' (ctx=580713825)
+2025-12-12 15:59:29.617 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 15:59:29.617 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 15:59:29.618 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: u.name = 'jacky'
+2025-12-12 15:59:29.619 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 15:59:29.619 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 15:59:29.620 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 15:59:29.622 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN on=[u.id = ui.uid] rAlias=ui eqs=u.id=ui.uid leftHeader=[id, name, age] rightHeader=[id, uid, a1, a2, b1, b2]
+2025-12-12 15:59:29.623 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=1 row={id=1, uid=1, a1=a11, a2=a12, b1=b11, b2=b21}
+2025-12-12 15:59:29.623 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=2 row={id=2, uid=2, a1=a21, a2=a22, b1=b21, b2=b22}
+2025-12-12 15:59:29.623 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=1 matches=1 row={id=1, name=jacky, age=22}
+2025-12-12 15:59:29.624 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=2 matches=1 row={id=2, name=doudou, age=3}
+2025-12-12 15:59:29.624 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=3 matches=0 row={id=3, name=maimai, age=3}
+2025-12-12 15:59:29.630 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='u.name = 'jacky'' before=2 after=1
+2025-12-12 15:59:29.634 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-12 15:59:29.634 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-12 16:03:48.423 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select * from user u inner join userinfo ui on u.id = ui.uid where u.name = 'jacky' (ctx=1209607693)
+2025-12-12 16:03:52.759 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 16:03:52.761 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 16:03:52.761 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: u.name = 'jacky'
+2025-12-12 16:03:52.851 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 16:03:52.852 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 16:03:52.877 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 16:03:52.893 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN on=[u.id = ui.uid] rAlias=ui eqs=u.id=ui.uid leftHeader=[id, name, age] rightHeader=[id, uid, a1, a2, b1, b2]
+2025-12-12 16:03:52.895 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=1 row={id=1, uid=1, a1=a11, a2=a12, b1=b11, b2=b21}
+2025-12-12 16:03:52.895 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=2 row={id=2, uid=2, a1=a21, a2=a22, b1=b21, b2=b22}
+2025-12-12 16:03:52.896 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=1 matches=1 row={id=1, name=jacky, age=22}
+2025-12-12 16:03:52.896 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=2 matches=1 row={id=2, name=doudou, age=3}
+2025-12-12 16:03:52.896 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=3 matches=0 row={id=3, name=maimai, age=3}
+2025-12-12 16:03:52.907 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='u.name = 'jacky'' before=2 after=1
+2025-12-12 16:03:52.908 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-12 16:03:52.908 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-12 16:03:56.053 INFO  [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name  from user u (ctx=955533126)
+2025-12-12 16:03:56.057 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 16:03:56.058 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 16:03:56.058 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 16:03:56.059 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name]
+2025-12-12 16:03:56.059 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 16:03:56.059 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 16:03:56.060 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 16:03:56.061 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:03:56.061 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:03:59.520 INFO  [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name n from user u (ctx=115945255)
+2025-12-12 16:03:59.521 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 16:03:59.522 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 16:03:59.523 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 16:03:59.524 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name]
+2025-12-12 16:03:59.524 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 16:03:59.524 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 16:03:59.525 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 16:03:59.526 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:03:59.526 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:12:16.299 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name n from user u (ctx=1078932069)
+2025-12-12 16:12:20.644 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 16:12:20.650 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 16:12:20.651 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 16:12:20.712 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name]
+2025-12-12 16:12:20.730 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 16:12:20.730 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 16:12:20.758 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 16:12:20.825 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:12:20.825 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:12:24.331 INFO  [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name  from user u (ctx=909502247)
+2025-12-12 16:12:24.333 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 16:12:24.334 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 16:12:24.335 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 16:12:24.335 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name]
+2025-12-12 16:12:24.335 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 16:12:24.336 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 16:12:24.337 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 16:12:24.337 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:12:24.338 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:12:27.415 INFO  [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - SQL: select * from user u inner join userinfo ui on u.id = ui.uid where u.name = 'jacky' (ctx=1016887489)
+2025-12-12 16:12:27.426 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 16:12:27.426 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 16:12:27.427 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: u.name = 'jacky'
+2025-12-12 16:12:27.427 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 16:12:27.427 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 16:12:27.429 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 16:12:27.431 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN on=[u.id = ui.uid] rAlias=ui eqs=u.id=ui.uid leftHeader=[id, name, age] rightHeader=[id, uid, a1, a2, b1, b2]
+2025-12-12 16:12:27.432 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=1 row={id=1, uid=1, a1=a11, a2=a12, b1=b11, b2=b21}
+2025-12-12 16:12:27.432 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=2 row={id=2, uid=2, a1=a21, a2=a22, b1=b21, b2=b22}
+2025-12-12 16:12:27.433 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=1 matches=1 row={id=1, name=jacky, age=22}
+2025-12-12 16:12:27.433 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=2 matches=1 row={id=2, name=doudou, age=3}
+2025-12-12 16:12:27.433 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=3 matches=0 row={id=3, name=maimai, age=3}
+2025-12-12 16:12:27.438 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='u.name = 'jacky'' before=2 after=1
+2025-12-12 16:12:27.439 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-12 16:12:27.439 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-12 16:13:13.766 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name as  n from user u (ctx=1209607693)
+2025-12-12 16:13:17.869 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 16:13:17.873 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 16:13:17.874 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 16:13:17.929 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name]
+2025-12-12 16:13:17.941 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 16:13:17.941 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 16:13:17.966 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 16:13:18.008 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:13:18.008 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:13:25.375 INFO  [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name n from user u (ctx=1016887489)
+2025-12-12 16:13:25.378 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 16:13:25.379 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 16:13:25.379 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 16:13:25.380 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name]
+2025-12-12 16:13:25.381 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 16:13:25.381 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 16:13:25.383 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 16:13:25.383 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:13:25.384 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:32:44.624 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name n from user u (ctx=1986477026)
+2025-12-12 16:32:48.892 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 16:32:48.897 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 16:32:48.898 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 16:32:48.955 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name]
+2025-12-12 16:32:48.969 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 16:32:48.969 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 16:32:48.997 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 16:32:49.057 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:32:49.058 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:32:52.633 INFO  [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name as  n from user u (ctx=2028238040)
+2025-12-12 16:32:52.636 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 16:32:52.637 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 16:32:52.637 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 16:32:52.637 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name]
+2025-12-12 16:32:52.637 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 16:32:52.638 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 16:32:52.639 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 16:32:52.639 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:32:52.639 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:32:55.979 INFO  [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - SQL: select * from user u inner join userinfo ui on u.id = ui.uid where u.name = 'jacky' (ctx=179477586)
+2025-12-12 16:32:55.990 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 16:32:55.990 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 16:32:55.991 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: u.name = 'jacky'
+2025-12-12 16:32:55.992 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 16:32:55.992 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 16:32:55.993 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 16:32:55.995 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN on=[u.id = ui.uid] rAlias=ui eqs=u.id=ui.uid leftHeader=[id, name, age] rightHeader=[id, uid, a1, a2, b1, b2]
+2025-12-12 16:32:55.996 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=1 row={id=1, uid=1, a1=a11, a2=a12, b1=b11, b2=b21}
+2025-12-12 16:32:55.997 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=2 row={id=2, uid=2, a1=a21, a2=a22, b1=b21, b2=b22}
+2025-12-12 16:32:55.997 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=1 matches=1 row={id=1, name=jacky, age=22}
+2025-12-12 16:32:55.998 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=2 matches=1 row={id=2, name=doudou, age=3}
+2025-12-12 16:32:55.998 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=3 matches=0 row={id=3, name=maimai, age=3}
+2025-12-12 16:32:56.002 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='u.name = 'jacky'' before=2 after=1
+2025-12-12 16:32:56.002 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-12 16:32:56.002 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-12 16:52:31.439 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select * from user u inner join userinfo ui on u.id = ui.uid where u.name = 'jacky' (ctx=1986477026)
+2025-12-12 16:52:35.886 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 16:52:35.887 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 16:52:35.888 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: u.name = 'jacky'
+2025-12-12 16:52:35.953 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 16:52:35.953 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 16:52:35.969 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 16:52:35.992 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN on=[u.id = ui.uid] rAlias=ui eqs=u.id=ui.uid leftHeader=[id, name, age] rightHeader=[id, uid, a1, a2, b1, b2]
+2025-12-12 16:52:35.993 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=1 row={id=1, uid=1, a1=a11, a2=a12, b1=b11, b2=b21}
+2025-12-12 16:52:35.993 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=2 row={id=2, uid=2, a1=a21, a2=a22, b1=b21, b2=b22}
+2025-12-12 16:52:35.995 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=1 matches=1 row={id=1, name=jacky, age=22}
+2025-12-12 16:52:35.995 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=2 matches=1 row={id=2, name=doudou, age=3}
+2025-12-12 16:52:35.995 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=3 matches=0 row={id=3, name=maimai, age=3}
+2025-12-12 16:52:36.003 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='u.name = 'jacky'' before=2 after=1
+2025-12-12 16:52:36.003 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-12 16:52:36.004 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-12 16:52:39.004 INFO  [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name as  n from user u (ctx=1249358235)
+2025-12-12 16:52:39.007 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 16:52:39.008 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 16:52:39.009 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 16:52:39.009 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name]
+2025-12-12 16:52:39.009 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 16:52:39.009 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 16:52:39.010 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 16:52:39.011 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:52:39.011 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:52:42.343 INFO  [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name n from user u (ctx=1453741459)
+2025-12-12 16:52:42.345 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 16:52:42.346 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 16:52:42.346 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 16:52:42.347 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name]
+2025-12-12 16:52:42.347 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 16:52:42.347 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 16:52:42.347 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 16:52:42.348 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:52:42.348 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:54:44.779 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name n from user u (ctx=1986477026)
+2025-12-12 16:54:49.039 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 16:54:49.045 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 16:54:49.046 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 16:54:49.083 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name]
+2025-12-12 16:54:49.092 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 16:54:49.092 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 16:54:49.110 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 16:54:49.150 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:54:49.150 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:54:56.628 INFO  [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name as  n from user u (ctx=179477586)
+2025-12-12 16:54:56.630 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 16:54:56.633 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 16:54:56.633 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 16:54:56.633 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name]
+2025-12-12 16:54:56.634 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 16:54:56.634 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 16:54:56.635 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 16:54:56.636 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 16:54:56.636 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 17:12:07.684 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name as  n from user u (ctx=1986477026)
+2025-12-12 17:12:12.096 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 17:12:12.105 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 17:12:12.106 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 17:12:12.171 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name]
+2025-12-12 17:12:12.187 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 17:12:12.187 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 17:12:12.214 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 17:12:12.285 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 17:12:12.285 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 18:30:05.831 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name as  n from user u (ctx=1986477026)
+2025-12-12 18:30:10.060 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 18:30:10.067 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 18:30:10.068 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 18:30:10.132 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name]
+2025-12-12 18:30:10.137 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 18:30:10.137 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 18:30:10.156 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 18:30:10.171 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 18:30:10.172 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 19:41:01.621 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name as  n from user u (ctx=1209607693)
+2025-12-12 19:41:06.536 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 19:41:06.545 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 19:41:06.546 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 19:41:06.606 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name]
+2025-12-12 19:41:06.619 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 19:41:06.619 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 19:41:06.637 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 19:41:06.654 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 19:41:06.654 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 19:41:15.759 INFO  [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name  n from user u (ctx=994532775)
+2025-12-12 19:41:15.761 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 19:41:15.763 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 19:41:15.764 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 19:41:15.764 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[name]
+2025-12-12 19:41:15.764 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 19:41:15.765 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 19:41:15.766 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 19:41:15.767 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 19:41:15.767 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[name]
+2025-12-12 20:00:25.098 INFO  [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name  n from user u (ctx=235891602)
+2025-12-12 20:00:31.886 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 20:00:31.899 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 20:00:31.913 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - SELECT alias fallback(handler): n
+2025-12-12 20:00:31.914 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 20:00:31.975 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[n] mapping={n=name}
+2025-12-12 20:00:31.995 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 20:00:31.996 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 20:00:32.034 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 20:00:32.124 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[n]
+2025-12-12 20:00:32.125 DEBUG [nioEventLoopGroup-3-1] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[n]
+2025-12-12 20:00:38.107 INFO  [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - SQL: select name as  n from user u (ctx=1529274698)
+2025-12-12 20:00:38.109 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.parser.dql.SelectTableParseTreeProcessor - SELECT columns: name
+2025-12-12 20:00:38.111 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 20:00:38.112 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - SELECT alias fallback(handler): n
+2025-12-12 20:00:38.112 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 20:00:38.113 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.logical.OptimizeQueryLogicalPlan - PROJECTION metadata=[n] mapping={n=name}
+2025-12-12 20:00:38.113 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 20:00:38.113 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 20:00:38.114 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 20:00:38.115 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[n]
+2025-12-12 20:00:38.115 DEBUG [nioEventLoopGroup-3-2] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[n]
+2025-12-12 20:00:48.871 INFO  [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - SQL: select * from user u inner join userinfo ui on u.id = ui.uid where u.name = 'jacky' (ctx=580713825)
+2025-12-12 20:00:48.882 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - processQuery
+2025-12-12 20:00:48.883 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - SELECT alias fallback(handler): *
+2025-12-12 20:00:48.883 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - plan where=null, having=null
+2025-12-12 20:00:48.883 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - fallback WHERE from raw SQL: u.name = 'jacky'
+2025-12-12 20:00:48.884 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - get jqResultSetMetaData
+2025-12-12 20:00:48.884 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write metadata ...
+2025-12-12 20:00:48.886 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.JimServerHandler - write data ...
+2025-12-12 20:00:48.889 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN on=[u.id = ui.uid] rAlias=ui eqs=u.id=ui.uid leftHeader=[id, name, age] rightHeader=[id, uid, a1, a2, b1, b2]
+2025-12-12 20:00:48.890 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=1 row={id=1, uid=1, a1=a11, a2=a12, b1=b11, b2=b21}
+2025-12-12 20:00:48.891 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN RKEY=2 row={id=2, uid=2, a1=a21, a2=a22, b1=b21, b2=b22}
+2025-12-12 20:00:48.891 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=1 matches=1 row={id=1, name=jacky, age=22}
+2025-12-12 20:00:48.892 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=2 matches=1 row={id=2, name=doudou, age=3}
+2025-12-12 20:00:48.892 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - JOIN LKEY=3 matches=0 row={id=3, name=maimai, age=3}
+2025-12-12 20:00:48.897 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - WHERE raw='u.name = 'jacky'' before=2 after=1
+2025-12-12 20:00:48.897 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]
+2025-12-12 20:00:48.898 DEBUG [nioEventLoopGroup-3-3] com.dafei1288.jimsql.server.plan.physical.QueryPhysicalPlan - PROJECTION headers=[id, name, age, ui.id, ui.uid, ui.a1, ui.a2, ui.b1, ui.b2]

@@ -1,11 +1,15 @@
-package com.dafei1288.jimsql.server;
+﻿package com.dafei1288.jimsql.server;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 public class Jimserver {
+  private static final Logger LOG = LoggerFactory.getLogger(Jimserver.class);
 
   private static String HOST = "0.0.0.0";
   private static int PORT = 8821;
@@ -32,24 +36,24 @@ public class Jimserver {
     PORT = port;
     HOST = host;
 
-    //循环组接收连接，不进行处转交给下面的线程
+    //寰幆缁勬帴鏀惰繛鎺ワ紝涓嶈繘琛屽杞氦缁欎笅闈㈢殑绾跨▼
     bossGroup = new NioEventLoopGroup();
-    //循环组处理连接，获取参数，进行工作处
+    //寰幆缁勫鐞嗚繛鎺ワ紝鑾峰彇鍙傛暟锛岃繘琛屽伐浣滃
     workerGroup = new NioEventLoopGroup();
     try {
-      //服务端进行启动类
+      //鏈嶅姟绔繘琛屽惎鍔ㄧ被
       ServerBootstrap serverBootstrap = new ServerBootstrap();
-      //使用NIO模式，初始化器等�?
+      //浣跨敤NIO妯″紡锛屽垵濮嬪寲鍣ㄧ瓑锟?
       serverBootstrap.group(bossGroup, workerGroup)
           .channel(NioServerSocketChannel.class)
           .childHandler(useJspV1() ? new JimServerV1Initializer() : new JimServerInitializer());
-      //绑定端口
+      //缁戝畾绔彛
       channelFuture = serverBootstrap.bind(host,port).sync();
           //serverBootstrap.bind(host,port).sync();
-      System.out.println(String.format("jimsql server is running on %s:%s , with data dir : %s ",host,port,datadir));
+      LOG.info(String.format("jimsql server is running on %s:%s , with data dir : %s ",host,port,datadir));
       channelFuture.channel().closeFuture().sync();
     } catch (InterruptedException e) {
-      e.printStackTrace();
+      LOG.error("error", e);
     } finally {
       bossGroup.shutdownGracefully();
       workerGroup.shutdownGracefully();
@@ -57,14 +61,14 @@ public class Jimserver {
   }
 
   void shutdown(){
-    System.out.println("Stopping server");
+    LOG.info("Stopping server");
     try{
       bossGroup.shutdownGracefully().sync();
       workerGroup.shutdownGracefully().sync();
       channelFuture.channel().close();
-      System.out.println("Server stopped");
+      LOG.info("Server stopped");
     }catch (InterruptedException e){
-      e.printStackTrace();
+      LOG.error("error", e);
     }
   }
 

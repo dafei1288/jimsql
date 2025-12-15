@@ -1,4 +1,7 @@
-package com.dafei1288.jimsql.server;
+﻿package com.dafei1288.jimsql.server;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import com.dafei1288.jimsql.common.JimSQueryStatus;
 import com.dafei1288.jimsql.common.JqColumnResultSetMetadata;
@@ -11,6 +14,7 @@ import java.util.LinkedHashMap;
 
 
 public class JimServerDummyHandler extends ChannelInboundHandlerAdapter {
+  private static final Logger LOG = LoggerFactory.getLogger(JimServerDummyHandler.class);
 
   @Override
   public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -96,7 +100,7 @@ public class JimServerDummyHandler extends ChannelInboundHandlerAdapter {
 
   @Override
   public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-    cause.getCause();
+    LOG.error("exceptionCaught", cause);
     ctx.channel().close();
   }
 
