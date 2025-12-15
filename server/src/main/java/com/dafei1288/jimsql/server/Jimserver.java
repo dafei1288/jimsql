@@ -36,16 +36,16 @@ public class Jimserver {
     PORT = port;
     HOST = host;
 
-    //寰幆缁勬帴鏀惰繛鎺ワ紝涓嶈繘琛屽杞氦缁欎笅闈㈢殑绾跨▼
-    bossGroup = new NioEventLoopGroup();
+    // Boss 组负责接收连接，不处理后续数据
+    // Worker 组处理连接，执行业务逻辑
     //寰幆缁勫鐞嗚繛鎺ワ紝鑾峰彇鍙傛暟锛岃繘琛屽伐浣滃
-    workerGroup = new NioEventLoopGroup();
+      // 服务端启动引导
     try {
-      //鏈嶅姟绔繘琛屽惎鍔ㄧ被
+      // 使用 NIO，配置初始化器等
       ServerBootstrap serverBootstrap = new ServerBootstrap();
       //浣跨敤NIO妯″紡锛屽垵濮嬪寲鍣ㄧ瓑锟?
       serverBootstrap.group(bossGroup, workerGroup)
-          .channel(NioServerSocketChannel.class)
+      // 绑定端口
           .childHandler(useJspV1() ? new JimServerV1Initializer() : new JimServerInitializer());
       //缁戝畾绔彛
       channelFuture = serverBootstrap.bind(host,port).sync();
