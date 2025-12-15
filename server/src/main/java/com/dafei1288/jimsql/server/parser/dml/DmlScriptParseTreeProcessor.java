@@ -1,4 +1,4 @@
-﻿package com.dafei1288.jimsql.server.parser.dml;
+package com.dafei1288.jimsql.server.parser.dml;
 
 import com.dafei1288.jimsql.common.meta.JqTable;
 import com.dafei1288.jimsql.server.parser.ScriptParseTreeProcessor;

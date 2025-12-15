@@ -1,4 +1,4 @@
-﻿package com.dafei1288.jimsql.server.protocol;
+package com.dafei1288.jimsql.server.protocol;
 
 import com.dafei1288.jimsql.common.JqQueryReq;
 import com.dafei1288.jimsql.common.JqResultSetMetaData;

@@ -1,4 +1,4 @@
-﻿package com.dafei1288.jimsql.server;
+package com.dafei1288.jimsql.server;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;

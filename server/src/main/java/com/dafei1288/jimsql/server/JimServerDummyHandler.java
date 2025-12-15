@@ -1,4 +1,4 @@
-﻿package com.dafei1288.jimsql.server;
+package com.dafei1288.jimsql.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
