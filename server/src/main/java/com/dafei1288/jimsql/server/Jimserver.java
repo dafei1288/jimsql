@@ -37,7 +37,9 @@ public class Jimserver {
     HOST = host;
 
     // Boss 组负责接收连接，不处理后续数据
+    bossGroup = new NioEventLoopGroup();
     // Worker 组处理连接，执行业务逻辑
+    workerGroup = new NioEventLoopGroup();
     // 服务端启动引导
     try {
       // 使用 NIO，配置初始化器等
@@ -47,6 +49,9 @@ public class Jimserver {
           .childHandler(useJspV1() ? new JimServerV1Initializer() : new JimServerInitializer());
       // 绑定端口
       channelFuture = serverBootstrap.bind(host,port).sync();
+      //serverBootstrap.bind(host,port).sync();
+      System.out.println(String.format("jimsql server is running on %s:%s , with data dir : %s ",host,port,datadir));
+      channelFuture.channel().closeFuture().sync();
     } catch (InterruptedException e) {
       LOG.error("error", e);
     } finally {
